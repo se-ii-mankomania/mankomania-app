@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
+    id "org.sonarqube" version "4.4.1.3373"
 }
 
 android {
@@ -35,4 +36,12 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", "se-ii-mankomania_mankomania-app"
+        property "sonar.organization", "se-ii-mankomania"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
