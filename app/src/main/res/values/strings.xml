@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Mankomania</string>
+    <string name="passwort">Passwort</string>
+    <string name="nutzername">Nutzername</string>
+    <string name="Login">Login</string>
+    <string name="gamescore_heading">Willkommen bei Mankomania!</string>
+    <string name="ResumeGame">Spiel fortsetzen</string>
+    <string name="StartNewGame">neues Spiel starten</string>
+    <string name="ChooseYourCharacter_heading">Choose your Character</string>
+    <string name="ChooseYourCharacter_PurplePlayer">Lila</string>
+    <string name="ChooseYourCharacter_GreenPlayer">Grün</string>
+    <string name="ChooseYourCharacter_BluePlayer">Blau</string>
+    <string name="ChooseYourCharacter_OrangePlayer">Orange</string>
+    <string name="Start">Start</string>
 </resources>

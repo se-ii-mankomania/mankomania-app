@@ -7,4 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="purplePlayer">#AC4FC6</color>
+    <color name="greenPlayer">#AADB1E</color>
+    <color name="bluePlayer">#00AEEF</color>
+    <color name="orangePlayer">#FF8200</color>
 </resources>
