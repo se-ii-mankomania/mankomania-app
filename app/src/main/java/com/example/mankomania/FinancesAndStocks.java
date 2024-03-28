@@ -2,6 +2,8 @@ package com.example.mankomania;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,30 +11,26 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import android.view.View;
-import android.widget.Button;
-
-public class ChooseYourCharacter extends AppCompatActivity {
+public class FinancesAndStocks extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_choose_your_character);
+        setContentView(R.layout.activity_finances_and_stocks);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        Button start=findViewById(R.id.ChooseYourCharacter_StartButton);
-        start.setOnClickListener(new View.OnClickListener() {
+        Button board=findViewById(R.id.FinancesStocks_BackToBoard);
+        board.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startGameWithChosenCharacter=new Intent(ChooseYourCharacter.this, Board.class);
-                startActivity(startGameWithChosenCharacter);
+                Intent switchToBoard=new Intent(FinancesAndStocks.this, Board.class);
+                startActivity(switchToBoard);
             }
         });
-
     }
 }

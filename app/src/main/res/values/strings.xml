@@ -12,4 +12,13 @@
     <string name="ChooseYourCharacter_BluePlayer">Blau</string>
     <string name="ChooseYourCharacter_OrangePlayer">Orange</string>
     <string name="Start">Start</string>
+    <string name="FinancesStocks_ReturnToBoard">zurück zum Spielfeld</string>
+    <string name="Kontostand">Kontostand:</string>
+    <string name="CurrentPlayer">Wer ist dran?</string>
+    <string name="Board_ToFinancesAndStocks"><![CDATA[Finanzen & Aktien]]></string>
+    <string name="Finances_5kbillstxt">5.000€ Noten:</string>
+    <string name="Finances_10kbillstxt">10.000€ Noten:</string>
+    <string name="Finances_50kbillstxt">50.000€ Noten:</string>
+    <string name="Finances_100kbillstxt">100.000€ Noten:</string>
+    <string name="Finances_totaltxt">gesamt:</string>
 </resources>
