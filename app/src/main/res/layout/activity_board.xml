@@ -65,7 +65,9 @@
             android:id="@+id/FinancesStocks_Board"
             android:layout_width="match_parent"
             android:layout_height="360dp"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:contentDescription="@string/Spielbrett"
+            app:srcCompat="@android:drawable/presence_audio_online"
+            tools:srcCompat="@android:drawable/presence_audio_online" />
 
         <TextView
             android:id="@+id/FinancesStocks_Messages"

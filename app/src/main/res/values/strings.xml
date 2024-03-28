@@ -21,4 +21,10 @@
     <string name="Finances_50kbillstxt">50.000€ Noten:</string>
     <string name="Finances_100kbillstxt">100.000€ Noten:</string>
     <string name="Finances_totaltxt">gesamt:</string>
+    <string name="Spielbrett">Spielbrett</string>
+    <string name="Finances_heading">Finanzen</string>
+    <string name="Stocks_heading">Aktien</string>
+    <string name="Stocks_KurzschulssAGtxt">Kurzschluss-Versorgungs-AG:</string>
+    <string name="Stocks_TrockenölAGtxt">Trockenöl-AG:</string>
+    <string name="Stocks_BruchstahlAGtxt">Bruchstahl-AG:</string>
 </resources>
