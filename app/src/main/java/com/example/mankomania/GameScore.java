@@ -28,8 +28,17 @@ public class GameScore extends AppCompatActivity {
         resumeGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent resumeGameIntent=new Intent(GameScore.this, ChooseYourCharacter.class);
+                Intent resumeGameIntent=new Intent(GameScore.this, Board.class);
                 startActivity(resumeGameIntent);
+            }
+        });
+
+        Button startNewGame=findViewById(R.id.GameScore_NewGame);
+        startNewGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startNewGameIntent=new Intent(GameScore.this, ChooseYourCharacter.class);
+                startActivity(startNewGameIntent);
             }
         });
     }
