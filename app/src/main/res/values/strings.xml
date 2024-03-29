@@ -27,4 +27,5 @@
     <string name="Stocks_KurzschulssAGtxt">Kurzschluss-Versorgungs-AG:</string>
     <string name="Stocks_TrockenölAGtxt">Trockenöl-AG:</string>
     <string name="Stocks_BruchstahlAGtxt">Bruchstahl-AG:</string>
+    <string name="Logout">Logout</string>
 </resources>

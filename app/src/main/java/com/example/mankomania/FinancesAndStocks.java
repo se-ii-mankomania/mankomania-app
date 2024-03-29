@@ -24,13 +24,26 @@ public class FinancesAndStocks extends AppCompatActivity {
             return insets;
         });
 
-        Button board=findViewById(R.id.FinancesStocks_BackToBoard);
-        board.setOnClickListener(new View.OnClickListener() {
+        Button toBoard=findViewById(R.id.FinancesStocks_BackToBoard);
+        toBoard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent switchToBoard=new Intent(FinancesAndStocks.this, Board.class);
                 startActivity(switchToBoard);
             }
         });
+
+        Button logout=findViewById(R.id.FinancesStocks_LogoutButton);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent fromFinancesAndStocksToLogin=new Intent(FinancesAndStocks.this, MainActivityLogin.class);
+                startActivity(fromFinancesAndStocksToLogin);
+            }
+        });
+
+
+
+
     }
 }

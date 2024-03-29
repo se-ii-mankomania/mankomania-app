@@ -32,5 +32,14 @@ public class Board extends AppCompatActivity {
                 startActivity(switchToFinancesAndStocks);
             }
         });
+
+        Button logout=findViewById(R.id.Board_LogoutButton);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent fromBoardToLogin=new Intent(Board.this, MainActivityLogin.class);
+                startActivity(fromBoardToLogin);
+            }
+        });
     }
 }
