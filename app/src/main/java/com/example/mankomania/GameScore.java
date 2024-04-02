@@ -12,8 +12,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class GameScore extends AppCompatActivity {
-    Button startNewGame=findViewById(R.id.GameScore_NewGame);
-    Button resumeGame=findViewById(R.id.GameScore_ResumeGame);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +24,7 @@ public class GameScore extends AppCompatActivity {
             return insets;
         });
 
+        Button resumeGame=findViewById(R.id.GameScore_ResumeGame);
         resumeGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -34,6 +33,7 @@ public class GameScore extends AppCompatActivity {
             }
         });
 
+        Button startNewGame=findViewById(R.id.GameScore_NewGame);
         startNewGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

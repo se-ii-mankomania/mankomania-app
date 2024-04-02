@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivityLogin extends AppCompatActivity {
-    Button login=findViewById(R.id.Login_LoginButton);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +25,7 @@ public class MainActivityLogin extends AppCompatActivity {
             return insets;
         });
 
+        Button login=findViewById(R.id.Login_LoginButton);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
