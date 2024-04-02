@@ -54,6 +54,11 @@ public class ChooseYourCharacter extends AppCompatActivity {
 
     }
 
+    /**
+     * updateAvailableRadioButtons() überprüft, welche Farben noch zur Auswahl
+     * zur Verfügung stehen und graut die vergebenen Optionen aus
+     */
+
     private void updateAvailableRadioButtons(){
         RadioGroup colorSelection=findViewById(R.id.ChooseYourCharacter_ColorSelectionRadioGroup);
          for(int i=0;i<colorSelection.getChildCount();i++){
@@ -70,6 +75,11 @@ public class ChooseYourCharacter extends AppCompatActivity {
              }
          }
     }
+
+    /**
+     * restoreRadioButtons() bewirkt, dass die gesamte RadioGroup wieder in ihren
+     * anfänglichen Zustand zurückgesetzt wird. Jeder Button ist auswählbar.
+     */
 
     //TODO wann muss ich die Button wieder in ihren ursprünglichen Zustand versetzen
     private void restoreRadioButtons(){
@@ -93,6 +103,12 @@ public class ChooseYourCharacter extends AppCompatActivity {
         blue.setTextColor(ContextCompat.getColor(this,R.color.bluePlayer));
         blue.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.bluePlayer)));
     }
+
+    /**
+     * saveColorChoice() legt die ausgewählte Farbe für den Spieler ab
+     * und setzt den Wert für alle später zu gebrauchenden Variablen
+     * @param buttonId gibt die ID des RadioButtons zurück
+     */
 
     private void saveColorChoice(int buttonId){
         RadioButton selectedButton=findViewById(buttonId);
