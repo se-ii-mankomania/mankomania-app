@@ -37,6 +37,7 @@ public class Board extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO Daten des Spiels speichern etc.
                 Intent fromBoardToLogin=new Intent(Board.this, MainActivityLogin.class);
                 startActivity(fromBoardToLogin);
             }
