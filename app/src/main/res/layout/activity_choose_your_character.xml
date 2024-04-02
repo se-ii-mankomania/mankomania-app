@@ -14,7 +14,7 @@
         android:layout_marginBottom="83dp"
         android:text="@string/ChooseYourCharacter_heading"
         android:textSize="28sp"
-        app:layout_constraintBottom_toTopOf="@+id/colorRadioGroup"
+        app:layout_constraintBottom_toTopOf="@+id/ChooseYourCharacter_ColorSelectionRadioGroup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
@@ -33,7 +33,7 @@
     </LinearLayout>
 
     <RadioGroup
-        android:id="@+id/colorRadioGroup"
+        android:id="@+id/ChooseYourCharacter_ColorSelectionRadioGroup"
         android:layout_width="559dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="280dp"
@@ -103,7 +103,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/colorRadioGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/ChooseYourCharacter_ColorSelectionRadioGroup" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
