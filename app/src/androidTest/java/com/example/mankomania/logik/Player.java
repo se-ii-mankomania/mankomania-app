@@ -68,5 +68,9 @@ public class Player {
     public HashMap<String, Integer> getAmountOfStock(){
         return new HashMap<String, Integer>(stocks);
     }
-
+    public void resetAllShares(){
+        for(StockTypes stockTypes : StockTypes.values()){
+            stocks.put(String.valueOf(stockTypes), 0);
+        }
+    }
 }
