@@ -28,6 +28,7 @@ public class GameScore extends AppCompatActivity {
         resumeGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO Verbindung zu letzter Session herstellen
                 Intent resumeGameIntent=new Intent(GameScore.this, Board.class);
                 startActivity(resumeGameIntent);
             }
@@ -37,6 +38,7 @@ public class GameScore extends AppCompatActivity {
         startNewGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO neue Instanzen für neues Spiel erzeugen
                 Intent startNewGameIntent=new Intent(GameScore.this, ChooseYourCharacter.class);
                 startActivity(startNewGameIntent);
             }
