@@ -31,7 +31,7 @@
 
                 <TextView
                     android:id="@+id/Finances_header"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="60sp"
                     android:layout_weight="1"
                     android:gravity="center"
@@ -316,6 +316,8 @@
                 android:layout_weight="1"
                 android:text="@string/CurrentPlayer"
                 android:textSize="20sp" />
+
+
 
             <TextView
                 android:id="@+id/CurrentPlayer"

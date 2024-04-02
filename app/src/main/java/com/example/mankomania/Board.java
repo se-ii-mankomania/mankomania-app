@@ -12,6 +12,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class Board extends AppCompatActivity {
+    Button financesAndStocks=findViewById(R.id.Board_ToFinancesAndStocks);
+    Button logout=findViewById(R.id.Board_LogoutButton);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +26,6 @@ public class Board extends AppCompatActivity {
             return insets;
         });
 
-        Button financesAndStocks=findViewById(R.id.Board_ToFinancesAndStocks);
         financesAndStocks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -33,7 +34,6 @@ public class Board extends AppCompatActivity {
             }
         });
 
-        Button logout=findViewById(R.id.Board_LogoutButton);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class ChooseYourCharacter extends AppCompatActivity {
+    Button start=findViewById(R.id.ChooseYourCharacter_StartButton);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +26,6 @@ public class ChooseYourCharacter extends AppCompatActivity {
             return insets;
         });
 
-        Button start=findViewById(R.id.ChooseYourCharacter_StartButton);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
