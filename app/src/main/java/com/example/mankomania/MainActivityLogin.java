@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class MainActivityLogin extends AppCompatActivity {
 
@@ -29,8 +30,17 @@ public class MainActivityLogin extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent loginIntent=new Intent(MainActivityLogin.this, GameScore.class);
-                startActivity(loginIntent);
+                EditText usernameInput=findViewById(R.id.Login_Nutzername);
+                EditText passwordInput=findViewById(R.id.Login_Passwort);
+                //TODO Verknüpfung Datenbank und Nutzername & Passwort prüfen
+                boolean isValid=true;
+                if(isValid) {
+                    Intent loginIntent = new Intent(MainActivityLogin.this, GameScore.class);
+                    startActivity(loginIntent);
+                }else{
+                    usernameInput.setError("Nutzername ist ungültig");
+                    passwordInput.setError("Passwort ist ungültig.");
+                }
             }
         });
 
