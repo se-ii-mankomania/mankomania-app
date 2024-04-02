@@ -76,9 +76,5 @@ public class FinancesAndStocks extends AppCompatActivity {
                 startActivity(fromFinancesAndStocksToLogin);
             }
         });
-
-
-
-
     }
 }
