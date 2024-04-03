@@ -28,6 +28,6 @@
     <string name="Stocks_TrockenölAGtxt">Trockenöl-AG:</string>
     <string name="Stocks_BruchstahlAGtxt">Bruchstahl-AG:</string>
     <string name="Logout">Logout</string>
-    <string name="Register">Register</string>
+    <string name="Register">Registrieren</string>
     <string name="Register_Heading">Registrierung</string>
 </resources>
