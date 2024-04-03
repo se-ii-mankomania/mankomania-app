@@ -36,7 +36,7 @@ public class Register extends AppCompatActivity {
                 //TODO Nutzer in Datenbank anlegen
                 boolean availablePassword=true;
                 boolean availableEmail=true;
-                if(!MainActivityLogin.isValidEmail(emailInput.getText().toString()) && availableEmail) {
+                if(MainActivityLogin.isNoValidEmail(emailInput.getText().toString()) && availableEmail) {
                     emailInput.setError("E-Mail-Adresse ist ungültig.");
                 }else if(!availablePassword){
                     passwordInput.setError("Passwort ist bereits vergeben.");

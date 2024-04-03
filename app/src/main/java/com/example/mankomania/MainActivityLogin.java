@@ -45,7 +45,7 @@ public class MainActivityLogin extends AppCompatActivity {
                 EditText passwordInput=findViewById(R.id.Login_Passwort);
                 //TODO Verknüpfung Datenbank und E-Mail & Passwort prüfen
                 boolean isValid=true;
-                if(!isValidEmail(emailInput.getText().toString())) {
+                if(isNoValidEmail(emailInput.getText().toString())) {
                     emailInput.setError("E-Mail-Adresse ist ungültig.");
                 }else if(!isValid)
                     passwordInput.setError("E-mail oder Passwort sind ungültig.");
@@ -58,9 +58,9 @@ public class MainActivityLogin extends AppCompatActivity {
 
     }
 
-    static boolean isValidEmail(String email){
+    static boolean isNoValidEmail(String email){
         String emailRegex ="^(.+)@(\\S+)$";
         Pattern pattern = Pattern.compile(emailRegex);
-        return pattern.matcher(email).matches();
+        return !pattern.matcher(email).matches();
     }
 }
