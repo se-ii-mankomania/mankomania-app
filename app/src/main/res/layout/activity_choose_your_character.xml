@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChooseYourCharacter">
+
+    <TextView
+        android:id="@+id/ChooseYourCharacter_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="83dp"
+        android:text="@string/ChooseYourCharacter_heading"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/ChooseYourCharacter_ColorSelectionRadioGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="58dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/ChooseYourCharacter_heading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/ChooseYourCharacter_ColorSelectionRadioGroup"
+        android:layout_width="559dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="280dp"
+        android:layout_marginEnd="202dp"
+        android:layout_marginBottom="59dp"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/ChooseYourCharacter_StartButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ChooseYourCharacter_heading">
+
+
+        <RadioButton
+            android:id="@+id/ChooseYourCharacter_PurplePlayer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/purplePlayer"
+            android:text="@string/ChooseYourCharacter_PurplePlayer"
+            android:textColor="@color/purplePlayer"
+            tools:layout_editor_absoluteX="97dp"
+            tools:layout_editor_absoluteY="181dp" />
+
+        <RadioButton
+            android:id="@+id/ChooseYourCharacter_GreenPlayer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/greenPlayer"
+            android:text="@string/ChooseYourCharacter_GreenPlayer"
+            android:textColor="@color/greenPlayer"
+            tools:layout_editor_absoluteX="233dp"
+            tools:layout_editor_absoluteY="183dp" />
+
+        <RadioButton
+            android:id="@+id/ChooseYourCharacter_BluePlayer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/bluePlayer"
+            android:text="@string/ChooseYourCharacter_BluePlayer"
+            android:textColor="@color/bluePlayer"
+            tools:layout_editor_absoluteX="362dp"
+            tools:layout_editor_absoluteY="181dp" />
+
+        <RadioButton
+            android:id="@+id/ChooseYourCharacter_OrangePlayer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/orangePlayer"
+            android:text="@string/ChooseYourCharacter_OrangePlayer"
+            android:textColor="@color/orangePlayer"
+            tools:layout_editor_absoluteX="503dp"
+            tools:layout_editor_absoluteY="181dp" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/ChooseYourCharacter_StartButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="72dp"
+        android:text="@string/Start"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ChooseYourCharacter_ColorSelectionRadioGroup" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
