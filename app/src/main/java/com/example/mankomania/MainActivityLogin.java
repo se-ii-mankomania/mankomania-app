@@ -30,7 +30,7 @@ public class MainActivityLogin extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText usernameInput=findViewById(R.id.Login_Nutzername);
+                EditText usernameInput=findViewById(R.id.Login_Email);
                 EditText passwordInput=findViewById(R.id.Login_Passwort);
                 //TODO Verknüpfung Datenbank und Nutzername & Passwort prüfen
                 boolean isValid=true;
