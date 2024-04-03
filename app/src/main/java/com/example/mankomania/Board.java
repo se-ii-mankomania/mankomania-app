@@ -24,23 +24,6 @@ public class Board extends AppCompatActivity {
             return insets;
         });
 
-        Button financesAndStocks=findViewById(R.id.Board_ToFinancesAndStocks);
-        financesAndStocks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent switchToFinancesAndStocks=new Intent(Board.this, FinancesAndStocks.class);
-                startActivity(switchToFinancesAndStocks);
-            }
-        });
-
-        Button logout=findViewById(R.id.Board_LogoutButton);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO Daten des Spiels speichern etc.
-                Intent fromBoardToLogin=new Intent(Board.this, MainActivityLogin.class);
-                startActivity(fromBoardToLogin);
-            }
-        });
+        ToolbarFunctionalities toolbarFunctionalities=new ToolbarFunctionalities(this);
     }
 }
