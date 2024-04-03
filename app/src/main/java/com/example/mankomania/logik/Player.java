@@ -1,7 +1,5 @@
 package com.example.mankomania.logik;
 
-import android.provider.ContactsContract;
-
 import java.util.HashMap;
 import java.util.Map;
 

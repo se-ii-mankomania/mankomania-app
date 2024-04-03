@@ -1,7 +1,6 @@
 package com.example.mankomania.logik;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
