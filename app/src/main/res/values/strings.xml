@@ -30,4 +30,5 @@
     <string name="Logout">Logout</string>
     <string name="Register">Registrieren</string>
     <string name="Register_Heading">Registrierung</string>
+    <string name="Login_ZurRegistrierung">Zur Registrierung</string>
 </resources>

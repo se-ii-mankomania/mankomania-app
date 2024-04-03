@@ -25,20 +25,24 @@ public class Register extends AppCompatActivity {
             return insets;
         });
 
+
+
         Button register=findViewById(R.id.Register_RegisterButton);
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText usernameInput=findViewById(R.id.Register_Email);
+                EditText emailInput=findViewById(R.id.Register_Email);
                 EditText passwordInput=findViewById(R.id.Register_Passwort);
                 //TODO Nutzer in Datenbank anlegen
-                boolean isValid=true;
-                if(isValid) {
+                boolean availablePassword=true;
+                boolean availableEmail=true;
+                if(!MainActivityLogin.isValidEmail(emailInput.getText().toString()) && availableEmail) {
+                    emailInput.setError("E-Mail-Adresse ist ungültig.");
+                }else if(!availablePassword){
+                    passwordInput.setError("Passwort ist bereits vergeben.");
+                }else{
                     Intent registerIntent = new Intent(Register.this, MainActivityLogin.class);
                     startActivity(registerIntent);
-                }else{
-                    usernameInput.setError("E-Mail-Adresse ist ungültig.");
-                    passwordInput.setError("Passwort ist ungültig.");
                 }
             }
         });

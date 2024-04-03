@@ -25,7 +25,7 @@
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/email"
-        android:inputType="textWebEmailAddress"
+        android:inputType="textEmailAddress"
         android:minHeight="48dp"
         app:layout_constraintBottom_toTopOf="@+id/Register_Passwort"
         app:layout_constraintStart_toStartOf="@+id/Register_Passwort" />

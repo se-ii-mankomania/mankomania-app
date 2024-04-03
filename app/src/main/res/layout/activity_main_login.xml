@@ -11,11 +11,11 @@
       android:id="@+id/Login_LoginButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="27dp"
+      android:layout_marginEnd="50dp"
       android:layout_marginBottom="16dp"
       android:text="@string/Login"
       app:layout_constraintBottom_toTopOf="@+id/Login_RegisterButton"
-      app:layout_constraintStart_toStartOf="@+id/Login_RegisterButton" />
+      app:layout_constraintEnd_toEndOf="@+id/Login_RegisterButton" />
 
   <EditText
       android:id="@+id/Login_Email"
@@ -25,7 +25,7 @@
       android:autofillHints=""
       android:ems="10"
       android:hint="@string/email"
-      android:inputType="textWebEmailAddress"
+      android:inputType="textEmailAddress"
       android:minHeight="48dp"
       app:layout_constraintBottom_toTopOf="@+id/Login_LoginButton"
       app:layout_constraintEnd_toEndOf="parent"
@@ -48,9 +48,9 @@
       android:id="@+id/Login_RegisterButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="34dp"
+      android:layout_marginStart="10dp"
       android:layout_marginBottom="25dp"
-      android:text="@string/Register"
+      android:text="@string/Login_ZurRegistrierung"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="@+id/Login_Passwort" />
 </androidx.constraintlayout.widget.ConstraintLayout>

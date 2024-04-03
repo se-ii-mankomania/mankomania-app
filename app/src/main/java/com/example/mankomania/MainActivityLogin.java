@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.regex.Pattern;
+
 public class MainActivityLogin extends AppCompatActivity {
 
     @Override
@@ -35,24 +37,30 @@ public class MainActivityLogin extends AppCompatActivity {
             }
         });
 
-
         Button login=findViewById(R.id.Login_LoginButton);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText usernameInput=findViewById(R.id.Login_Email);
+                EditText emailInput=findViewById(R.id.Login_Email);
                 EditText passwordInput=findViewById(R.id.Login_Passwort);
                 //TODO Verknüpfung Datenbank und E-Mail & Passwort prüfen
                 boolean isValid=true;
-                if(isValid) {
+                if(!isValidEmail(emailInput.getText().toString())) {
+                    emailInput.setError("E-Mail-Adresse ist ungültig.");
+                }else if(!isValid)
+                    passwordInput.setError("E-mail oder Passwort sind ungültig.");
+                else{
                     Intent loginIntent = new Intent(MainActivityLogin.this, GameScore.class);
                     startActivity(loginIntent);
-                }else{
-                    usernameInput.setError("E-Mail-Adresse ist ungültig.");
-                    passwordInput.setError("Passwort ist ungültig.");
                 }
             }
         });
 
+    }
+
+    static boolean isValidEmail(String email){
+        String emailRegex ="^(.+)@(\\S+)$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        return pattern.matcher(email).matches();
     }
 }
