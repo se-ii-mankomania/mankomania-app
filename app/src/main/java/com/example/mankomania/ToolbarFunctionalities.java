@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * Diese Klasse fügt den "Logout"- und den "Finances & Stocks"-Button eine Funktionlität zu.
+ */
 public class ToolbarFunctionalities {
-
 
     public ToolbarFunctionalities(Context context){
         Activity activity=(Activity)context;
