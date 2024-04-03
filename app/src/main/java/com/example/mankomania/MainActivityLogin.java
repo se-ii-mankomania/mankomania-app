@@ -58,6 +58,13 @@ public class MainActivityLogin extends AppCompatActivity {
 
     }
 
+    /**
+     * Diese Methode überprüft mit einem simplen Regex, ob es sich bei dem
+     * Eingabestring um eine E-Mail-Adresse handelt.
+     * @param email zu überprüfende E-Mail-Adresse aus Eingabefeld
+     * @return ob E-Mail-Adresse nicht valide ist oder schon
+     */
+
     static boolean isNoValidEmail(String email){
         String emailRegex ="^(.+)@(\\S+)$";
         Pattern pattern = Pattern.compile(emailRegex);
