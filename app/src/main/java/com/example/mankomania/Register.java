@@ -1,6 +1,10 @@
 package com.example.mankomania;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,5 +24,24 @@ public class Register extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Button register=findViewById(R.id.Register_RegisterButton);
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText usernameInput=findViewById(R.id.Register_Email);
+                EditText passwordInput=findViewById(R.id.Register_Passwort);
+                //TODO Nutzer in Datenbank anlegen
+                boolean isValid=true;
+                if(isValid) {
+                    Intent registerIntent = new Intent(Register.this, MainActivityLogin.class);
+                    startActivity(registerIntent);
+                }else{
+                    usernameInput.setError("E-Mail-Adresse ist ungültig.");
+                    passwordInput.setError("Passwort ist ungültig.");
+                }
+            }
+        });
+
     }
 }

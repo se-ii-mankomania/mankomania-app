@@ -15,10 +15,10 @@
         android:layout_marginBottom="71dp"
         android:text="@string/Register"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/Login_Passwort" />
+        app:layout_constraintStart_toStartOf="@+id/Register_Passwort" />
 
     <EditText
-        android:id="@+id/Login_Email"
+        android:id="@+id/Register_Email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
@@ -27,11 +27,11 @@
         android:hint="@string/email"
         android:inputType="textWebEmailAddress"
         android:minHeight="48dp"
-        app:layout_constraintBottom_toTopOf="@+id/Login_Passwort"
-        app:layout_constraintStart_toStartOf="@+id/Login_Passwort" />
+        app:layout_constraintBottom_toTopOf="@+id/Register_Passwort"
+        app:layout_constraintStart_toStartOf="@+id/Register_Passwort" />
 
     <EditText
-        android:id="@+id/Login_Passwort"
+        android:id="@+id/Register_Passwort"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="28dp"

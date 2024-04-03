@@ -26,19 +26,29 @@ public class MainActivityLogin extends AppCompatActivity {
             return insets;
         });
 
+        Button register=findViewById(R.id.Login_RegisterButton);
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent registerIntent=new Intent(MainActivityLogin.this,Register.class);
+                startActivity(registerIntent);
+            }
+        });
+
+
         Button login=findViewById(R.id.Login_LoginButton);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EditText usernameInput=findViewById(R.id.Login_Email);
                 EditText passwordInput=findViewById(R.id.Login_Passwort);
-                //TODO Verknüpfung Datenbank und Nutzername & Passwort prüfen
+                //TODO Verknüpfung Datenbank und E-Mail & Passwort prüfen
                 boolean isValid=true;
                 if(isValid) {
                     Intent loginIntent = new Intent(MainActivityLogin.this, GameScore.class);
                     startActivity(loginIntent);
                 }else{
-                    usernameInput.setError("Nutzername ist ungültig");
+                    usernameInput.setError("E-Mail-Adresse ist ungültig.");
                     passwordInput.setError("Passwort ist ungültig.");
                 }
             }
