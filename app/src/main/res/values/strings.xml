@@ -31,4 +31,6 @@
     <string name="Register">Registrieren</string>
     <string name="Register_Heading">Registrierung</string>
     <string name="Login_ZurRegistrierung">Zur Registrierung</string>
+    <string name="Wuerfeln">Würfeln</string>
+    <string name="RollDice_resultTxt">Dein Ergebnis lautet:</string>
 </resources>
