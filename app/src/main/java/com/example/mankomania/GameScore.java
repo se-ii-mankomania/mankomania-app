@@ -3,6 +3,7 @@ package com.example.mankomania;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -42,7 +43,7 @@ public class GameScore extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int checkedPosition=listOfGames.getCheckedItemPosition();
-                if(checkedPosition!=ListView.INVALID_POSITION) {
+                if(checkedPosition!= AdapterView.INVALID_POSITION) {
                     String selectedGame=(String) listOfGames.getItemAtPosition(checkedPosition);
                     //TODO selctedGame starten
                     Intent resumeGameIntent = new Intent(GameScore.this, Board.class);
