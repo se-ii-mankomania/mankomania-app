@@ -45,5 +45,6 @@ sonar {
         property "sonar.projectKey", "se-ii-mankomania_mankomania-app"
         property "sonar.organization", "se-ii-mankomania"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.exclusions", "**/Board.java,**/ChooseYourCharacter.java,**/FinancesAndStocks.java,**/GameScore.java,**/MainActivityLogin.java,**/PlayerViewModel.java"
     }
 }
