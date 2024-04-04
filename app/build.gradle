@@ -46,8 +46,8 @@ sonar {
         property "sonar.organization", "se-ii-mankomania"
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.exclusions", "**/Board.java,**/ChooseYourCharacter.java," +
-                "**/Event_RollDice,**/FinancesAndStocks.java,**/GameScore.java," +
+                "**/Event_RollDice.java,**/FinancesAndStocks.java,**/GameScore.java," +
                 "**/MainActivityLogin.java,**/PlayerViewModel.java," +
-                "**/Register.java,**/ToolbarFunctionalities"
+                "**/Register.java,**/ToolbarFunctionalities.java"
     }
 }
