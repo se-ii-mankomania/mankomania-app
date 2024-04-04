@@ -32,7 +32,7 @@
                 <TextView
                     android:id="@+id/Finances_header"
                     android:layout_width="wrap_content"
-                    android:layout_height="60sp"
+                    android:layout_height="45sp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/Finances_heading"
@@ -47,7 +47,7 @@
                 <TextView
                     android:id="@+id/Finances_5kbillsTxt"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="50sp"
                     android:layout_weight="1"
                     android:text="@string/Finances_5kbillstxt"
                     android:textSize="16sp" />
@@ -55,7 +55,7 @@
                 <TextView
                     android:id="@+id/Finances_5kbillsAnswer"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="50sp"
                     android:layout_weight="1"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -68,7 +68,7 @@
                 <TextView
                     android:id="@+id/Finances_10kbillsTxt"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="50sp"
                     android:layout_weight="1"
                     android:text="@string/Finances_10kbillstxt"
                     android:textSize="16sp" />
@@ -76,7 +76,7 @@
                 <TextView
                     android:id="@+id/Finances_10kbillsAnswer"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="50sp"
                     android:layout_weight="1"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -89,7 +89,7 @@
                 <TextView
                     android:id="@+id/Finances_50kbillsTxt"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="50sp"
                     android:layout_weight="1"
                     android:text="@string/Finances_50kbillstxt"
                     android:textSize="16sp" />
@@ -97,7 +97,7 @@
                 <TextView
                     android:id="@+id/Finances_50kbillsAnswer"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="50sp"
                     android:layout_weight="1"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -110,7 +110,7 @@
                 <TextView
                     android:id="@+id/Finances_100kbillsTxt"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="40sp"
                     android:layout_weight="1"
                     android:text="@string/Finances_100kbillstxt"
                     android:textSize="16sp" />
@@ -118,7 +118,7 @@
                 <TextView
                     android:id="@+id/Finances_100kbillsAnswer"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="40sp"
                     android:layout_weight="1"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -131,7 +131,7 @@
                 <TextView
                     android:id="@+id/Finances_totalTxt"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="50sp"
                     android:layout_weight="1"
                     android:text="@string/Finances_totaltxt"
                     android:textSize="16sp" />
@@ -139,7 +139,7 @@
                 <TextView
                     android:id="@+id/Finances_totalAnswer"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="50sp"
                     android:layout_weight="1"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -174,7 +174,7 @@
                 <TextView
                     android:id="@+id/Stocks_header"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="45sp"
                     android:gravity="center"
                     android:layout_weight="1"
                     android:text="@string/Stocks_heading"
@@ -188,7 +188,7 @@
                 <TextView
                     android:id="@+id/Stocks_KurzschulssAGTxt"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="50sp"
                     android:layout_weight="1"
                     android:text="@string/Stocks_KurzschulssAGtxt"
                     android:textSize="16sp" />
@@ -196,7 +196,7 @@
                 <TextView
                     android:id="@+id/Stocks_KurzschulssAGAnswer"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="50sp"
                     android:layout_weight="1"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -207,7 +207,7 @@
                 <TextView
                     android:id="@+id/Stocks_TrockenoelAGTxt"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="50sp"
                     android:layout_weight="1"
                     android:text="@string/Stocks_TrockenölAGtxt"
                     android:textSize="16sp" />
@@ -215,7 +215,7 @@
                 <TextView
                     android:id="@+id/Stocks_TrockenoelAGAnswer"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="50sp"
                     android:layout_weight="1"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -226,7 +226,7 @@
                 <TextView
                     android:id="@+id/Stocks_BruchstahlAGTxt"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="40sp"
                     android:layout_weight="1"
                     android:text="@string/Stocks_BruchstahlAGtxt"
                     android:textSize="16sp" />
@@ -234,7 +234,7 @@
                 <TextView
                     android:id="@+id/Stocks_BruchstahlAGAnswer"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="40sp"
                     android:layout_weight="1"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -246,7 +246,7 @@
                 <TextView
                     android:id="@+id/Stocks_totalTxt"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="50sp"
                     android:layout_weight="1"
                     android:text="@string/Finances_totaltxt"
                     android:textSize="16sp" />
@@ -254,7 +254,7 @@
                 <TextView
                     android:id="@+id/Stocks_totalAnswer"
                     android:layout_width="0dp"
-                    android:layout_height="60sp"
+                    android:layout_height="50sp"
                     android:layout_weight="1"
                     android:textSize="16sp" />
             </LinearLayout>

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Mankomania</string>
     <string name="passwort">Passwort</string>
-    <string name="nutzername">Nutzername</string>
+    <string name="email">E-Mail</string>
     <string name="Login">Login</string>
     <string name="gamescore_heading">Willkommen bei Mankomania!</string>
     <string name="ResumeGame">Spiel fortsetzen</string>
@@ -28,4 +28,9 @@
     <string name="Stocks_TrockenölAGtxt">Trockenöl-AG:</string>
     <string name="Stocks_BruchstahlAGtxt">Bruchstahl-AG:</string>
     <string name="Logout">Logout</string>
+    <string name="Register">Registrieren</string>
+    <string name="Register_Heading">Registrierung</string>
+    <string name="Login_ZurRegistrierung">Zur Registrierung</string>
+    <string name="Wuerfeln">Würfeln</string>
+    <string name="RollDice_resultTxt">Dein Ergebnis lautet:</string>
 </resources>
