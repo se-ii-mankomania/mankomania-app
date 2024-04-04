@@ -1,11 +1,7 @@
 package com.example.mankomania;
 
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.stream.Stream;
 
 public class TestEmail {
     @Test
