@@ -12,15 +12,46 @@
         tools:layout_editor_absoluteX="162dp"
         tools:layout_editor_absoluteY="-48dp">
 
-        <include layout="@layout/toolbar_layout" />
-
-        <ImageView
-            android:id="@+id/Board_Board"
+        <com.example.mankomania.ZoomLinearLayout
+            android:id="@+id/zoom_linear_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="50dp"
-            android:contentDescription="@string/Spielbrett"
-            android:src="@drawable/gameboard" />
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/Board_Board"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/Spielbrett"
+                    android:src="@drawable/gameboard" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        android:id="@+id/button2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="250dp"
+                        android:layout_marginTop="135dp"
+                        android:text="Button" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="153dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Button" />
+        </com.example.mankomania.ZoomLinearLayout>
+
+        <include layout="@layout/toolbar_layout" />
 
         <TextView
             android:id="@+id/Board_Messages"
