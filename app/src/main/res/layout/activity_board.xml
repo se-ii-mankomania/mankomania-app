@@ -17,9 +17,10 @@
         <ImageView
             android:id="@+id/Board_Board"
             android:layout_width="match_parent"
-            android:layout_height="360dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="50dp"
             android:contentDescription="@string/Spielbrett"
-            tools:srcCompat="@drawable/gameboard" />
+            android:src="@drawable/gameboard" />
 
         <TextView
             android:id="@+id/Board_Messages"
