@@ -11,7 +11,7 @@ public class Player {
     private Wallet wallet;
     private Map<String, Integer> stocks ;
     private int position;
-    private SecureRandom random = new SecureRandom;
+    private SecureRandom random = new SecureRandom();
 
     public Player(String username, Color color) {
         this.id = random.nextInt(10000);
