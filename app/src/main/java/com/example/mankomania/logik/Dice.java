@@ -1,8 +1,11 @@
 package com.example.mankomania.logik;
 
+import java.security.SecureRandom;
+
 public class Dice {
+    SecureRandom random = new SecureRandom();
     public int[] throwDice(){
-        return new int[]{(int) (Math.random()*6)+1, (int) (Math.random()*6)+1};
+        return new int[]{ random.nextInt(6)+1, random.nextInt(6)+1};
     }
 
     public int[] rollSix(){
