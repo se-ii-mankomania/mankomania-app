@@ -19,8 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="360dp"
             android:contentDescription="@string/Spielbrett"
-            app:srcCompat="@android:drawable/presence_audio_online"
-            tools:srcCompat="@android:drawable/presence_audio_online" />
+            tools:srcCompat="@drawable/gameboard" />
 
         <TextView
             android:id="@+id/Board_Messages"
