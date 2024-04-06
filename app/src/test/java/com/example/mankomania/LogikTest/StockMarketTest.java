@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 
 public class StockMarketTest {
-
     private StockMarket stockMarket = new StockMarket();
 
     //Stellt sicher, dass beim Erstellen eines StockMarket-Objekts alle Aktientypen mit einem Startkurs initialisiert werden, der im definierten Bereich liegt.
