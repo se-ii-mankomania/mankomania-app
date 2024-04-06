@@ -21,6 +21,7 @@ public class StockMarket {
     public void refreshSharePrice(){
         for (StockTypes stockTypes : StockTypes.values()){
             double newSharePrice = sharePrice.get(stockTypes) + (random.nextDouble()* 20 - 10);
+            sharePrice.put(stockTypes, newSharePrice);
         }
     }
 }
