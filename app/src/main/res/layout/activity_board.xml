@@ -8,39 +8,34 @@
     tools:context=".Board">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="162dp"
-        tools:layout_editor_absoluteY="-48dp">
+        android:layout_height="match_parent">
 
         <com.example.mankomania.ZoomLayout
             android:id="@+id/zoom_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <RelativeLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <GridLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/grid_board"
+                    android:columnCount="14"
+                    android:rowCount="14"
+                    android:layout_gravity="center">
+                </GridLayout>
+
                 <ImageView
-                    android:id="@+id/Board_Board"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@string/Spielbrett"
-                    android:src="@drawable/gameboard" />
+                    android:id="@+id/iv_player"
+                    android:layout_width="30px"
+                    android:layout_height="30px"
+                    android:src="@drawable/ic_launcher_background">
+                </ImageView>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <Button
-                        android:id="@+id/button2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="250dp"
-                        android:layout_marginTop="135dp"
-                        android:text="Button" />
-                </RelativeLayout>
-            </RelativeLayout>
+            </FrameLayout>
         </com.example.mankomania.ZoomLayout>
 
         <include layout="@layout/toolbar_layout" />
