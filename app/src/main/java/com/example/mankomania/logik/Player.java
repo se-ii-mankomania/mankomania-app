@@ -3,8 +3,11 @@ package com.example.mankomania.logik;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class Player {
+
+    Logger logger = Logger.getLogger(getClass().getName());
     private int id;
     private String username;
     private Color color;
@@ -50,7 +53,7 @@ public class Player {
             this.wallet.removeMoney(note, amount);
             player.wallet.addMoney(note, amount);
         }catch (Exception e){
-            System.out.println(e);
+            logger.info(e.getMessage());
         }
     }
     public void addMoneyToWallet(NoteTypes note, int amount) {
@@ -61,7 +64,7 @@ public class Player {
         try {
             this.wallet.cheatMoney(note, amount);
         }catch (Exception e){
-            System.out.println(e);
+            logger.info(e.getMessage());
         }
     }
 
@@ -69,7 +72,7 @@ public class Player {
         try{
             this.wallet.removeMoney(note, amount);
         }catch (Exception e){
-            System.out.println(e);
+            logger.info(e.getMessage());
         }
     }
     public int getWalletBalance() {
