@@ -18,22 +18,25 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+                
 
-                <GridLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/grid_board"
-                    android:columnCount="14"
-                    android:rowCount="14"
-                    android:layout_gravity="center">
-                </GridLayout>
+
+                <ImageView
+                    android:id="@+id/gameboard"
+                    android:layout_width="240dp"
+                    android:layout_height="240dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/gameboard">
+                </ImageView>
 
                 <ImageView
                     android:id="@+id/iv_player"
-                    android:layout_width="30px"
-                    android:layout_height="30px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:src="@drawable/ic_launcher_background">
                 </ImageView>
+
+
 
             </FrameLayout>
         </com.example.mankomania.ZoomLayout>
