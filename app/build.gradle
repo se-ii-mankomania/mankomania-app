@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
+    id "jacoco"
     id "org.sonarqube" version "4.4.1.3373"
 }
 
@@ -18,6 +19,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            testCoverageEnabled = true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -45,9 +49,15 @@ sonar {
         property "sonar.projectKey", "se-ii-mankomania_mankomania-app"
         property "sonar.organization", "se-ii-mankomania"
         property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.exclusions", "**/Board.java,**/ChooseYourCharacter.java," +
-                "**/Event_RollDice.java,**/FinancesAndStocks.java,**/GameScore.java," +
-                "**/MainActivityLogin.java,**/PlayerViewModel.java," +
-                "**/Register.java,**/ToolbarFunctionalities.java"
+
+        //property "sonar.exclusions", "**/Board.java,**/ChooseYourCharacter.java," +
+        //        "**/Event_RollDice.java,**/FinancesAndStocks.java,**/GameScore.java," +
+        //        "**/MainActivityLogin.java,**/PlayerViewModel.java," +
+        //        "**/Register.java,**/ToolbarFunctionalities.java"
+        property "sonar.sources", ["src/test", "src/main/java"]
+        property "sonar.tests", "src/test"
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.test.inclusions", ["src/test/java"]
+        property "sonar.coverage.exclusions", ["**src/main/**"]
     }
 }
