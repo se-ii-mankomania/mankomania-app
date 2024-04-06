@@ -31,6 +31,19 @@ public class Player {
     public void movement(int fields){
         this.position += fields;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
     //Auslagern in einer späteren Phase
     public void payToPlayer(Player player, NoteTypes note, int amount){
         try {
@@ -72,5 +85,9 @@ public class Player {
         for(StockTypes stockTypes : StockTypes.values()){
             stocks.put(String.valueOf(stockTypes), 0);
         }
+    }
+
+    public int getPosition() {
+        return position;
     }
 }
