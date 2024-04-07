@@ -46,7 +46,7 @@ tasks.register('jacocoTestReport', JacocoReport) {
     def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
     def debugTree = fileTree(dir: "${project.layout.buildDirectory.get().asFile}/intermediates/javac/debug", excludes: fileFilter)
     def mainSrc = "${project.projectDir}/src/main/java"
-
+    
     sourceDirectories.from = files([mainSrc])
     classDirectories.from = files([debugTree])
     executionData.from = files("${project.layout.buildDirectory.get().asFile}/jacoco/testDebugUnitTest.exec")
@@ -62,6 +62,7 @@ sonar {
                 "**/Event_RollDice,**/FinancesAndStocks.java,**/GameScore.java," +
                 "**/MainActivityLogin.java,**/PlayerViewModel.java," +
                 "**/Register.java,**/ToolbarFunctionalities"
+
     }
 }
 dependencies {
