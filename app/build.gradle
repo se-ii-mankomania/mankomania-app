@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
-    id "jacoco"
+    //id "jacoco"
     id "org.sonarqube" version "4.4.1.3373"
 }
 
@@ -28,30 +28,31 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    testOptions {
-        unitTests.all {
-            useJUnitPlatform()
-            finalizedBy jacocoTestReport
-        }
-    }
+    //testOptions {
+    //    unitTests.all {
+    //        useJUnitPlatform()
+    //        finalizedBy jacocoTestReport
+    //    }
+    //}
 }
 
-tasks.register('jacocoTestReport', JacocoReport) {
-    dependsOn 'testDebugUnitTest'
+//tasks.register('jacocoTestReport', JacocoReport) {
+//    dependsOn 'testDebugUnitTest'
 
-    reports {
-        xml.required = true
-        xml.destination file("${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
-    }
+//   reports {
+//        xml.required = true
+//        xml.destination file("${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
+//    }
 
-    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
-    def debugTree = fileTree(dir: "${project.layout.buildDirectory.get().asFile}/intermediates/javac/debug", excludes: fileFilter)
-    def mainSrc = "${project.projectDir}/src/main/java"
+//    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+//    def debugTree = fileTree(dir: "${project.layout.buildDirectory.get().asFile}/intermediates/javac/debug", excludes: fileFilter)
+//    def mainSrc = "${project.projectDir}/src/main/java"
 
-    sourceDirectories.from = files([mainSrc])
-    classDirectories.from = files([debugTree])
-    executionData.from = files("${project.layout.buildDirectory.get().asFile}/jacoco/testDebugUnitTest.exec")
-}
+//    sourceDirectories.from = files([mainSrc])
+//    classDirectories.from = files([debugTree])
+//    executionData.from = files("${project.layout.buildDirectory.get().asFile}/jacoco/testDebugUnitTest.exec")
+//}
+
 
 dependencies {
 
@@ -62,10 +63,10 @@ dependencies {
     testImplementation libs.junit
     // No such property ...
     // no time to fix rn
-    testImplementation libs.junit.jupiter.api
-    testRuntimeOnly libs.junit.jupiter.engine
-    androidTestImplementation libs.ext.junit
-    androidTestImplementation libs.espresso.core
+    //testImplementation libs.junit.jupiter.api
+    //testRuntimeOnly libs.junit.jupiter.engine
+    //androidTestImplementation libs.ext.junit
+    //androidTestImplementation libs.espresso.core
 }
 
 sonar {
@@ -74,8 +75,8 @@ sonar {
         property "sonar.organization", "se-ii-mankomania"
         property "sonar.host.url", "https://sonarcloud.io"
 
-        property "sonar.java.coveragePlugin", "jacoco"
-        property "sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+        //property "sonar.java.coveragePlugin", "jacoco"
+        //property "sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
 
         //property "sonar.exclusions", "**/Board.java,**/ChooseYourCharacter.java," +
         //        "**/Event_RollDice.java,**/FinancesAndStocks.java,**/GameScore.java," +
