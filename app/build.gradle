@@ -72,4 +72,7 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
+    implementation libs.okhttp
+    testImplementation libs.junit.jupiter.api
+    testRuntimeOnly libs.jupiter.junit.jupiter.engine
 }
