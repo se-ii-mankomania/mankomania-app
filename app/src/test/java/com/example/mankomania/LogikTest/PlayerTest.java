@@ -1,16 +1,17 @@
 package com.example.mankomania.LogikTest;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.example.mankomania.logik.Color;
 import com.example.mankomania.logik.NoteTypes;
 import com.example.mankomania.logik.Player;
 import com.example.mankomania.logik.StockTypes;
 
-import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Optional;
 
 public class PlayerTest {
         private Player player1 = new Player("T1", Color.RED);
@@ -69,7 +70,7 @@ public class PlayerTest {
         @Test
         public void testAddShare() {
             player1.addShare(StockTypes.BRUCHSTAHL_AG, 5);
-            assertEquals(5, player1.getAmountOfStock().get(String.valueOf(StockTypes.BRUCHSTAHL_AG)));
+            assertEquals(Optional.of(5), player1.getAmountOfStock().get(String.valueOf(StockTypes.BRUCHSTAHL_AG)));
         }
 
         @Test
