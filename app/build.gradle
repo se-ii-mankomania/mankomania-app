@@ -28,13 +28,8 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    testOptions {
-        unitTests.all {
-            useJUnitPlatform()
-            finalizedBy jacocoTestReport
-        }
-    }
 }
+
 tasks.register('jacocoTestReport', JacocoReport) {
     dependsOn 'testDebugUnitTest'
 
@@ -51,6 +46,7 @@ tasks.register('jacocoTestReport', JacocoReport) {
     classDirectories.from = files([debugTree])
     executionData.from = files("${project.layout.buildDirectory.get().asFile}/jacoco/testDebugUnitTest.exec")
 }
+
 sonar {
     properties {
         property "sonar.projectKey", "se-ii-mankomania_mankomania-app"
