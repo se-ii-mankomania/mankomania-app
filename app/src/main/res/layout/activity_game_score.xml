@@ -11,9 +11,11 @@
         android:id="@+id/GameScore_heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="67dp"
+        android:layout_marginTop="47dp"
+        android:layout_marginBottom="31dp"
         android:text="@string/gamescore_heading"
         android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/GameScore_NewGame"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,19 +24,33 @@
         android:id="@+id/GameScore_ResumeGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="38dp"
+        android:layout_marginStart="89dp"
+        android:layout_marginBottom="35dp"
         android:text="@string/ResumeGame"
-        app:layout_constraintStart_toStartOf="@+id/GameScore_NewGame"
-        app:layout_constraintTop_toBottomOf="@+id/GameScore_heading" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/GameScore_ListOfGames"
+        app:layout_constraintTop_toBottomOf="@+id/GameScore_ListOfGames" />
 
     <Button
         android:id="@+id/GameScore_NewGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="39dp"
+        android:layout_marginStart="82dp"
+        android:layout_marginBottom="5dp"
         android:text="@string/StartNewGame"
+        app:layout_constraintBottom_toTopOf="@+id/GameScore_ListOfGames"
+        app:layout_constraintStart_toStartOf="@+id/GameScore_ListOfGames"
+        app:layout_constraintTop_toBottomOf="@+id/GameScore_heading" />
+
+    <ListView
+        android:id="@+id/GameScore_ListOfGames"
+        android:layout_width="373dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:choiceMode="singleChoice"
+        app:layout_constraintBottom_toTopOf="@+id/GameScore_ResumeGame"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/GameScore_ResumeGame" />
+        app:layout_constraintTop_toBottomOf="@+id/GameScore_NewGame" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
