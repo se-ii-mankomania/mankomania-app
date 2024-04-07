@@ -59,13 +59,12 @@ sonar {
         property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
         property "sonar.exclusions", "**/Board.java,**/ChooseYourCharacter.java," +
-                "**/Event_RollDice.java,**/FinancesAndStocks.java,**/GameScore.java," +
+                "**/Event_RollDice,**/FinancesAndStocks.java,**/GameScore.java," +
                 "**/MainActivityLogin.java,**/PlayerViewModel.java," +
-                "**/Register.java,**/ToolbarFunctionalities.java"
+                "**/Register.java,**/ToolbarFunctionalities"
     }
 }
 dependencies {
-
     implementation libs.appcompat
     implementation libs.material
     implementation libs.activity
