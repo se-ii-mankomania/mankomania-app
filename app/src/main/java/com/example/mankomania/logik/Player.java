@@ -28,7 +28,7 @@ public class Player {
 
     public void initializationOfStocks(){
         stocks.put(String.valueOf(StockTypes.BRUCHSTAHL_AG), 0);
-        stocks.put(String.valueOf(StockTypes.TROCKENÖL_AG), 0);
+        stocks.put(String.valueOf(StockTypes.TROCKENOEL_AG), 0);
         stocks.put(String.valueOf(StockTypes.KURZSCHLUSS_VERSORGUNGS_AG), 0);
     }
     public void movement(int fields){
