@@ -75,7 +75,7 @@ public class PlayerTest {
         @Test
         public void testResetAllShares(){
         player1.addShare(StockTypes.BRUCHSTAHL_AG, 1);
-        player1.addShare(StockTypes.TROCKENÖL_AG, 1);
+        player1.addShare(StockTypes.TROCKENOEL_AG, 1);
         player1.addShare(StockTypes.KURZSCHLUSS_VERSORGUNGS_AG, 1);
 
         player1.resetAllShares();
