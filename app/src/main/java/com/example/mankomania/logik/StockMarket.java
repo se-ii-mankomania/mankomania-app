@@ -3,7 +3,6 @@ package com.example.mankomania.logik;
 import java.security.SecureRandom;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Random;
 
 public class StockMarket {
     SecureRandom random = new SecureRandom();
