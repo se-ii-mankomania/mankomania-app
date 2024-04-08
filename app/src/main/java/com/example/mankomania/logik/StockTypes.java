@@ -2,7 +2,7 @@ package com.example.mankomania.logik;
 
 public enum StockTypes {
     BRUCHSTAHL_AG("Bruchstahl AG"),
-    TROCKENÖL_AG("Trockenöl AG"),
+    TROCKENOEL_AG("Trockenöl AG"),
     KURZSCHLUSS_VERSORGUNGS_AG("Kurzschluss-Versorgungs AG");
 
     private String name;
