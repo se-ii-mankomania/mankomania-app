@@ -81,7 +81,7 @@ public class Player {
     public void addShare(StockTypes stockTypes, int amount){
         stocks.merge(String.valueOf(stockTypes), amount, Integer::sum);
     }
-    public HashMap<String, Integer> getAmountOfStock(){
+    public Map<String, Integer> getAmountOfStock(){
         return new HashMap<String, Integer>(stocks);
     }
     public void resetAllShares(){
