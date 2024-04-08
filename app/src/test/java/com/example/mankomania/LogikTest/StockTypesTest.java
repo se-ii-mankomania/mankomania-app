@@ -14,8 +14,8 @@ public class StockTypesTest {
         assertEquals("Bruchstahl AG", StockTypes.BRUCHSTAHL_AG.getName());
     }
     @Test
-    public void testNameOfTROCKENÖL_AG(){
-        assertEquals("Trockenöl AG", StockTypes.TROCKENÖL_AG.getName());
+    public void testNameOfTROCKENOEL_AG(){
+        assertEquals("Trockenöl AG", StockTypes.TROCKENOEL_AG.getName());
     }
     @Test
     public void testNameOfKURZSCHLUSS_VERSORGUNGS_AG(){
@@ -25,7 +25,7 @@ public class StockTypesTest {
     //Stellt sicher, dass alle Aktien vorhanden sind
     @Test
     public void testEnumValues(){
-        StockTypes[] expectedStockTypes = {StockTypes.BRUCHSTAHL_AG, StockTypes.TROCKENÖL_AG, StockTypes.KURZSCHLUSS_VERSORGUNGS_AG};
+        StockTypes[] expectedStockTypes = {StockTypes.BRUCHSTAHL_AG, StockTypes.TROCKENOEL_AG, StockTypes.KURZSCHLUSS_VERSORGUNGS_AG};
         StockTypes[] actualStockTypes = StockTypes.values();
         assertEquals(expectedStockTypes, actualStockTypes);
     }
