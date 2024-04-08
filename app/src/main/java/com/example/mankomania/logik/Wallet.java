@@ -16,21 +16,21 @@ public class Wallet {
         int currentAmount = notes.getOrDefault(note, 0);
         notes.put(note, currentAmount + amount);
     }
-    public void cheatMoney(NoteTypes noteTypes, int amount)throws Exception{
+    public void cheatMoney(NoteTypes noteTypes, int amount){
         int currentAmount = notes.getOrDefault(noteTypes, 0);
         if(currentAmount >= amount){
             notes.put(noteTypes, currentAmount - amount);
         }else {
-        throw new Exception("Nicht genug Scheine");
+        throw new IllegalArgumentException("Nicht genug Scheine");
         }
     }
 
-    public void removeMoney(NoteTypes note, int amount)throws Exception{
+    public void removeMoney(NoteTypes note, int amount){
         int currentAmmount = notes.getOrDefault(note, 0);
         if(currentAmmount >= amount){
             notes.put(note, currentAmmount - amount);
         }else {
-            throw new Exception("Nicht genug Scheine");
+            throw new IllegalArgumentException("Nicht genug Scheine");
         }
     }
     public int totalAmount(){
