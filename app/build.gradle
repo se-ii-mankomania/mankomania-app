@@ -35,7 +35,7 @@ tasks.register('jacocoTestReport', JacocoReport) {
 
     reports {
         xml.required = true
-        xml.destination file("${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
+        xml.destination file("${project.buildDir}/reports/jacoco/jacocoTestReport.xml")
     }
 
     def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
@@ -53,8 +53,7 @@ sonar {
         property "sonar.organization", "se-ii-mankomania"
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.java.coveragePlugin", "jacoco"
-        property "sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
-
+        property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/jacocoTestReport.xml"
     }
 }
 dependencies {
