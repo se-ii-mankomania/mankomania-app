@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".CreateNewLobby">
 
-    <!-- First Row: Text View + EditText -->
     <LinearLayout
         android:id="@+id/firstRow"
         android:layout_width="0dp"
@@ -33,18 +32,16 @@
             android:hint="Name" />
     </LinearLayout>
 
-    <!-- Second Row: Chip -->
-    <com.google.android.material.chip.Chip
-        android:id="@+id/chip"
+    <Switch
+        android:id="@+id/privateLobbySwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/firstRow"
-        android:text="private" />
+        android:text="Private" />
 
-    <!-- Third Row: Text View + EditText -->
     <LinearLayout
         android:id="@+id/thirdRow"
         android:layout_width="0dp"
@@ -53,7 +50,7 @@
         android:padding="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chip">
+        app:layout_constraintTop_toBottomOf="@+id/privateLobbySwitch">
 
         <TextView
             android:id="@+id/passwortTextView"
@@ -63,14 +60,14 @@
             android:textSize="16sp" />
 
         <EditText
-            android:id="@+id/PasswortEditText"
+            android:id="@+id/passwortEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:inputType="textPassword"
             android:hint="Passwort" />
     </LinearLayout>
 
-    <!-- Fourth Row: Text View + Spinner -->
     <LinearLayout
         android:id="@+id/fourthRow"
         android:layout_width="0dp"
@@ -94,5 +91,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/createLobbyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lobby erstellen"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fourthRow"
+        android:layout_marginTop="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
