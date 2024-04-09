@@ -15,6 +15,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mankomania.api.Auth;
 
+import java.util.regex.Pattern;
+
 public class Register extends AppCompatActivity implements Auth.RegisterCallback {
 
     @Override
@@ -37,24 +39,11 @@ public class Register extends AppCompatActivity implements Auth.RegisterCallback
                 EditText emailInput=findViewById(R.id.Register_Email);
                 EditText passwordInput=findViewById(R.id.Register_Passwort);
 
-                //TODO Nutzer in Datenbank anlegen
                 String email = emailInput.getText().toString();
                 String password = passwordInput.getText().toString();
 
                 Auth.register(email, password, Register.this);
 
-                /*
-                boolean availablePassword=true;
-                boolean availableEmail=true;
-                if(MainActivityLogin.isNoValidEmail(emailInput.getText().toString()) && availableEmail) {
-                    emailInput.setError("E-Mail-Adresse ist ungültig.");
-                }else if(!availablePassword){
-                    passwordInput.setError("Passwort ist bereits vergeben.");
-                }else{
-                    Intent registerIntent = new Intent(Register.this, MainActivityLogin.class);
-                    startActivity(registerIntent);
-                }
-                 */
             }
         });
 
@@ -63,6 +52,10 @@ public class Register extends AppCompatActivity implements Auth.RegisterCallback
     @Override
     public void onRegisterSuccess(String message) {
         runOnUiThread(() -> Toast.makeText(Register.this, "Registrierung erfolgreich: " + message, Toast.LENGTH_SHORT).show());
+
+        // go back to login page
+        Intent loginIntent = new Intent(Register.this, MainActivityLogin.class);
+        startActivity(loginIntent);
     }
 
     @Override
