@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +13,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class Register extends AppCompatActivity {
+import com.example.mankomania.api.Auth;
+
+public class Register extends AppCompatActivity implements Auth.RegisterCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +36,14 @@ public class Register extends AppCompatActivity {
             public void onClick(View v) {
                 EditText emailInput=findViewById(R.id.Register_Email);
                 EditText passwordInput=findViewById(R.id.Register_Passwort);
+
                 //TODO Nutzer in Datenbank anlegen
+                String email = emailInput.getText().toString();
+                String password = passwordInput.getText().toString();
+
+                Auth.register(email, password, Register.this);
+
+                /*
                 boolean availablePassword=true;
                 boolean availableEmail=true;
                 if(MainActivityLogin.isNoValidEmail(emailInput.getText().toString()) && availableEmail) {
@@ -44,8 +54,19 @@ public class Register extends AppCompatActivity {
                     Intent registerIntent = new Intent(Register.this, MainActivityLogin.class);
                     startActivity(registerIntent);
                 }
+                 */
             }
         });
 
+    }
+
+    @Override
+    public void onRegisterSuccess(String message) {
+        runOnUiThread(() -> Toast.makeText(Register.this, "Registrierung erfolgreich: " + message, Toast.LENGTH_SHORT).show());
+    }
+
+    @Override
+    public void onRegisterFailure(String errorMessage) {
+        runOnUiThread(() -> Toast.makeText(Register.this, "Registrierung fehlgeschlagen: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
 }
