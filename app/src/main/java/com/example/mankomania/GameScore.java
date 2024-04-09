@@ -62,8 +62,8 @@ public class GameScore extends AppCompatActivity implements Lobby.LobbiesCallbac
             @Override
             public void onClick(View v) {
                 //TODO neue Instanzen für neues Spiel erzeugen
-                Intent startNewGameIntent=new Intent(GameScore.this, ChooseYourCharacter.class);
-                startActivity(startNewGameIntent);
+                Intent createNewLobbyIntent = new Intent(GameScore.this, CreateNewLobby.class);
+                startActivity(createNewLobbyIntent);
             }
         });
     }

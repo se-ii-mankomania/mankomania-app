@@ -42,6 +42,11 @@
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
+            android:name=".CreateNewLobby"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            />
+        <activity
             android:name=".MainActivityLogin"
             android:exported="true"
             android:screenOrientation="landscape">
