@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
+    id 'jacoco'
     id "org.sonarqube" version "4.4.1.3373"
 }
 
@@ -29,20 +30,21 @@ android {
     }
 }
 
+tasks.register('jacocoTestReport', JacocoReport) {
+    dependsOn 'testDebugUnitTest'
 
-dependencies {
+    reports {
+        xml.required = true
+        xml.destination file("${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
+    }
 
-    implementation libs.appcompat
-    implementation libs.material
-    implementation libs.activity
-    implementation libs.constraintlayout
-    testImplementation libs.junit
-    // No such property ...
-    // no time to fix rn
-    //testImplementation libs.junit.jupiter.api
-    //testRuntimeOnly libs.junit.jupiter.engine
-    androidTestImplementation libs.ext.junit
-    androidTestImplementation libs.espresso.core
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+    def debugTree = fileTree(dir: "${project.layout.buildDirectory.get().asFile}/intermediates/javac/debug", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories.from = files([mainSrc])
+    classDirectories.from = files([debugTree])
+    executionData.from = files("${project.layout.buildDirectory.get().asFile}/jacoco/testDebugUnitTest.exec")
 }
 
 sonar {
@@ -50,18 +52,23 @@ sonar {
         property "sonar.projectKey", "se-ii-mankomania_mankomania-app"
         property "sonar.organization", "se-ii-mankomania"
         property "sonar.host.url", "https://sonarcloud.io"
-
-        //property "sonar.java.coveragePlugin", "jacoco"
-        //property "sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
-
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
         //property "sonar.exclusions", "**/Board.java,**/ChooseYourCharacter.java," +
-        //        "**/Event_RollDice.java,**/FinancesAndStocks.java,**/GameScore.java," +
-        //        "**/MainActivityLogin.java,**/PlayerViewModel.java," +
-        //        "**/Register.java,**/ToolbarFunctionalities.java"
-        //property "sonar.sources", ["src/test", "src/main/java"]
-        //property "sonar.tests", "src/test"
-        //property "sonar.sourceEncoding", "UTF-8"
-        //property "sonar.test.inclusions", ["src/test/java"]
-        //property "sonar.coverage.exclusions", ["**src/main/**"]
+        //      "**/Event_RollDice,**/FinancesAndStocks.java,**/GameScore.java," +
+          //      "**/MainActivityLogin.java,**/PlayerViewModel.java," +
+            //    "**/Register.java,**/ToolbarFunctionalities"
     }
+}
+dependencies {
+    implementation libs.appcompat
+    implementation libs.material
+    implementation libs.activity
+    implementation libs.constraintlayout
+    testImplementation libs.junit
+    androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.espresso.core
+    implementation libs.okhttp
+    testImplementation libs.junit.jupiter.api
+    testRuntimeOnly libs.jupiter.junit.jupiter.engine
 }
