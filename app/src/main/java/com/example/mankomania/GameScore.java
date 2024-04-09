@@ -3,7 +3,6 @@ package com.example.mankomania;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,27 +11,14 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.mankomania.api.Lobbies;
+import com.example.mankomania.api.Lobby;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
-public class GameScore extends AppCompatActivity implements Lobbies.LobbiesCallback{
+public class GameScore extends AppCompatActivity implements Lobby.LobbiesCallback{
 
     private ListView listOfGames;
 
@@ -53,7 +39,7 @@ public class GameScore extends AppCompatActivity implements Lobbies.LobbiesCallb
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String token = sharedPreferences.getString("token", null);
         // get Lobbies
-        Lobbies.getLobbies(token, GameScore.this);
+        Lobby.getLobbies(token, GameScore.this);
 
         Button resumeGame=findViewById(R.id.GameScore_ResumeGame);
         resumeGame.setOnClickListener(new View.OnClickListener() {

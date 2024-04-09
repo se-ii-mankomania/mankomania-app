@@ -5,35 +5,21 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.mankomania.api.Login;
+import com.example.mankomania.api.Auth;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.regex.Pattern;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
-public class MainActivityLogin extends AppCompatActivity implements Login.LoginCallback{
+public class MainActivityLogin extends AppCompatActivity implements Auth.LoginCallback{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +52,7 @@ public class MainActivityLogin extends AppCompatActivity implements Login.LoginC
             if(isNoValidEmail(email)) {
                 emailInput.setError("E-Mail-Adresse ist ungültig.");
             } else {
-                Login.login(email, password, MainActivityLogin.this);
+                Auth.login(email, password, MainActivityLogin.this);
             }
         });
 

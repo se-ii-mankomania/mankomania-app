@@ -1,7 +1,5 @@
 package com.example.mankomania.api;
 
-import android.widget.ListView;
-
 import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
@@ -12,12 +10,10 @@ import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.MediaType;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class Lobbies {
+public class Lobby {
     private static String[] lobbyNames;
 
     // interface to notify whether login is successful or not
