@@ -1,10 +1,7 @@
-package com.example.mankomania.LogikTest;
+package com.example.mankomania.logik;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
-
-import com.example.mankomania.logik.NoteTypes;
-import com.example.mankomania.logik.Wallet;
 
 import org.junit.Test;
 

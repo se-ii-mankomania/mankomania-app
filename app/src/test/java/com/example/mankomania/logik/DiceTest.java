@@ -1,12 +1,8 @@
-package com.example.mankomania.LogikTest;
+package com.example.mankomania.logik;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.Assert.*;
-
-import com.example.mankomania.logik.Dice;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
