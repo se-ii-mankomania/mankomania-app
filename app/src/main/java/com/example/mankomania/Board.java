@@ -20,7 +20,7 @@ import com.example.mankomania.gameboardfields.HotelField;
 import com.example.mankomania.gameboardfields.ProfitField;
 
 public class Board extends AppCompatActivity {
-    Player [] players = new Player[2];
+    PlayerTest[] players = new PlayerTest[4];
 
 
     GameboardField[] fields = new GameboardField[52];
@@ -79,13 +79,28 @@ public class Board extends AppCompatActivity {
 
         initFields();
 
-        Player playerblue = new Player(Color.BLUE, fields[7] );
-        Player playergreen = new Player(Color.GREEN, fields[7]);
+        PlayerTest playerblue = new PlayerTest(ColorTest.BLUE, fields[44] );
+        PlayerTest playergreen = new PlayerTest(ColorTest.GREEN, fields[45]);
+        PlayerTest playerRed = new PlayerTest(ColorTest.RED, fields[46]);
+        PlayerTest playerPurple = new PlayerTest(ColorTest.PURPLE, fields[47]);
         players[0] = playerblue;
         players[1] = playergreen;
-        movePlayer(playerblue, 5);
-        movePlayer(playergreen, 5);
-        udatePlayerPositions();
+        players[2] = playerRed;
+        players[3] = playerPurple;
+
+//Testing
+       movePlayer(playerblue, 15);
+        movePlayer(playergreen, 15);
+        movePlayer(playerRed, 15);
+        movePlayer(playerPurple, 15);
+
+
+
+        movePlayer(playerblue, 12);
+        movePlayer(playergreen, 12);
+        movePlayer(playerRed, 12);
+        movePlayer(playerPurple, 12);
+        updatePlayerPositions();
 
 
 
@@ -109,44 +124,27 @@ public class Board extends AppCompatActivity {
         player_red.getLayoutParams().width = cellWidth;
         player_red.requestLayout();
 
-        //testing
-   /*     player_blue.setX(fields[0].x);
-        player_blue.setY(fields[0].y);
-        player_green.setX(fields[1].x);
-        player_green.setY(fields[1].y);
-        player_red.setX(fields[2].x);
-        player_red.setY(fields[1].y);
-
-
-    */
-        //player_purple.setX(fields[3].x);
-        //player_purple.setY(fields[1].y);
-
-
-
-
-
 
     }
-   public void udatePlayerPositions(){
-       for (Player player: players
+   public void updatePlayerPositions(){
+       for (PlayerTest player: players
             ) {
-           if(player.color == Color.BLUE){
+           if(player.color == ColorTest.BLUE){
                ImageView playerBlue = findViewById(R.id.player_blue);
                playerBlue.setX(player.currentField.x);
                playerBlue.setY(player.currentField.y);
            }
-           if(player.color == Color.RED){
+           if(player.color == ColorTest.RED){
                ImageView playerRed = findViewById(R.id.player_red);
                playerRed.setX(player.currentField.x);
                playerRed.setY(player.currentField.y);
            }
-           if(player.color == Color.GREEN){
+           if(player.color == ColorTest.GREEN){
                ImageView playerGreen = findViewById(R.id.player_green);
                playerGreen.setX(player.currentField.x);
                playerGreen.setY(player.currentField.y);
            }
-           if(player.color == Color.YELLOW){
+           if(player.color == ColorTest.PURPLE){
                ImageView playerPurple = findViewById(R.id.player_purple);
                playerPurple.setX(player.currentField.x);
                playerPurple.setY(player.currentField.y);
@@ -155,75 +153,92 @@ public class Board extends AppCompatActivity {
 
 
    }
-    public void movePlayer(Player player, int diceNr){
-        //innerhalb des Quadrats
-
-        //>= 1 oder 0
-        if(player.currentField.id>=1 && player.currentField.id <= 43){
-            //neue Runde
-            if(player.currentField.id + diceNr > 43){
-                int calc = 43 - player.currentField.id;
-                int newID = diceNr - calc;
-                player.setGameboardField(fields[newID]);
-            }
-            player.setGameboardField(fields[player.currentField.id + diceNr -1]);
-        }
-
+    public void movePlayer(PlayerTest player, int diceNr){
         //Starts
         //links oben
-        else if(player.currentField.id == 48){
-                int newID = diceNr;
-                player.setGameboardField(fields[newID]);
+         if(player.currentField.id == 49){
+            int newID = diceNr;
+            player.setGameboardField(fields[newID - 1]);
 
         }
         //rechts oben
-        else if(player.currentField.id == 49){
+        else if(player.currentField.id == 50){
             int newID = 10 + diceNr ;
             player.setGameboardField(fields[newID]);
         }
         //rechts unten
-       else if(player.currentField.id == 50){
+        else if(player.currentField.id == 51){
             int newID = 21 + diceNr ;
             player.setGameboardField(fields[newID]);
         }
-       //links unten
-       else if(player.currentField.id == 51){
+        //links unten
+        else if(player.currentField.id == 52){
             if(diceNr > 11){
                 int calc = diceNr - 12;
-                int newID =calc;
+                int newID = calc;
+                player.setGameboardField(fields[newID]); //bleibt +1?
+            }
+            else{
+                int newID = 32 + diceNr ;
                 player.setGameboardField(fields[newID]);
             }
-            int newID = 32 + diceNr ;
-            player.setGameboardField(fields[newID]);
         }
 
-        //ActivityFelder
-        // Pferderennen
-        else if(player.currentField.id == 46){
-            player.setGameboardField(fields[ 14 + diceNr]);
-        }
-        //Börse
-        else if(player.currentField.id == 47){
-            player.setGameboardField(fields[ 19 + diceNr]);
-        }
-        //Casino
-        else if(player.currentField.id == 48){
-            player.setGameboardField(fields[ 36 + diceNr]);
-            if(diceNr > 8){
-                int calc = diceNr - 8;
-                int newID =calc;
-                player.setGameboardField(fields[newID]);
+         //ActivityFelder
+         // Pferderennen
+         else if(player.currentField.id == 46){
+             int newID = 14 + diceNr;
+             player.setGameboardField(fields[newID-1]);
+         }
+         //Börse
+         else if(player.currentField.id == 47){
+             int newID = 19 + diceNr - 1;
+             player.setGameboardField(fields[newID]);
+         }
+         //Casino
+         else if(player.currentField.id == 48){
+             if(diceNr > 8){
+                 int calc = diceNr - 8;
+                 int newID =calc -1;
+                 player.setGameboardField(fields[newID]);
+             }
+             else{
+                 int newID = 36 + diceNr;
+                 player.setGameboardField(fields[ newID]);
+             }
+         }
+         //Auktionshaus
+         else if(player.currentField.id == 45){
+             if(diceNr > 3){
+                 int calc = diceNr - 3;
+                 int newID = calc -1;
+                 player.setGameboardField(fields[newID]);
+             }
+             else{
+                 int newID = 41 + diceNr;
+                 player.setGameboardField(fields[newID]);
+             }
+
+         }
+        //innerhalb des Quadrats
+
+        //
+       else if(player.currentField.id>=1 && player.currentField.id <= 43){
+            //neue Runde
+            if(player.currentField.id + diceNr > 43){
+                int calc = 44 - player.currentField.id;
+                int newID = diceNr - calc;
+                player.setGameboardField(fields[newID-1]);
             }
-        }
-        //Auktionshaus
-        else if(player.currentField.id == 45){
-            if(diceNr > 3){
-                int calc = diceNr - 3;
-                int newID =calc;
-                player.setGameboardField(fields[newID]);
+            else{
+                player.setGameboardField(fields[player.currentField.id + diceNr -1]);
             }
-            player.setGameboardField(fields[ 41 + diceNr]);
+
         }
+
+
+
+
 
 
     }
@@ -292,7 +307,7 @@ public class Board extends AppCompatActivity {
         fields[48] = new GameboardField( cellPositions[0][0].x, cellPositions[0][0].y, 49);
         fields[49] = new GameboardField( cellPositions[0][13].x, cellPositions[0][13].y, 50);
         fields[50] = new GameboardField( cellPositions[13][13].x, cellPositions[13][13].y, 51);
-        fields[51] = new GameboardField( cellPositions[13][0].x, cellPositions[11][1].y, 52);
+        fields[51] = new GameboardField( cellPositions[13][0].x, cellPositions[13][0].y, 52);
 
 
     }

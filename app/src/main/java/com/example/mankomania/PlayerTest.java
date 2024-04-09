@@ -2,14 +2,14 @@ package com.example.mankomania;
 
 import com.example.mankomania.gameboardfields.GameboardField;
 
-public class Player {
+public class PlayerTest {
 
 
     GameboardField currentField;
     int profit;
 
-    Color color;
-    public Player(Color color, GameboardField currentField){
+    ColorTest color;
+    public PlayerTest(ColorTest color, GameboardField currentField){
         this.color = color;
         this.currentField = currentField;
     }
