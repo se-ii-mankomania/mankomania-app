@@ -1,21 +1,39 @@
 package com.example.mankomania;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.mankomania.api.Login;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.regex.Pattern;
 
-public class MainActivityLogin extends AppCompatActivity {
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+public class MainActivityLogin extends AppCompatActivity implements Login.LoginCallback{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,24 +56,38 @@ public class MainActivityLogin extends AppCompatActivity {
         });
 
         Button login=findViewById(R.id.Login_LoginButton);
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText emailInput=findViewById(R.id.Login_Email);
-                EditText passwordInput=findViewById(R.id.Login_Passwort);
-                //TODO Verknüpfung Datenbank und E-Mail & Passwort prüfen
-                boolean isValid=true;
-                if(isNoValidEmail(emailInput.getText().toString())) {
-                    emailInput.setError("E-Mail-Adresse ist ungültig.");
-                }else if(!isValid)
-                    passwordInput.setError("E-mail oder Passwort sind ungültig.");
-                else{
-                    Intent loginIntent = new Intent(MainActivityLogin.this, GameScore.class);
-                    startActivity(loginIntent);
-                }
+        login.setOnClickListener(v -> {
+            EditText emailInput=findViewById(R.id.Login_Email);
+            EditText passwordInput=findViewById(R.id.Login_Passwort);
+
+            String email = emailInput.getText().toString();
+            String password = passwordInput.getText().toString();
+
+            if(isNoValidEmail(email)) {
+                emailInput.setError("E-Mail-Adresse ist ungültig.");
+            } else {
+                Login.login(email, password, MainActivityLogin.this);
             }
         });
 
+    }
+
+    @Override
+    public void onLoginSuccess(String token) {
+        // store token
+        SharedPreferences.Editor editor = getSharedPreferences("MyPrefs", MODE_PRIVATE).edit();
+        editor.putString("token", token);
+        editor.apply();
+
+        // go to next page
+        Intent loginIntent = new Intent(MainActivityLogin.this, GameScore.class);
+        startActivity(loginIntent);
+    }
+
+    @Override
+    public void onLoginFailure(String errorMessage) {
+        // handle login failure
+        runOnUiThread(() -> Toast.makeText(MainActivityLogin.this, "Login fehlgeschlagen: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
 
     /**

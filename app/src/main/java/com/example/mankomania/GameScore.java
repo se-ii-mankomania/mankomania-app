@@ -1,7 +1,9 @@
 package com.example.mankomania;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -10,12 +12,29 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class GameScore extends AppCompatActivity {
+import com.example.mankomania.api.Lobbies;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+public class GameScore extends AppCompatActivity implements Lobbies.LobbiesCallback{
+
+    private ListView listOfGames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +47,13 @@ public class GameScore extends AppCompatActivity {
             return insets;
         });
 
-        ListView listOfGames=findViewById(R.id.GameScore_ListOfGames);
+        listOfGames = findViewById(R.id.GameScore_ListOfGames);
 
-        //TODO DummyData ersetzen
-        String[] dummyGameData={"Spiel1","Spiel2","Spiel3","Spiel4"};
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_single_choice, dummyGameData);
-        listOfGames.setAdapter(adapter);
-
+        // get token from shared preferences
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", null);
+        // get Lobbies
+        Lobbies.getLobbies(token, GameScore.this);
 
         Button resumeGame=findViewById(R.id.GameScore_ResumeGame);
         resumeGame.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +79,21 @@ public class GameScore extends AppCompatActivity {
                 Intent startNewGameIntent=new Intent(GameScore.this, ChooseYourCharacter.class);
                 startActivity(startNewGameIntent);
             }
+        });
+    }
+
+    @Override
+    public void onLobbiesFailure(String errorMessage) {
+        // handle login failure
+        runOnUiThread(() -> Toast.makeText(GameScore.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show());
+    }
+
+    @Override
+    public void onLobbiesSuccess(String[] lobbies) {
+        runOnUiThread(() -> {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(GameScore.this,
+                    android.R.layout.simple_list_item_single_choice, lobbies);
+            listOfGames.setAdapter(adapter);
         });
     }
 }
