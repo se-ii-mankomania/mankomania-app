@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Board">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="162dp"
+        tools:layout_editor_absoluteY="-48dp">
+
+        <include layout="@layout/toolbar_layout" />
+
+        <ImageView
+            android:id="@+id/Board_Board"
+            android:layout_width="match_parent"
+            android:layout_height="360dp"
+            android:contentDescription="@string/Spielbrett"
+            app:srcCompat="@android:drawable/presence_audio_online"
+            tools:srcCompat="@android:drawable/presence_audio_online" />
+
+        <TextView
+            android:id="@+id/Board_Messages"
+            android:layout_width="match_parent"
+            android:layout_height="361dp"
+            android:alpha="1"
+            android:background="#FFFFFF"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

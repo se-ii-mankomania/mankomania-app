@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivityLogin">
+
+  <Button
+      android:id="@+id/Login_LoginButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="50dp"
+      android:layout_marginBottom="16dp"
+      android:text="@string/Login"
+      app:layout_constraintBottom_toTopOf="@+id/Login_RegisterButton"
+      app:layout_constraintEnd_toEndOf="@+id/Login_RegisterButton" />
+
+  <EditText
+      android:id="@+id/Login_Email"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="87dp"
+      android:autofillHints=""
+      android:ems="10"
+      android:hint="@string/email"
+      android:inputType="textEmailAddress"
+      android:minHeight="48dp"
+      app:layout_constraintBottom_toTopOf="@+id/Login_LoginButton"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent" />
+
+  <EditText
+      android:id="@+id/Login_Passwort"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="18dp"
+      android:autofillHints=""
+      android:ems="10"
+      android:hint="@string/passwort"
+      android:inputType="textPassword"
+      android:minHeight="48dp"
+      app:layout_constraintStart_toStartOf="@+id/Login_Email"
+      app:layout_constraintTop_toBottomOf="@+id/Login_Email" />
+
+  <Button
+      android:id="@+id/Login_RegisterButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="10dp"
+      android:layout_marginBottom="25dp"
+      android:text="@string/Login_ZurRegistrierung"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="@+id/Login_Passwort" />
+</androidx.constraintlayout.widget.ConstraintLayout>

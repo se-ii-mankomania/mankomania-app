@@ -1,3 +1,36 @@
 <resources>
     <string name="app_name">Mankomania</string>
+    <string name="passwort">Passwort</string>
+    <string name="email">E-Mail</string>
+    <string name="Login">Login</string>
+    <string name="gamescore_heading">Willkommen bei Mankomania!</string>
+    <string name="ResumeGame">Spiel fortsetzen</string>
+    <string name="StartNewGame">neues Spiel starten</string>
+    <string name="ChooseYourCharacter_heading">Choose your Character</string>
+    <string name="ChooseYourCharacter_PurplePlayer">Lila</string>
+    <string name="ChooseYourCharacter_GreenPlayer">Grün</string>
+    <string name="ChooseYourCharacter_BluePlayer">Blau</string>
+    <string name="ChooseYourCharacter_OrangePlayer">Orange</string>
+    <string name="Start">Start</string>
+    <string name="FinancesStocks_ReturnToBoard">zurück zum Spielfeld</string>
+    <string name="Kontostand">Kontostand:</string>
+    <string name="CurrentPlayer">Wer ist dran?</string>
+    <string name="Board_ToFinancesAndStocks"><![CDATA[Finanzen & Aktien]]></string>
+    <string name="Finances_5kbillstxt">5.000€ Noten:</string>
+    <string name="Finances_10kbillstxt">10.000€ Noten:</string>
+    <string name="Finances_50kbillstxt">50.000€ Noten:</string>
+    <string name="Finances_100kbillstxt">100.000€ Noten:</string>
+    <string name="Finances_totaltxt">gesamt:</string>
+    <string name="Spielbrett">Spielbrett</string>
+    <string name="Finances_heading">Finanzen</string>
+    <string name="Stocks_heading">Aktien</string>
+    <string name="Stocks_KurzschulssAGtxt">Kurzschluss-Versorgungs-AG:</string>
+    <string name="Stocks_TrockenölAGtxt">Trockenöl-AG:</string>
+    <string name="Stocks_BruchstahlAGtxt">Bruchstahl-AG:</string>
+    <string name="Logout">Logout</string>
+    <string name="Register">Registrieren</string>
+    <string name="Register_Heading">Registrierung</string>
+    <string name="Login_ZurRegistrierung">Zur Registrierung</string>
+    <string name="Wuerfeln">Würfeln</string>
+    <string name="RollDice_resultTxt">Dein Ergebnis lautet:</string>
 </resources>
