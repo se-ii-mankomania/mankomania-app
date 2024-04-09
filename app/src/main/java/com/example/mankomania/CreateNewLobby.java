@@ -1,6 +1,8 @@
 package com.example.mankomania;
 
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,9 +20,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mankomania.api.Lobby;
+import com.example.mankomania.api.Status;
 import com.google.android.material.chip.Chip;
 
-public class CreateNewLobby extends AppCompatActivity {
+public class CreateNewLobby extends AppCompatActivity implements Lobby.AddLobbyCallback{
 
     EditText nameInput;
     Switch privateLobbySwitch;
@@ -84,7 +89,30 @@ public class CreateNewLobby extends AppCompatActivity {
                 Log.d("CreateNewLobby", "Max Players: " + maxPlayers);
 
                 // make sure to "send" password = null if password = "" !!!
+                if (lobbyPassword.equals("")) {
+                    lobbyPassword = null;
+                }
+
+                // get token from shared preferences
+                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                String token = sharedPreferences.getString("token", null);
+                // add lobby
+                Lobby.addLobby(token, lobbyName, lobbyPassword, isLobbyPrivate, maxPlayers, Status.open, CreateNewLobby.this);
             }
         });
+    }
+
+    @Override
+    public void onAddLobbySuccess(String message) {
+        runOnUiThread(() -> Toast.makeText(CreateNewLobby.this, "Lobby erfolgreich erstellt: " + message, Toast.LENGTH_SHORT).show());
+
+        // go back to login page
+        Intent backToLobbies = new Intent(CreateNewLobby.this, GameScore.class);
+        startActivity(backToLobbies);
+    }
+
+    @Override
+    public void onAddLobbyFailure(String errorMessage) {
+        runOnUiThread(() -> Toast.makeText(CreateNewLobby.this, "Lobbyerstellung fehlgeschlagen: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
 }

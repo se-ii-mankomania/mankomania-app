@@ -18,7 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mankomania.api.Lobby;
 
-public class GameScore extends AppCompatActivity implements Lobby.LobbiesCallback{
+public class GameScore extends AppCompatActivity implements Lobby.GetLobbiesCallback {
 
     private ListView listOfGames;
 
@@ -69,13 +69,13 @@ public class GameScore extends AppCompatActivity implements Lobby.LobbiesCallbac
     }
 
     @Override
-    public void onLobbiesFailure(String errorMessage) {
+    public void onGetLobbiesFailure(String errorMessage) {
         // handle login failure
         runOnUiThread(() -> Toast.makeText(GameScore.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
 
     @Override
-    public void onLobbiesSuccess(String[] lobbies) {
+    public void onGetLobbiesSuccess(String[] lobbies) {
         runOnUiThread(() -> {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(GameScore.this,
                     android.R.layout.simple_list_item_single_choice, lobbies);
