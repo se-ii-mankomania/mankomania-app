@@ -44,6 +44,8 @@ public class Register extends AppCompatActivity implements Auth.RegisterCallback
 
                 if(isNoValidEmail(email)) {
                     emailInput.setError("E-Mail-Adresse ist ungültig.");
+                } else if (password.length() <= 7) {
+                    passwordInput.setError("Passwort muss >7 Zeichen lang sein.");
                 } else {
                     Auth.register(email, password, Register.this);
                 }

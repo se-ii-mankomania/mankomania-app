@@ -134,7 +134,7 @@ public class Auth {
                         callback.onRegisterFailure("Fehler beim Lesen der Response!");
                     }
                 } else {
-                    callback.onRegisterFailure("Falsche Eingaben!");
+                    callback.onRegisterFailure("User bereits registriert!");
                 }
             }
         });
