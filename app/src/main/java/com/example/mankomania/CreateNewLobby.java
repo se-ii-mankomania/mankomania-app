@@ -73,7 +73,17 @@ public class CreateNewLobby extends AppCompatActivity {
         createLobbyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String lobbyName = nameInput.getText().toString();
+                String lobbyPassword = passwordInput.getText().toString();
+                boolean isLobbyPrivate = privateLobbySwitch.isChecked();
+                int maxPlayers = Integer.parseInt((String) maxPlayerSpinner.getSelectedItem());
 
+                Log.d("CreateNewLobby", "Lobby Name: " + lobbyName);
+                Log.d("CreateNewLobby", "Lobby Password: " + lobbyPassword);
+                Log.d("CreateNewLobby", "Is Lobby Private: " + isLobbyPrivate);
+                Log.d("CreateNewLobby", "Max Players: " + maxPlayers);
+
+                // make sure to "send" password = null if password = "" !!!
             }
         });
     }
