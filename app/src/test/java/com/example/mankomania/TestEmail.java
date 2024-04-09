@@ -7,7 +7,7 @@ public class TestEmail {
     @Test
     public void testValidEmail(){
         Assert.assertFalse(MainActivityLogin.isNoValidEmail("l@gmail.com"));
-        Assert.assertFalse(MainActivityLogin.isNoValidEmail("ajsdhf@dushlf.jkasdh"));
+        Assert.assertFalse(MainActivityLogin.isNoValidEmail("ajshf@dushlf.jkasdh"));
         Assert.assertFalse(MainActivityLogin.isNoValidEmail("l@edu.aau.at"));
     }
     @Test
