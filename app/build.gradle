@@ -52,12 +52,13 @@ sonar {
         property "sonar.projectKey", "se-ii-mankomania_mankomania-app"
         property "sonar.organization", "se-ii-mankomania"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.login","2ebf73b1588eb84f3e7d6aadb3046468843d5656"
         property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
-        //property "sonar.exclusions", "**/Board.java,**/ChooseYourCharacter.java," +
-        //      "**/Event_RollDice,**/FinancesAndStocks.java,**/GameScore.java," +
-          //      "**/MainActivityLogin.java,**/PlayerViewModel.java," +
-            //    "**/Register.java,**/ToolbarFunctionalities"
+        property "sonar.exclusions", "**/Board.java,**/ChooseYourCharacter.java," +
+              "**/Event_RollDice,**/FinancesAndStocks.java,**/GameScore.java," +
+              "**/MainActivityLogin.java,**/PlayerViewModel.java," +
+            "**/Register.java,**/ToolbarFunctionalities"
     }
 }
 dependencies {
