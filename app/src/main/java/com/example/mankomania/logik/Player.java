@@ -21,16 +21,10 @@ public class Player {
         this.username = username;
         this.color = color;
         this.wallet = new Wallet();
-        this.stocks = new HashMap<>();
+        this.stocks = StockInitializer.initializeRandomStocks();
         this.position = 0;
-        initializationOfStocks();
     }
 
-    public void initializationOfStocks(){
-        stocks.put(String.valueOf(StockTypes.BRUCHSTAHL_AG), 0);
-        stocks.put(String.valueOf(StockTypes.TROCKENOEL_AG), 0);
-        stocks.put(String.valueOf(StockTypes.KURZSCHLUSS_VERSORGUNGS_AG), 0);
-    }
     public void movement(int fields){
         this.position += fields;
     }
