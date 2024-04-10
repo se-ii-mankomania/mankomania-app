@@ -1,4 +1,4 @@
-package com.example.mankomania;
+package com.example.mankomania.screens;
 
 import com.example.mankomania.gameboardfields.ActivityField;
 import com.example.mankomania.gameboardfields.GameboardField;
@@ -8,15 +8,14 @@ import com.example.mankomania.gameboardfields.ProfitField;
 import com.example.mankomania.logik.Player;
 
 public class FieldsHandler {
-    GameboardField[] fields = new GameboardField[52];
+    public GameboardField[] fields = new GameboardField[52];
 
 
     public void movePlayer(Player player, int diceNr){
         //Starts
         //links oben
         if(player.getCurrentField().id == 49){
-            int newID = diceNr;
-            player.setCurrentField(fields[newID - 1]);
+            player.setCurrentField(fields[diceNr - 1]);
 
         }
         //rechts oben
@@ -32,8 +31,7 @@ public class FieldsHandler {
         //links unten
         else if(player.getCurrentField().id == 52){
             if(diceNr > 11){
-                int calc = diceNr - 12;
-                int newID = calc;
+                int newID = diceNr - 12;
                 player.setCurrentField(fields[newID]); //bleibt +1?
             }
             else{
@@ -101,7 +99,7 @@ public class FieldsHandler {
 
     }
 
-    public void initFields(Cellposition [][] cellPositions) {
+    public void initFields(Cellposition[][] cellPositions) {
         if(cellPositions.length != 14 || cellPositions[0].length != 14){
             throw new IllegalArgumentException("wrong size");
         }

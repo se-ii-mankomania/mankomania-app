@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.example.mankomania.ZoomLayout
+        <com.example.mankomania.screens.ZoomLayout
             android:id="@+id/zoom_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -60,7 +60,7 @@
 
 
             </FrameLayout>
-        </com.example.mankomania.ZoomLayout>
+        </com.example.mankomania.screens.ZoomLayout>
 
         <include layout="@layout/toolbar_layout" />
 
