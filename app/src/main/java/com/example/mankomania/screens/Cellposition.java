@@ -1,4 +1,4 @@
-package com.example.mankomania;
+package com.example.mankomania.screens;
 
 public class Cellposition {
     public int x;

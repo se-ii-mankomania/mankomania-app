@@ -1,6 +1,8 @@
 package com.example.mankomania;
 import com.example.mankomania.logik.Color;
 import com.example.mankomania.logik.Player;
+import com.example.mankomania.screens.Cellposition;
+import com.example.mankomania.screens.FieldsHandler;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -12,7 +14,7 @@ public class BoardTest {
     @Before
     public void setUp(){
 
-        Cellposition [][] cellPositions = new Cellposition[14][14];
+        Cellposition[][] cellPositions = new Cellposition[14][14];
         for(int i= 0; i<14; i++){
             for(int j = 0; j<14; j++){
                 cellPositions[j][i] = new Cellposition(j, i);

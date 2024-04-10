@@ -1,4 +1,4 @@
-package com.example.mankomania;
+package com.example.mankomania.screens;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.mankomania.R;
 import com.example.mankomania.api.Auth;
 
 import java.util.regex.Pattern;
@@ -33,12 +34,9 @@ public class MainActivityLogin extends AppCompatActivity implements Auth.LoginCa
         });
 
         Button register=findViewById(R.id.Login_RegisterButton);
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent registerIntent=new Intent(MainActivityLogin.this,Register.class);
-                startActivity(registerIntent);
-            }
+        register.setOnClickListener((View v) -> {
+            Intent registerIntent=new Intent(MainActivityLogin.this, Register.class);
+            startActivity(registerIntent);
         });
 
         Button login=findViewById(R.id.Login_LoginButton);
@@ -83,7 +81,7 @@ public class MainActivityLogin extends AppCompatActivity implements Auth.LoginCa
      * @return ob E-Mail-Adresse nicht valide ist oder schon
      */
 
-    static boolean isNoValidEmail(String email){
+    public static boolean isNoValidEmail(String email){
         String emailRegex ="^(.+)@(\\S+)$";
         Pattern pattern = Pattern.compile(emailRegex);
         return !pattern.matcher(email).matches();

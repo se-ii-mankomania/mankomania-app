@@ -1,8 +1,7 @@
-package com.example.mankomania;
+package com.example.mankomania.screens;
 
 
 import android.os.Bundle;
-
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.mankomania.R;
 
 import com.example.mankomania.logik.Color;
 import com.example.mankomania.logik.Player;
@@ -33,13 +34,10 @@ public class Board extends AppCompatActivity {
 
 
 
-        ZoomLayout zoomLayout = (ZoomLayout) findViewById(R.id.zoom_linear_layout);
-        zoomLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                zoomLayout.init(Board.this);
-                return false;
-            }
+        ZoomLayout zoomLayout = findViewById(R.id.zoom_linear_layout);
+        zoomLayout.setOnTouchListener((View v, MotionEvent event) -> {
+            zoomLayout.init(Board.this);
+            return false;
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

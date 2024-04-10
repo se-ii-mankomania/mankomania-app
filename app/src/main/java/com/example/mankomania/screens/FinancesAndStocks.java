@@ -1,4 +1,4 @@
-package com.example.mankomania;
+package com.example.mankomania.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.mankomania.R;
 
 public class FinancesAndStocks extends AppCompatActivity {
     PlayerViewModel playerViewModel;
@@ -59,22 +61,16 @@ public class FinancesAndStocks extends AppCompatActivity {
 
 
         Button toBoard=findViewById(R.id.FinancesStocks_BackToBoard);
-        toBoard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent switchToBoard=new Intent(FinancesAndStocks.this, Board.class);
-                startActivity(switchToBoard);
-            }
+        toBoard.setOnClickListener((View v) -> {
+            Intent switchToBoard=new Intent(FinancesAndStocks.this, Board.class);
+            startActivity(switchToBoard);
         });
 
         Button logout=findViewById(R.id.FinancesStocks_LogoutButton);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO Daten des Spiels speichern etc.
-                Intent fromFinancesAndStocksToLogin=new Intent(FinancesAndStocks.this, MainActivityLogin.class);
-                startActivity(fromFinancesAndStocksToLogin);
-            }
+        logout.setOnClickListener((View v) -> {
+            //TODO Daten des Spiels speichern etc.
+            Intent fromFinancesAndStocksToLogin=new Intent(FinancesAndStocks.this, MainActivityLogin.class);
+            startActivity(fromFinancesAndStocksToLogin);
         });
     }
 }

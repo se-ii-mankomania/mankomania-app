@@ -17,37 +17,37 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".Event_RollDice"
+            android:name=".screens.Event_RollDice"
             android:exported="false"
             android:screenOrientation="landscape"
             />
         <activity
-            android:name=".Register"
+            android:name=".screens.Register"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".Board"
+            android:name=".screens.Board"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".FinancesAndStocks"
+            android:name=".screens.FinancesAndStocks"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ChooseYourCharacter"
+            android:name=".screens.ChooseYourCharacter"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".GameScore"
+            android:name=".screens.GameScore"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".CreateNewLobby"
+            android:name=".screens.CreateNewLobby"
             android:exported="false"
             android:screenOrientation="landscape"
             />
         <activity
-            android:name=".MainActivityLogin"
+            android:name=".screens.MainActivityLogin"
             android:exported="true"
             android:screenOrientation="landscape">
             <intent-filter>
