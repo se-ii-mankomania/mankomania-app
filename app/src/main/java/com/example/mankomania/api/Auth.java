@@ -42,7 +42,6 @@ public class Auth {
             jsonRequest.put("email", email);
             jsonRequest.put("password", password);
         } catch (JSONException e) {
-            e.printStackTrace();
             callback.onLoginFailure("Request konnte nicht erstellt werden!");
         }
 
@@ -57,7 +56,6 @@ public class Auth {
         HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                e.printStackTrace();
                 callback.onLoginFailure("Keine Antwort!");
             }
 
@@ -74,7 +72,6 @@ public class Auth {
                         token = jsonResponse.getString("token");
                         callback.onLoginSuccess(token);
                     } catch (JSONException e) {
-                        e.printStackTrace();
                         callback.onLoginFailure("Fehler beim Lesen der Response!");
                     }
                 } else {
@@ -96,7 +93,6 @@ public class Auth {
             jsonRequest.put("email", email);
             jsonRequest.put("password", password);
         } catch (JSONException e) {
-            e.printStackTrace();
             callback.onRegisterFailure("Request konnte nicht erstellt werden!");
         }
 
@@ -111,7 +107,6 @@ public class Auth {
         HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                e.printStackTrace();
                 callback.onRegisterFailure("Keine Antwort!");
             }
 
@@ -128,7 +123,6 @@ public class Auth {
                         message = jsonResponse.getString("message");
                         callback.onRegisterSuccess(message);
                     } catch (JSONException e) {
-                        e.printStackTrace();
                         callback.onRegisterFailure("Fehler beim Lesen der Response!");
                     }
                 } else {

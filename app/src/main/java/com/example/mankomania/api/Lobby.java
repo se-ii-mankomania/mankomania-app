@@ -44,7 +44,6 @@ public class Lobby {
         HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                e.printStackTrace();
                 callback.onGetLobbiesFailure("Keine Antwort!");
             }
 
@@ -63,7 +62,6 @@ public class Lobby {
                         }
                         callback.onGetLobbiesSuccess(lobbyNames);
                     } catch (JSONException e) {
-                        e.printStackTrace();
                         callback.onGetLobbiesFailure("Fehler beim Lesen der Response!");
                     }
                 } else {
@@ -85,7 +83,6 @@ public class Lobby {
             jsonRequest.put("maxPlayers", maxPlayer);
             jsonRequest.put("status", status);
         } catch (JSONException e) {
-            e.printStackTrace();
             callback.onAddLobbyFailure("Request konnte nicht erstellt werden!");
         }
 
@@ -101,7 +98,6 @@ public class Lobby {
         HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                e.printStackTrace();
                 callback.onAddLobbyFailure("Keine Antwort!");
             }
 
@@ -118,7 +114,6 @@ public class Lobby {
                         message = jsonResponse.getString("message");
                         callback.onAddLobbySuccess(message);
                     } catch (JSONException e) {
-                        e.printStackTrace();
                         callback.onAddLobbyFailure("Fehler beim Lesen der Response!");
                     }
                 } else {
