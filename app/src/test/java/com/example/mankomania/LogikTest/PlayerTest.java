@@ -67,7 +67,7 @@ public class PlayerTest {
         assertEquals(expectedPayer1Balance, player1.getWalletBalance());
         assertEquals(expectedPlayer2Balance, player2.getWalletBalance());
     }
-    
+
         @Test
         public void testAddShare() {
             //Aktueller Stand
