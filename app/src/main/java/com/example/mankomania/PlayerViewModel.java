@@ -15,5 +15,11 @@ public class PlayerViewModel extends ViewModel {
         this.currentPlayer.setValue(player);
     }*/
 
+    //TODO PseudoMehtode um Coverage zu testen
+
+    public static boolean isEven(int i){
+        return i%2==0;
+    }
+
 
 }
