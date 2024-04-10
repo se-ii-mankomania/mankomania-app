@@ -67,12 +67,16 @@ public class PlayerTest {
         assertEquals(expectedPayer1Balance, player1.getWalletBalance());
         assertEquals(expectedPlayer2Balance, player2.getWalletBalance());
     }
-
+    
         @Test
         public void testAddShare() {
+            //Aktueller Stand
+            int currentStock = player1.getAmountOfStock().getOrDefault(String.valueOf(StockTypes.BRUCHSTAHL_AG), 0);
+            // Hinzufügen neuer Aktien
             player1.addShare(StockTypes.BRUCHSTAHL_AG, 5);
-            Assertions.assertEquals(5, player1.getAmountOfStock().get(String.valueOf(StockTypes.BRUCHSTAHL_AG)));
-        }
+            int newTotalStock = player1.getAmountOfStock().getOrDefault(String.valueOf(StockTypes.BRUCHSTAHL_AG), 0);
+            assertEquals(currentStock + 5, newTotalStock);
+    }
 
         @Test
         public void testResetAllShares(){
