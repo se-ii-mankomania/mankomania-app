@@ -15,17 +15,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class Auth {
-    private String email;
-    private String password;
-
     private static String token;
 
     private static String message;
-
-    // must be changed later when server is deployed
-    // 10.0.2.2 to reach localhost of development machine
-    private static final String SERVER = "http://10.0.2.2";
-    private static final int PORT = 3000;
 
     // interface to notify whether login is successful or not
     public interface LoginCallback {
@@ -33,6 +25,7 @@ public class Auth {
         void onLoginFailure(String errorMessage);
     }
 
+    // interface to notify whether register is successful or not
     public interface RegisterCallback {
         void onRegisterSuccess(String message);
         void onRegisterFailure(String errorMessage);
@@ -91,6 +84,11 @@ public class Auth {
         });
     }
 
+    /**
+     * this method tries to register a user
+     * on success, the new user gets added into the db
+     * the server will provide a feedback
+     */
     public static void register(String email, String password, final RegisterCallback callback) {
         // create JSON object for request
         JSONObject jsonRequest = new JSONObject();

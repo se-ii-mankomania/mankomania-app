@@ -30,6 +30,11 @@ public class Lobby {
         void onAddLobbyFailure(String errorMessage);
     }
 
+    /**
+     * this method gets all lobbies from the db
+     * and stores the names of the lobby into lobbyNames
+     * TODO: other properties
+     */
     public static void getLobbies(String token, final GetLobbiesCallback callback) {
         Request request = new Request.Builder()
                 .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/lobby/getAll")
@@ -68,6 +73,9 @@ public class Lobby {
         });
     }
 
+    /**
+     * this method tries to add a lobby to the db
+     */
     public static void addLobby(String token, String name, String password, boolean isPrivate, int maxPlayer, Status status, final AddLobbyCallback callback) {
         JSONObject jsonRequest = new JSONObject();
         try {

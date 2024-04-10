@@ -3,7 +3,6 @@ package com.example.mankomania;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -42,35 +41,28 @@ public class GameScore extends AppCompatActivity implements Lobby.GetLobbiesCall
         Lobby.getLobbies(token, GameScore.this);
 
         Button resumeGame=findViewById(R.id.GameScore_ResumeGame);
-        resumeGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int checkedPosition=listOfGames.getCheckedItemPosition();
-                if(checkedPosition!= AdapterView.INVALID_POSITION) {
-                    String selectedGame=(String) listOfGames.getItemAtPosition(checkedPosition);
-                    //TODO selctedGame starten
-                    Intent resumeGameIntent = new Intent(GameScore.this, Board.class);
-                    startActivity(resumeGameIntent);
-                }else{
-                    Toast.makeText(GameScore.this, "Wähle ein Spiel aus.", Toast.LENGTH_SHORT).show();
-                }
+        resumeGame.setOnClickListener(v -> {
+            int checkedPosition=listOfGames.getCheckedItemPosition();
+            if(checkedPosition!= AdapterView.INVALID_POSITION) {
+                String selectedGame=(String) listOfGames.getItemAtPosition(checkedPosition);
+                //TODO selctedGame starten
+                Intent chooseYourCharacterIntent = new Intent(GameScore.this, ChooseYourCharacter.class);
+                startActivity(chooseYourCharacterIntent);
+            }else{
+                Toast.makeText(GameScore.this, "Wähle ein Spiel aus.", Toast.LENGTH_SHORT).show();
             }
         });
 
         Button startNewGame=findViewById(R.id.GameScore_NewGame);
-        startNewGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO neue Instanzen für neues Spiel erzeugen
-                Intent createNewLobbyIntent = new Intent(GameScore.this, CreateNewLobby.class);
-                startActivity(createNewLobbyIntent);
-            }
+        startNewGame.setOnClickListener(v -> {
+            //TODO neue Instanzen für neues Spiel erzeugen
+            Intent createNewLobbyIntent = new Intent(GameScore.this, CreateNewLobby.class);
+            startActivity(createNewLobbyIntent);
         });
     }
 
     @Override
     public void onGetLobbiesFailure(String errorMessage) {
-        // handle login failure
         runOnUiThread(() -> Toast.makeText(GameScore.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
 

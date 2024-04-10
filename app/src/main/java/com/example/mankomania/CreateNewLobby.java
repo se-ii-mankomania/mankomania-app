@@ -22,7 +22,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mankomania.api.Lobby;
 import com.example.mankomania.api.Status;
-import com.google.android.material.chip.Chip;
 
 public class CreateNewLobby extends AppCompatActivity implements Lobby.AddLobbyCallback{
 
@@ -75,30 +74,22 @@ public class CreateNewLobby extends AppCompatActivity implements Lobby.AddLobbyC
             }
         });
 
-        createLobbyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String lobbyName = nameInput.getText().toString();
-                String lobbyPassword = passwordInput.getText().toString();
-                boolean isLobbyPrivate = privateLobbySwitch.isChecked();
-                int maxPlayers = Integer.parseInt((String) maxPlayerSpinner.getSelectedItem());
+        createLobbyButton.setOnClickListener(v -> {
+            String lobbyName = nameInput.getText().toString();
+            String lobbyPassword = passwordInput.getText().toString();
+            boolean isLobbyPrivate = privateLobbySwitch.isChecked();
+            int maxPlayers = Integer.parseInt((String) maxPlayerSpinner.getSelectedItem());
 
-                Log.d("CreateNewLobby", "Lobby Name: " + lobbyName);
-                Log.d("CreateNewLobby", "Lobby Password: " + lobbyPassword);
-                Log.d("CreateNewLobby", "Is Lobby Private: " + isLobbyPrivate);
-                Log.d("CreateNewLobby", "Max Players: " + maxPlayers);
-
-                // make sure to "send" password = null if password = "" !!!
-                if (lobbyPassword.equals("")) {
-                    lobbyPassword = null;
-                }
-
-                // get token from shared preferences
-                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                String token = sharedPreferences.getString("token", null);
-                // add lobby
-                Lobby.addLobby(token, lobbyName, lobbyPassword, isLobbyPrivate, maxPlayers, Status.open, CreateNewLobby.this);
+            // make sure to "send" password = null if password == "" !!!
+            if (lobbyPassword.equals("")) {
+                lobbyPassword = null;
             }
+
+            // get token from shared preferences
+            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            String token = sharedPreferences.getString("token", null);
+            // add lobby
+            Lobby.addLobby(token, lobbyName, lobbyPassword, isLobbyPrivate, maxPlayers, Status.open, CreateNewLobby.this);
         });
     }
 
@@ -107,8 +98,8 @@ public class CreateNewLobby extends AppCompatActivity implements Lobby.AddLobbyC
         runOnUiThread(() -> Toast.makeText(CreateNewLobby.this, "Lobby erfolgreich erstellt: " + message, Toast.LENGTH_SHORT).show());
 
         // go back to login page
-        Intent backToLobbies = new Intent(CreateNewLobby.this, GameScore.class);
-        startActivity(backToLobbies);
+        Intent goToChooseYourCharacter = new Intent(CreateNewLobby.this, ChooseYourCharacter.class);
+        startActivity(goToChooseYourCharacter);
     }
 
     @Override
