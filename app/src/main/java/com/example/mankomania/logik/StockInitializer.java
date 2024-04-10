@@ -1,5 +1,6 @@
 package com.example.mankomania.logik;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.Map;
 import java.util.Random;
 
 public class StockInitializer {
-    private static final Random random = new Random();
+    private static final SecureRandom random = new SecureRandom();
 
     public static Map<String, Integer> initializeRandomStocks() {
             Map<String, Integer> stocks = new HashMap<>();
