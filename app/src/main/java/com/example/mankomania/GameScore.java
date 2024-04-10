@@ -3,7 +3,11 @@ package com.example.mankomania;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,13 +28,29 @@ public class GameScore extends AppCompatActivity {
             return insets;
         });
 
+        ListView listOfGames=findViewById(R.id.GameScore_ListOfGames);
+
+        //TODO DummyData ersetzen
+        String[] dummyGameData={"Spiel1","Spiel2","Spiel3","Spiel4"};
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_single_choice, dummyGameData);
+        listOfGames.setAdapter(adapter);
+
+
         Button resumeGame=findViewById(R.id.GameScore_ResumeGame);
         resumeGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Verbindung zu letzter Session herstellen
-                Intent resumeGameIntent=new Intent(GameScore.this, Board.class);
-                startActivity(resumeGameIntent);
+                int checkedPosition=listOfGames.getCheckedItemPosition();
+                if(checkedPosition!= AdapterView.INVALID_POSITION) {
+                    String selectedGame=(String) listOfGames.getItemAtPosition(checkedPosition);
+                    //TODO selctedGame starten
+                    Intent resumeGameIntent = new Intent(GameScore.this, Board.class);
+                    startActivity(resumeGameIntent);
+                }else{
+                    Toast.makeText(GameScore.this, "Wähle ein Spiel aus.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

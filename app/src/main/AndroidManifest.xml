@@ -13,9 +13,18 @@
         android:theme="@style/Theme.Mankomania"
         tools:targetApi="31">
         <activity
+            android:name=".Event_RollDice"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            />
+        <activity
+            android:name=".Register"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".Board"
             android:exported="false"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".FinancesAndStocks"
             android:exported="false"
@@ -34,6 +43,7 @@
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
