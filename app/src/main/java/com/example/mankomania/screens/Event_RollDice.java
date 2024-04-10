@@ -1,4 +1,4 @@
-package com.example.mankomania;
+package com.example.mankomania.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import java.util.Random;
+
+import com.example.mankomania.R;
+import com.example.mankomania.logik.Dice;
+
+import java.util.Arrays;
 
 public class Event_RollDice extends AppCompatActivity {
 
@@ -29,28 +33,22 @@ public class Event_RollDice extends AppCompatActivity {
         });
 
         ToolbarFunctionalities toolbarFunctionalities=new ToolbarFunctionalities(this);
-        Random random=new Random();
-        int randomNumber=random.nextInt(6) + 1;
+        Dice dice=new Dice();
+        int[] randomNumber=dice.throwDice();
         //TODO entsprechende Anzahl am Spielfeld weiterrücken
-        String resultOfRollingDice= String.valueOf(randomNumber);
+        String resultOfRollingDice= String.valueOf(randomNumber[0]+randomNumber[1]);
 
         Button rollDice=findViewById(R.id.RollDice_RollButton);
-        rollDice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TextView result=findViewById(R.id.RollDice_resultAnswer);
-                result.setText(resultOfRollingDice);
+        rollDice.setOnClickListener((View v) -> {
+            TextView result=findViewById(R.id.RollDice_resultAnswer);
+            result.setText(resultOfRollingDice);
 
-                Handler handler=new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent backToBoard=new Intent(Event_RollDice.this, Board.class);
-                        startActivity(backToBoard);
-                    }
-                },700);
-                Toast.makeText(getApplicationContext(), "Deine Spielfigur zieht "+randomNumber+" Felder weiter.", Toast.LENGTH_SHORT).show();
-            }
+            Handler handler=new Handler();
+            handler.postDelayed(() -> {
+                Intent backToBoard=new Intent(Event_RollDice.this, Board.class);
+                startActivity(backToBoard);
+            },700);
+            Toast.makeText(getApplicationContext(), "Deine Spielfigur zieht "+ Arrays.toString(randomNumber) +" Felder weiter.", Toast.LENGTH_SHORT).show();
         });
     }
 }
