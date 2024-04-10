@@ -1,7 +1,7 @@
 package com.example.mankomania.LogikTest;
 
+
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 import com.example.mankomania.logik.StockTypes;
 

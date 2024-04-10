@@ -1,12 +1,13 @@
 package com.example.mankomania.LogikTest;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.example.mankomania.logik.Dice;
+
+import org.junit.Test;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -18,8 +19,8 @@ public class DiceTest {
 
     @Test
     public void testDiceRange() {
-        int[] result = dice.throwDice();
         for(int i = 0; i < 5; i++){
+            int[] result = dice.throwDice();
             assertTrue(result[0] >= 1 && result[0] <= 6 );
             assertTrue(result[1] >=1 && result[1] <= 6);
         }

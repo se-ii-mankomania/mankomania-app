@@ -1,5 +1,6 @@
 package com.example.mankomania.LogikTest;
 
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
@@ -7,7 +8,7 @@ import com.example.mankomania.logik.NoteTypes;
 import com.example.mankomania.logik.Wallet;
 
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
+
 
 public class WalletTest {
     private Wallet wallet = new Wallet();

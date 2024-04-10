@@ -6,7 +6,6 @@ import com.example.mankomania.logik.NoteTypes;
 
 import org.junit.Test;
 
-import java.util.Arrays;
 
 public class NoteTypesTest {
 
