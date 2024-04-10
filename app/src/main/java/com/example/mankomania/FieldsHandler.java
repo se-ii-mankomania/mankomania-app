@@ -61,7 +61,7 @@ public class FieldsHandler {
             }
             else{
                 int newID = 36 + diceNr;
-                player.setGameboardField(fields[ newID]);
+                player.setGameboardField(fields[newID-1]);
             }
         }
         //Auktionshaus
@@ -100,7 +100,7 @@ public class FieldsHandler {
 
     }
 
-    public void initFields(Board.CellPosition [][] cellPositions) {
+    public void initFields(Cellposition [][] cellPositions) {
         if(cellPositions.length != 14 || cellPositions[0].length != 14){
             throw new IllegalArgumentException("wrong size");
         }

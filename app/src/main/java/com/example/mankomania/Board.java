@@ -17,16 +17,8 @@ public class Board extends AppCompatActivity {
     PlayerTest[] players = new PlayerTest[4];
     FieldsHandler fieldsHandler = new FieldsHandler();
 
-    CellPosition[][] cellPositions = new CellPosition[14][14];
-    public class CellPosition {
-        public int x;
-        public int y;
+    Cellposition[][] cellPositions = new Cellposition[14][14];
 
-        public CellPosition(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +57,7 @@ public class Board extends AppCompatActivity {
         int cellHeight = board.getHeight()/14;
         for (int row = 0; row<14; row++){
             for(int col = 0; col<14; col++){
-                cellPositions[row][col] = new CellPosition((int) (col*cellWidth + board.getX()), (int) (row*cellHeight + board.getY()));
+                cellPositions[row][col] = new Cellposition((int) (col*cellWidth + board.getX()), (int) (row*cellHeight + board.getY()));
             }
         }
 
