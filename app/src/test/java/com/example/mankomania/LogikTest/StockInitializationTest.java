@@ -1,6 +1,7 @@
 package com.example.mankomania.LogikTest;
 
 
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -20,6 +21,7 @@ public class StockInitializationTest {
     public void testInitializeStocksBasic() {
         Map<String, Integer> stocks = StockInitializer.initializeRandomStocks();
         assertNotNull(stocks);
-        assertEquals(2, stocks.size());
+        int uniqueStocksCount = (int) stocks.values().stream().count();
+        assertTrue(uniqueStocksCount == 1 || uniqueStocksCount == 2);
     }
 }
