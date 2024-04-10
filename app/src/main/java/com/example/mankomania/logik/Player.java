@@ -1,5 +1,7 @@
 package com.example.mankomania.logik;
 
+import com.example.mankomania.gameboardfields.GameboardField;
+
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +9,7 @@ import java.util.logging.Logger;
 
 public class Player {
 
+    private GameboardField currentField;
     Logger logger = Logger.getLogger(getClass().getName());
     private int id;
     private String username;
@@ -16,6 +19,7 @@ public class Player {
     private int position;
     private SecureRandom random = new SecureRandom();
 
+
     public Player(String username, Color color) {
         this.id = random.nextInt(10000);
         this.username = username;
@@ -23,6 +27,14 @@ public class Player {
         this.wallet = new Wallet();
         this.stocks = StockInitializer.initializeRandomStocks();
         this.position = 0;
+    }
+
+    public GameboardField getCurrentField() {
+        return currentField;
+    }
+
+    public void setCurrentField(GameboardField currentField) {
+        this.currentField = currentField;
     }
 
     public void movement(int fields){

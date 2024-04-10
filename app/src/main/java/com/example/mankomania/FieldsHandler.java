@@ -5,90 +5,91 @@ import com.example.mankomania.gameboardfields.GameboardField;
 import com.example.mankomania.gameboardfields.GoToField;
 import com.example.mankomania.gameboardfields.HotelField;
 import com.example.mankomania.gameboardfields.ProfitField;
+import com.example.mankomania.logik.Player;
 
 public class FieldsHandler {
     GameboardField[] fields = new GameboardField[52];
 
 
-    public void movePlayer(PlayerTest player, int diceNr){
+    public void movePlayer(Player player, int diceNr){
         //Starts
         //links oben
-        if(player.currentField.id == 49){
+        if(player.getCurrentField().id == 49){
             int newID = diceNr;
-            player.setGameboardField(fields[newID - 1]);
+            player.setCurrentField(fields[newID - 1]);
 
         }
         //rechts oben
-        else if(player.currentField.id == 50){
+        else if(player.getCurrentField().id == 50){
             int newID = 10 + diceNr ;
-            player.setGameboardField(fields[newID]);
+            player.setCurrentField(fields[newID]);
         }
         //rechts unten
-        else if(player.currentField.id == 51){
+        else if(player.getCurrentField().id == 51){
             int newID = 21 + diceNr ;
-            player.setGameboardField(fields[newID]);
+            player.setCurrentField(fields[newID]);
         }
         //links unten
-        else if(player.currentField.id == 52){
+        else if(player.getCurrentField().id == 52){
             if(diceNr > 11){
                 int calc = diceNr - 12;
                 int newID = calc;
-                player.setGameboardField(fields[newID]); //bleibt +1?
+                player.setCurrentField(fields[newID]); //bleibt +1?
             }
             else{
                 int newID = 32 + diceNr ;
-                player.setGameboardField(fields[newID]);
+                player.setCurrentField(fields[newID]);
             }
         }
 
         //ActivityFelder
         // Pferderennen
-        else if(player.currentField.id == 46){
+        else if(player.getCurrentField().id == 46){
             int newID = 14 + diceNr;
-            player.setGameboardField(fields[newID-1]);
+            player.setCurrentField(fields[newID-1]);
         }
         //Börse
-        else if(player.currentField.id == 47){
+        else if(player.getCurrentField().id == 47){
             int newID = 19 + diceNr - 1;
-            player.setGameboardField(fields[newID]);
+            player.setCurrentField(fields[newID]);
         }
         //Casino
-        else if(player.currentField.id == 48){
+        else if(player.getCurrentField().id == 48){
             if(diceNr > 8){
                 int calc = diceNr - 8;
                 int newID =calc -1;
-                player.setGameboardField(fields[newID]);
+                player.setCurrentField(fields[newID]);
             }
             else{
                 int newID = 36 + diceNr;
-                player.setGameboardField(fields[newID-1]);
+                player.setCurrentField(fields[newID-1]);
             }
         }
         //Auktionshaus
-        else if(player.currentField.id == 45){
+        else if(player.getCurrentField().id == 45){
             if(diceNr > 3){
                 int calc = diceNr - 3;
                 int newID = calc -1;
-                player.setGameboardField(fields[newID]);
+                player.setCurrentField(fields[newID]);
             }
             else{
                 int newID = 41 + diceNr;
-                player.setGameboardField(fields[newID]);
+                player.setCurrentField(fields[newID]);
             }
 
         }
         //innerhalb des Quadrats
 
         //
-        else if(player.currentField.id>=1 && player.currentField.id <= 43){
+        else if(player.getCurrentField().id>=1 && player.getCurrentField().id <= 43){
             //neue Runde
-            if(player.currentField.id + diceNr > 43){
-                int calc = 44 - player.currentField.id;
+            if(player.getCurrentField().id + diceNr > 43){
+                int calc = 44 - player.getCurrentField().id;
                 int newID = diceNr - calc;
-                player.setGameboardField(fields[newID-1]);
+                player.setCurrentField(fields[newID-1]);
             }
             else{
-                player.setGameboardField(fields[player.currentField.id + diceNr -1]);
+                player.setCurrentField(fields[player.getCurrentField().id + diceNr -1]);
             }
 
         }

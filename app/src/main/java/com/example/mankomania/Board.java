@@ -13,8 +13,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mankomania.logik.Color;
+import com.example.mankomania.logik.Player;
+
 public class Board extends AppCompatActivity {
-    PlayerTest[] players = new PlayerTest[4];
+    Player[] players = new Player[4];
     FieldsHandler fieldsHandler = new FieldsHandler();
 
     Cellposition[][] cellPositions = new Cellposition[14][14];
@@ -64,16 +67,20 @@ public class Board extends AppCompatActivity {
         fieldsHandler.initFields(cellPositions);
 
 
-        PlayerTest playerblue = new PlayerTest(ColorTest.BLUE, fieldsHandler.fields[44] );
-        PlayerTest playergreen = new PlayerTest(ColorTest.GREEN, fieldsHandler.fields[45]);
-        PlayerTest playerRed = new PlayerTest(ColorTest.RED, fieldsHandler.fields[46]);
-        PlayerTest playerPurple = new PlayerTest(ColorTest.PURPLE, fieldsHandler.fields[47]);
+        Player playerblue = new Player("Blue", Color.BLUE );
+        playerblue.setCurrentField(fieldsHandler.fields[44]);
+        Player playergreen = new Player("GREEN", Color.GREEN);
+        playergreen.setCurrentField(fieldsHandler.fields[45]);
+        Player playerRed = new Player("RED", Color.RED);
+        playerRed.setCurrentField(fieldsHandler.fields[46]);
+        Player playerPurple = new Player("PURPLE", Color.PURPLE );
+        playerPurple.setCurrentField(fieldsHandler.fields[47]);
         players[0] = playerblue;
         players[1] = playergreen;
         players[2] = playerRed;
         players[3] = playerPurple;
 
-//Testing
+        //Testing
         fieldsHandler.movePlayer(playerblue, 15);
         fieldsHandler.movePlayer(playergreen, 15);
         fieldsHandler.movePlayer(playerRed, 15);
@@ -112,27 +119,27 @@ public class Board extends AppCompatActivity {
 
     }
    public void updatePlayerPositions(){
-       for (PlayerTest player: players
+       for (Player player: players
             ) {
-           if(player.color == ColorTest.BLUE){
+           if(player.getColor() == Color.BLUE){
                ImageView playerBlue = findViewById(R.id.player_blue);
-               playerBlue.setX(player.currentField.x);
-               playerBlue.setY(player.currentField.y);
+               playerBlue.setX(player.getCurrentField().x);
+               playerBlue.setY(player.getCurrentField().y);
            }
-           if(player.color == ColorTest.RED){
+           if(player.getColor() == Color.RED){
                ImageView playerRed = findViewById(R.id.player_red);
-               playerRed.setX(player.currentField.x);
-               playerRed.setY(player.currentField.y);
+               playerRed.setX(player.getCurrentField().x);
+               playerRed.setY(player.getCurrentField().y);
            }
-           if(player.color == ColorTest.GREEN){
+           if(player.getColor() == Color.GREEN){
                ImageView playerGreen = findViewById(R.id.player_green);
-               playerGreen.setX(player.currentField.x);
-               playerGreen.setY(player.currentField.y);
+               playerGreen.setX(player.getCurrentField().x);
+               playerGreen.setY(player.getCurrentField().y);
            }
-           if(player.color == ColorTest.PURPLE){
+           if(player.getColor() == Color.PURPLE){
                ImageView playerPurple = findViewById(R.id.player_purple);
-               playerPurple.setX(player.currentField.x);
-               playerPurple.setY(player.currentField.y);
+               playerPurple.setX(player.getCurrentField().x);
+               playerPurple.setY(player.getCurrentField().y);
            }
        }
 
