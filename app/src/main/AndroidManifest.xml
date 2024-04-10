@@ -38,6 +38,10 @@
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
+            android:name=".PopupActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".MainActivityLogin"
             android:exported="true"
             android:screenOrientation="landscape">
