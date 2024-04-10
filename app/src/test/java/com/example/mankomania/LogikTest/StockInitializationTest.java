@@ -16,7 +16,7 @@ public class StockInitializationTest {
 
     private StockInitializer stockinit = new StockInitializer();
 
-    //Testet ob die Methode genau 2 Aktien hinzufügt bzw. keine leere Map
+    //Testet ob die Methode genau 2 Aktien hinzufügt bzw. dass die Map nicht leer ist
     @Test
     public void testInitializeStocksBasic() {
         Map<String, Integer> stocks = StockInitializer.initializeRandomStocks();

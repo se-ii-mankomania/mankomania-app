@@ -1,13 +1,14 @@
 package com.example.mankomania.logik;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class StockInitializer {
+
+    private StockInitializer() {
+    }
+
     private static final SecureRandom random = new SecureRandom();
 
     public static Map<String, Integer> initializeRandomStocks() {
