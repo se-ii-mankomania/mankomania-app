@@ -14,12 +14,13 @@ import java.util.Map;
 
 public class StockInitializationTest {
 
-    //Testet ob die Methode genau 2 Aktien hinzufügt bzw. dass die Map nicht leer ist
+    //Testet ob die Map nicht Null ist und ob insgesamt 2 Aktien vorhanden sind
     @Test
-    public void testInitializeStocksBasic() {
+    public void testThatTheMapIsNotNull() {
         Map<String, Integer> stocks = StockInitializer.initializeRandomStocks();
         assertNotNull(stocks);
         int uniqueStocksCount = (int) stocks.values().stream().count();
         assertTrue(uniqueStocksCount == 1 || uniqueStocksCount == 2);
+
     }
 }
