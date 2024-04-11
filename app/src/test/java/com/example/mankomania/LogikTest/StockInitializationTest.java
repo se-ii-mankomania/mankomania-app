@@ -2,7 +2,6 @@ package com.example.mankomania.LogikTest;
 
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.example.mankomania.logik.StockInitializer;
