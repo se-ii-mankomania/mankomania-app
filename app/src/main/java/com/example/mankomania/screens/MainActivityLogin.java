@@ -82,7 +82,7 @@ public class MainActivityLogin extends AppCompatActivity implements Auth.LoginCa
      */
 
     public static boolean isNoValidEmail(String email){
-        String emailRegex ="^(.+)@(\\S+)$";
+        String emailRegex ="^(.+)@([\\w.-]+)$";
         Pattern pattern = Pattern.compile(emailRegex);
         return !pattern.matcher(email).matches();
     }
