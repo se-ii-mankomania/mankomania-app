@@ -3,7 +3,7 @@ package com.example.mankomania.api;
 import okhttp3.OkHttpClient;
 
 public class HttpClient {
-    private static OkHttpClient httpClient;
+    private static OkHttpClient httpClientInstance;
 
     // must be changed later when server is deployed
     // 10.0.2.2 to reach localhost of development machine
@@ -14,11 +14,11 @@ public class HttpClient {
     private HttpClient() {}
 
     public static OkHttpClient getHttpClient() {
-        if(httpClient == null) {
-            httpClient = new OkHttpClient();
+        if(httpClientInstance == null) {
+            httpClientInstance = new OkHttpClient();
         }
 
-        return httpClient;
+        return httpClientInstance;
     }
 
     public static String getServer() {
