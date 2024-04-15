@@ -88,7 +88,7 @@ public class CreateNewLobby extends AppCompatActivity implements Lobby.AddLobbyC
             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
             String token = sharedPreferences.getString("token", null);
             // add lobby
-            Lobby.addLobby(token, lobbyName, lobbyPassword, isLobbyPrivate, maxPlayers, Status.open, CreateNewLobby.this);
+            Lobby.addLobby(token, lobbyName, lobbyPassword, isLobbyPrivate, maxPlayers, Status.OPEN, CreateNewLobby.this);
         });
     }
 
