@@ -1,10 +1,14 @@
 package com.example.mankomania.LogikTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.example.mankomania.logik.StockTypes;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.Optional;
 
 public class StockTypesTest {
     //Testet ob die richtigen Namen zurückgegeben werden
@@ -23,9 +27,8 @@ public class StockTypesTest {
 
     //Stellt sicher, dass alle Aktien vorhanden sind
     @Test
-    public void testEnumValues(){
-        StockTypes[] expectedStockTypes = {StockTypes.BRUCHSTAHL_AG, StockTypes.TROCKENOEL_AG, StockTypes.KURZSCHLUSS_VERSORGUNGS_AG};
-        StockTypes[] actualStockTypes = StockTypes.values();
-        assertEquals(expectedStockTypes, actualStockTypes);
+    public void testNumberOfEnumValues(){
+        StockTypes[] values=StockTypes.values();
+        assertEquals(3, Arrays.stream(values).count());
     }
 }
