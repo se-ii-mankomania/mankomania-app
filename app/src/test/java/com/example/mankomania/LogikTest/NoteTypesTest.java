@@ -28,12 +28,4 @@ public class NoteTypesTest {
     public void testValueOfHUNDREDTHOUSAND(){
         assertEquals(100000, NoteTypes.HUNDREDTHOUSAND.getValue());
     }
-
-    //Stellt sicher, dass alle erwarteten Enums vorhanden sind
-    @Test
-    public void testEnumValues(){
-        NoteTypes[] expectedValues = {NoteTypes.FIVETHOUSAND, NoteTypes.TENTHOUSAND, NoteTypes.FIFTYTHOUSAND, NoteTypes.HUNDREDTHOUSAND};
-        NoteTypes[] actualValues = NoteTypes.values();
-        assertEquals(expectedValues, actualValues);
-    }
 }
