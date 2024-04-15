@@ -1,10 +1,8 @@
 package com.example.mankomania.LogikTest;
 
-import static org.junit.Assert.assertEquals;
-
 import com.example.mankomania.logik.NoteTypes;
-
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 
 public class NoteTypesTest {

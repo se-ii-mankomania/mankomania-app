@@ -1,11 +1,10 @@
 package com.example.mankomania.LogikTest;
 
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.example.mankomania.logik.StockTypes;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class StockTypesTest {
     //Testet ob die richtigen Namen zurückgegeben werden
