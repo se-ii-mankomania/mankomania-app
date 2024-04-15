@@ -6,10 +6,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -62,15 +60,12 @@ public class CreateNewLobby extends AppCompatActivity implements Lobby.AddLobbyC
         maxPlayerSpinner.setAdapter(adapter);
 
         // only allow a password if the lobby is private
-        privateLobbySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                passwordInput.setEnabled(isChecked);
-                passwordInput.setFocusable(isChecked);
-                passwordInput.setFocusableInTouchMode(isChecked);
-                if (!isChecked) {
-                    passwordInput.setText("");
-                }
+        privateLobbySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            passwordInput.setEnabled(isChecked);
+            passwordInput.setFocusable(isChecked);
+            passwordInput.setFocusableInTouchMode(isChecked);
+            if (!isChecked) {
+                passwordInput.setText("");
             }
         });
 
@@ -81,7 +76,7 @@ public class CreateNewLobby extends AppCompatActivity implements Lobby.AddLobbyC
             int maxPlayers = Integer.parseInt((String) maxPlayerSpinner.getSelectedItem());
 
             // make sure to "send" password = null if password == "" !!!
-            if (lobbyPassword.equals("")) {
+            if (lobbyPassword.isEmpty()) {
                 lobbyPassword = null;
             }
 
