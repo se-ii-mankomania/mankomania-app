@@ -16,8 +16,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.mankomania.R;
 import com.example.mankomania.api.Auth;
 
-import java.util.regex.Pattern;
-
 public class Register extends AppCompatActivity implements Auth.RegisterCallback {
 
     @Override
@@ -41,7 +39,7 @@ public class Register extends AppCompatActivity implements Auth.RegisterCallback
             String email = emailInput.getText().toString();
             String password = passwordInput.getText().toString();
 
-            if(isNoValidEmail(email)) {
+            if(MainActivityLogin.isNoValidEmail(email)) {
                 emailInput.setError("E-Mail-Adresse ist ungültig.");
             } else if (password.length() <= 7) {
                 passwordInput.setError("Passwort muss >7 Zeichen lang sein.");
@@ -64,12 +62,5 @@ public class Register extends AppCompatActivity implements Auth.RegisterCallback
     @Override
     public void onRegisterFailure(String errorMessage) {
         runOnUiThread(() -> Toast.makeText(Register.this, "Registrierung fehlgeschlagen: " + errorMessage, Toast.LENGTH_SHORT).show());
-    }
-
-    // von MainActivityLogin
-    static boolean isNoValidEmail(String email){
-        String emailRegex ="^(.+)@(\\S+)$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        return !pattern.matcher(email).matches();
     }
 }

@@ -22,7 +22,7 @@
             android:id="@+id/nameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name:"
+            android:text="@string/createNewLobby_nameTextView_text"
             android:textSize="16sp" />
 
         <EditText
@@ -30,10 +30,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Name" />
+            android:inputType="text"
+            android:autofillHints=""
+            android:hint="@string/createNewLobby_nameEditView_hint" />
     </LinearLayout>
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/privateLobbySwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,7 +43,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/firstRow"
-        android:text="Private" />
+        android:text="@string/createNewLobby_privateLobbySwitch_text" />
 
     <LinearLayout
         android:id="@+id/thirdRow"
@@ -57,7 +59,7 @@
             android:id="@+id/passwortTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Passwort:"
+            android:text="@string/createNewLobby_passwordTextView_text"
             android:textSize="16sp" />
 
         <EditText
@@ -66,7 +68,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="textPassword"
-            android:hint="Passwort" />
+            android:autofillHints=""
+            android:hint="@string/createNewLobby_passwordEditText_hint" />
     </LinearLayout>
 
     <LinearLayout
@@ -83,7 +86,7 @@
             android:id="@+id/maxSpielerTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Max. Spieler:"
+            android:text="@string/createNewLobby_maxSpielerTextView_text"
             android:textSize="16sp" />
 
         <Spinner
@@ -97,7 +100,7 @@
         android:id="@+id/createLobbyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Lobby erstellen"
+        android:text="@string/createNewLobby_createLobbyButton_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fourthRow"

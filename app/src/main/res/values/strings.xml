@@ -85,4 +85,11 @@
     <string name="field_50_description">Startfeld grün</string>
     <string name="field_51_description">Startfeld lila</string>
     <string name="field_52_description">Startfeld rot</string>
+    <string name="createNewLobby_nameTextView_text">Name:</string>
+    <string name="createNewLobby_nameEditView_hint">Name</string>
+    <string name="createNewLobby_privateLobbySwitch_text">Private</string>
+    <string name="createNewLobby_passwordTextView_text">Passwort:</string>
+    <string name="createNewLobby_passwordEditText_hint">Passwort</string>
+    <string name="createNewLobby_maxSpielerTextView_text">Max. Spieler:</string>
+    <string name="createNewLobby_createLobbyButton_text">Lobby erstellen</string>
 </resources>
