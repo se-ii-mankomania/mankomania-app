@@ -63,7 +63,7 @@ sonar {
         property "sonar.exclusions", "**/Board.java,**/ChooseYourCharacter.java," +
               "**/Event_RollDice,**/FinancesAndStocks.java,**/GameScore.java," +
                 "**/MainActivityLogin.java, **/PlayerViewModel.java" +
-                "**/Register.java,**/ToolbarFunctionalities"
+                "**/Register.java,**/ToolbarFunctionalities.java,**/EventRollDice.java"
     }
 }
 dependencies {
