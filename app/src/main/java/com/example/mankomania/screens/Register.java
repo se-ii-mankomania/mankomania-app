@@ -16,8 +16,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.mankomania.R;
 import com.example.mankomania.api.Auth;
 
-import java.util.regex.Pattern;
-
 public class Register extends AppCompatActivity implements Auth.RegisterCallback {
 
     @Override
