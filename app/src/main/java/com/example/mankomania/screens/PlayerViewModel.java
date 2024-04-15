@@ -14,5 +14,9 @@ public class PlayerViewModel extends ViewModel {
         this.currentPlayer.setValue(player);
     }*/
 
+    public static boolean isEven(int a){
+        return a%2==0;
+    }
+
 
 }
