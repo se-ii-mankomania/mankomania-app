@@ -68,7 +68,7 @@ public class Register extends AppCompatActivity implements Auth.RegisterCallback
 
     // von MainActivityLogin
     static boolean isNoValidEmail(String email){
-        String emailRegex ="^(.+)@(\\S+)$";
+        String emailRegex ="^(.+)@([\\w.-]+)$";
         Pattern pattern = Pattern.compile(emailRegex);
         return !pattern.matcher(email).matches();
     }
