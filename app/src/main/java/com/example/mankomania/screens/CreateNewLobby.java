@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -25,7 +26,7 @@ import com.example.mankomania.api.Status;
 public class CreateNewLobby extends AppCompatActivity implements Lobby.AddLobbyCallback{
 
     EditText nameInput;
-    Switch privateLobbySwitch;
+    SwitchCompat privateLobbySwitch;
     EditText passwordInput;
     Spinner maxPlayerSpinner;
     Button createLobbyButton;
