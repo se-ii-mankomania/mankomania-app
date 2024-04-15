@@ -1,17 +1,20 @@
 package com.example.mankomania;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 import com.example.mankomania.logik.Color;
 import com.example.mankomania.logik.Player;
 import com.example.mankomania.screens.Cellposition;
 import com.example.mankomania.screens.FieldsHandler;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 public class BoardTest {
     FieldsHandler fieldsHandler = new FieldsHandler();
 
-    @Before
+    @BeforeEach
     public void setUp(){
 
         Cellposition[][] cellPositions = new Cellposition[14][14];
@@ -28,11 +31,11 @@ public class BoardTest {
         Player playerblue = new Player("BLUE", Color.BLUE);
         playerblue.setCurrentField(fieldsHandler.fields[0]);
 
-        Assert.assertEquals(fieldsHandler.fields[0].id, playerblue.getCurrentField().id);
+        assertEquals(fieldsHandler.fields[0].id, playerblue.getCurrentField().id);
 
         fieldsHandler.movePlayer(playerblue, 5);
-        Assert.assertEquals(fieldsHandler.fields[5].id, playerblue.getCurrentField().id);
-        Assert.assertNotEquals(fieldsHandler.fields[0].id, playerblue.getCurrentField().id);
+        assertEquals(fieldsHandler.fields[5].id, playerblue.getCurrentField().id);
+        assertNotEquals(fieldsHandler.fields[0].id, playerblue.getCurrentField().id);
     }
     @Test
     public void gameFieldMoveTestStartPosition(){
@@ -50,10 +53,10 @@ public class BoardTest {
         fieldsHandler.movePlayer(playerred, 7);
         fieldsHandler.movePlayer(playerpurple, 7);
 
-        Assert.assertEquals(fieldsHandler.fields[6].id, playerblue.getCurrentField().id);
-        Assert.assertEquals(fieldsHandler.fields[17].id, playergreen.getCurrentField().id);
-        Assert.assertEquals(fieldsHandler.fields[28].id, playerred.getCurrentField().id);
-        Assert.assertEquals(fieldsHandler.fields[39].id, playerpurple.getCurrentField().id);
+        assertEquals(fieldsHandler.fields[6].id, playerblue.getCurrentField().id);
+        assertEquals(fieldsHandler.fields[17].id, playergreen.getCurrentField().id);
+        assertEquals(fieldsHandler.fields[28].id, playerred.getCurrentField().id);
+        assertEquals(fieldsHandler.fields[39].id, playerpurple.getCurrentField().id);
     }
     @Test
     public void gameFieldMoveTestBackToStart(){
@@ -61,7 +64,7 @@ public class BoardTest {
         playerblue.setCurrentField(fieldsHandler.fields[40]);
 
         fieldsHandler.movePlayer(playerblue, 5);
-        Assert.assertEquals(fieldsHandler.fields[1].id, playerblue.getCurrentField().id);
+        assertEquals(fieldsHandler.fields[1].id, playerblue.getCurrentField().id);
     }
 
     @Test
@@ -80,10 +83,10 @@ public class BoardTest {
         fieldsHandler.movePlayer(playerred, 5);
         fieldsHandler.movePlayer(playerpurple, 5);
 
-        Assert.assertEquals(fieldsHandler.fields[1].id, playerblue.getCurrentField().id);
-        Assert.assertEquals(fieldsHandler.fields[18].id, playergreen.getCurrentField().id);
-        Assert.assertEquals(fieldsHandler.fields[23].id, playerred.getCurrentField().id);
-        Assert.assertEquals(fieldsHandler.fields[40].id, playerpurple.getCurrentField().id);
+        assertEquals(fieldsHandler.fields[1].id, playerblue.getCurrentField().id);
+        assertEquals(fieldsHandler.fields[18].id, playergreen.getCurrentField().id);
+        assertEquals(fieldsHandler.fields[23].id, playerred.getCurrentField().id);
+        assertEquals(fieldsHandler.fields[40].id, playerpurple.getCurrentField().id);
     }
 
 

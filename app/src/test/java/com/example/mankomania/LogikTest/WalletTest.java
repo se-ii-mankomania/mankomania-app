@@ -1,13 +1,12 @@
 package com.example.mankomania.LogikTest;
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.example.mankomania.logik.NoteTypes;
 import com.example.mankomania.logik.Wallet;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 public class WalletTest {
