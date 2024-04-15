@@ -10,6 +10,9 @@ public class HttpClient {
     private static final String SERVER = "http://10.0.2.2";
     private static final int PORT = 3000;
 
+    // private constructor to prevent instantiation from outside
+    private HttpClient() {}
+
     public static OkHttpClient getHttpClient() {
         if(httpClient == null) {
             httpClient = new OkHttpClient();
