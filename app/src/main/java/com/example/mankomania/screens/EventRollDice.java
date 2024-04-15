@@ -3,6 +3,7 @@ package com.example.mankomania.screens;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -43,12 +44,12 @@ public class EventRollDice extends AppCompatActivity {
             TextView result=findViewById(R.id.RollDice_resultAnswer);
             result.setText(resultOfRollingDice);
 
-            Handler handler=new Handler();
-            handler.postDelayed(() -> {
-                Intent backToBoard=new Intent(EventRollDice.this, Board.class);
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                Intent backToBoard = new Intent(EventRollDice.this, Board.class);
                 startActivity(backToBoard);
-            },700);
-            Toast.makeText(getApplicationContext(), "Deine Spielfigur zieht "+ Arrays.toString(randomNumber) +" Felder weiter.", Toast.LENGTH_SHORT).show();
+            }, 700);
+
+            Toast.makeText(getApplicationContext(), "Deine Spielfigur zieht " + Arrays.toString(randomNumber) + " Felder weiter.", Toast.LENGTH_SHORT).show();
         });
     }
 }
