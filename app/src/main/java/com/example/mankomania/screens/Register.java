@@ -41,7 +41,7 @@ public class Register extends AppCompatActivity implements Auth.RegisterCallback
             String email = emailInput.getText().toString();
             String password = passwordInput.getText().toString();
 
-            if(isNoValidEmail(email)) {
+            if(MainActivityLogin.isNoValidEmail(email)) {
                 emailInput.setError("E-Mail-Adresse ist ungültig.");
             } else if (password.length() <= 7) {
                 passwordInput.setError("Passwort muss >7 Zeichen lang sein.");
@@ -64,12 +64,5 @@ public class Register extends AppCompatActivity implements Auth.RegisterCallback
     @Override
     public void onRegisterFailure(String errorMessage) {
         runOnUiThread(() -> Toast.makeText(Register.this, "Registrierung fehlgeschlagen: " + errorMessage, Toast.LENGTH_SHORT).show());
-    }
-
-    // von MainActivityLogin
-    static boolean isNoValidEmail(String email){
-        String emailRegex ="^(.+)@([\\w.-]+)$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        return !pattern.matcher(email).matches();
     }
 }
