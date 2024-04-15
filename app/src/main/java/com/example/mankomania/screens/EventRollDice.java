@@ -19,7 +19,7 @@ import com.example.mankomania.logik.Dice;
 
 import java.util.Arrays;
 
-public class Event_RollDice extends AppCompatActivity {
+public class EventRollDice extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class Event_RollDice extends AppCompatActivity {
 
             Handler handler=new Handler();
             handler.postDelayed(() -> {
-                Intent backToBoard=new Intent(Event_RollDice.this, Board.class);
+                Intent backToBoard=new Intent(EventRollDice.this, Board.class);
                 startActivity(backToBoard);
             },700);
             Toast.makeText(getApplicationContext(), "Deine Spielfigur zieht "+ Arrays.toString(randomNumber) +" Felder weiter.", Toast.LENGTH_SHORT).show();
