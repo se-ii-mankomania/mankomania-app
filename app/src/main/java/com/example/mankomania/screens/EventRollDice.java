@@ -33,7 +33,7 @@ public class EventRollDice extends AppCompatActivity {
             return insets;
         });
 
-        ToolbarFunctionalities toolbarFunctionalities=new ToolbarFunctionalities(this);
+        ToolbarFunctionalities.setUpToolbar(this);
         Dice dice=new Dice();
         int[] randomNumber=dice.throwDice();
         //TODO entsprechende Anzahl am Spielfeld weiterrücken

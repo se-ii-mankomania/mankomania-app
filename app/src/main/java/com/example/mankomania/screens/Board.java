@@ -46,7 +46,7 @@ public class Board extends AppCompatActivity {
             return insets;
         });
 
-        ToolbarFunctionalities toolbarFunctionalities=new ToolbarFunctionalities(this);
+        ToolbarFunctionalities.setUpToolbar(this);
     }
 
     @Override
