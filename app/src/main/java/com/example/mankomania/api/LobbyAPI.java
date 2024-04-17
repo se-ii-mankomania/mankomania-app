@@ -2,8 +2,6 @@ package com.example.mankomania.api;
 
 import static org.json.JSONObject.NULL;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
@@ -91,11 +89,6 @@ public class LobbyAPI {
                             allLobbiesDisplayStrings[i] += jsonLobby.getString("name");
                         }
 
-                        // logging...
-                        for(Lobby l : allLobbies) {
-                            Log.v("Katrin", l.toString());
-                        }
-
                         callback.onGetLobbiesSuccess(allLobbiesDisplayStrings);
                     } catch (JSONException e) {
                         callback.onGetLobbiesFailure("Fehler beim Lesen der Response!");
@@ -148,11 +141,6 @@ public class LobbyAPI {
                                 openLobbiesDisplayStrings[i] += " | ";
                                 openLobbiesDisplayStrings[i] += jsonLobby.getString("name");
                             }
-                        }
-
-                        // logging...
-                        for(Lobby l : openLobbies) {
-                            Log.v("Katrin", l.toString());
                         }
 
                         callback.onGetLobbiesByStatusSuccess(openLobbiesDisplayStrings);
