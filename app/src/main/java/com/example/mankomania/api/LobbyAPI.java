@@ -77,16 +77,10 @@ public class LobbyAPI {
                             // TODO: replace x with actual value of players in lobby
                             // TODO: find a better way to make it actually look pretty (sprint 3?)
                             // generate string as display for GameScore.java
-                            allLobbiesDisplayStrings[i] = "";
-                            if(jsonLobby.getBoolean("isprivate")) {
-                                allLobbiesDisplayStrings[i] += "P";
-                            } else {
-                                allLobbiesDisplayStrings[i] += "O";
-                            }
-                            allLobbiesDisplayStrings[i] += " | ";
-                            allLobbiesDisplayStrings[i] += " x/" + jsonLobby.getInt("maxplayers");
-                            allLobbiesDisplayStrings[i] += " | ";
-                            allLobbiesDisplayStrings[i] += jsonLobby.getString("name");
+                            boolean isPrivate = jsonLobby.getBoolean("isprivate");
+                            int maxPlayers = jsonLobby.getInt("maxplayers");
+                            String name = jsonLobby.getString("name");
+                            allLobbiesDisplayStrings[i] = generateString(isPrivate, maxPlayers, name);
                         }
 
                         callback.onGetLobbiesSuccess(allLobbiesDisplayStrings);
@@ -130,16 +124,10 @@ public class LobbyAPI {
                                 // TODO: replace x with actual value of players in lobby
                                 // TODO: find a better way to make it actually look pretty (sprint 3?)
                                 // generate string as display for GameScore.java
-                                openLobbiesDisplayStrings[i] = "";
-                                if(jsonLobby.getBoolean("isprivate")) {
-                                    openLobbiesDisplayStrings[i] += "P";
-                                } else {
-                                    openLobbiesDisplayStrings[i] += "O";
-                                }
-                                openLobbiesDisplayStrings[i] += " | ";
-                                openLobbiesDisplayStrings[i] += "x/" + jsonLobby.getInt("maxplayers");
-                                openLobbiesDisplayStrings[i] += " | ";
-                                openLobbiesDisplayStrings[i] += jsonLobby.getString("name");
+                                boolean isPrivate = jsonLobby.getBoolean("isprivate");
+                                int maxPlayers = jsonLobby.getInt("maxplayers");
+                                String name = jsonLobby.getString("name");
+                                openLobbiesDisplayStrings[i] = generateString(isPrivate, maxPlayers, name);
                             }
                         }
 
@@ -253,6 +241,22 @@ public class LobbyAPI {
 
         Lobby lobby = new Lobby(id, name, password, isPrivate, maxPlayers, status);
         list.add(lobby);
+    }
+
+    private static String generateString(boolean isPrivate, int maxPlayers, String name) {
+        String string = "";
+
+        if(isPrivate) {
+            string += "P";
+        } else {
+            string += "O";
+        }
+        string += " | ";
+        string += "x/" + maxPlayers;
+        string += " | ";
+        string += name;
+
+        return string;
     }
 
 }
