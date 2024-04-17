@@ -14,9 +14,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mankomania.R;
-import com.example.mankomania.api.Auth;
+import com.example.mankomania.api.AuthAPI;
 
-public class Register extends AppCompatActivity implements Auth.RegisterCallback {
+public class Register extends AppCompatActivity implements AuthAPI.RegisterCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class Register extends AppCompatActivity implements Auth.RegisterCallback
             } else if (password.length() <= 7) {
                 passwordInput.setError("Passwort muss >7 Zeichen lang sein.");
             } else {
-                Auth.register(email, password, Register.this);
+                AuthAPI.register(email, password, Register.this);
             }
         });
 

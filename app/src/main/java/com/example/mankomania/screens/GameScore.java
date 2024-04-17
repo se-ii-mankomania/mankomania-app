@@ -16,10 +16,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mankomania.R;
-import com.example.mankomania.api.Lobby;
+import com.example.mankomania.api.LobbyAPI;
 import com.example.mankomania.api.Status;
 
-public class GameScore extends AppCompatActivity implements Lobby.GetLobbiesCallback, Lobby.GetLobbiesByStatusCallback {
+public class GameScore extends AppCompatActivity implements LobbyAPI.GetLobbiesCallback, LobbyAPI.GetLobbiesByStatusCallback {
 
     private ListView listOfGames;
 
@@ -40,7 +40,7 @@ public class GameScore extends AppCompatActivity implements Lobby.GetLobbiesCall
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String token = sharedPreferences.getString("token", null);
         // get Lobbies
-        Lobby.getLobbiesByStatus(token, Status.open,GameScore.this);
+        LobbyAPI.getLobbiesByStatus(token, Status.open,GameScore.this);
 
         Button resumeGame=findViewById(R.id.GameScore_ResumeGame);
         resumeGame.setOnClickListener(v -> {
