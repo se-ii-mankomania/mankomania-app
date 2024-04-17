@@ -72,19 +72,19 @@ public class FieldsHandler {
             }
             else{
                 int newID = 41 + diceNr;
-                player.setCurrentField(fields[newID]);
+                player.setCurrentField(fields[newID-1]); //-1 geändert
             }
 
         }
         //innerhalb des Quadrats
 
         //
-        else if(player.getCurrentField().id>=1 && player.getCurrentField().id <= 43){
+        else if(player.getCurrentField().id>=1 && player.getCurrentField().id <= 44){ //auf 44 geändert
             //neue Runde
-            if(player.getCurrentField().id + diceNr > 43){
+            if(player.getCurrentField().id + diceNr > 44){ // von 43 auf 44 geändert
                 int calc = 44 - player.getCurrentField().id;
-                int newID = diceNr - calc;
-                player.setCurrentField(fields[newID-1]);
+                int newID = diceNr - calc - 1;
+                player.setCurrentField(fields[newID]);
             }
             else{
                 player.setCurrentField(fields[player.getCurrentField().id + diceNr -1]);
