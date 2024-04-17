@@ -8,7 +8,7 @@ import com.example.mankomania.api.Status;
 
 import java.util.UUID;
 
-class LobbyTest {
+class LobbyTests {
 
     @Test
     void testToString() {
