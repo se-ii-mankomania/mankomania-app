@@ -27,6 +27,11 @@ public class Lobby {
         void onGetLobbiesFailure(String errorMessage);
     }
 
+    public interface GetLobbiesByStatusCallback {
+        void onGetLobbiesByStatusSuccess(String[] lobbies);
+        void onGetLobbiesByStatusFailure(String errorMessage);
+    }
+
     public interface AddLobbyCallback {
         void onAddLobbySuccess(String message);
         void onAddLobbyFailure(String errorMessage);
@@ -68,6 +73,42 @@ public class Lobby {
                     }
                 } else {
                     callback.onGetLobbiesFailure(response.message());
+                }
+            }
+        });
+    }
+
+    public static void getLobbiesByStatus(String token, Status status, final GetLobbiesByStatusCallback callback) {
+        Request request = new Request.Builder()
+                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/lobby/getByStatus/" + status.toString())
+                .header("Authorization", token)
+                .build();
+
+        HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                callback.onGetLobbiesByStatusFailure("Keine Antwort!");
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if(response.isSuccessful()) {
+                    String responseBody = response.body().string();
+
+                    try {
+                        JSONArray responseArray = new JSONArray(responseBody);
+                        lobbyNames = new String[responseArray.length()];
+
+                        for(int i = 0; i < responseArray.length(); i++) {
+                            JSONObject jsonLobby = responseArray.getJSONObject(i);
+                            lobbyNames[i] = jsonLobby.getString("name");
+                        }
+                        callback.onGetLobbiesByStatusSuccess(lobbyNames);
+                    } catch (JSONException e) {
+                        callback.onGetLobbiesByStatusFailure("Fehler beim Lesen der Response!");
+                    }
+                } else {
+                    callback.onGetLobbiesByStatusFailure(response.message());
                 }
             }
         });

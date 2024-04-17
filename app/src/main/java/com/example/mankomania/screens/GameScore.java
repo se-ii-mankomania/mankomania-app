@@ -17,8 +17,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mankomania.R;
 import com.example.mankomania.api.Lobby;
+import com.example.mankomania.api.Status;
 
-public class GameScore extends AppCompatActivity implements Lobby.GetLobbiesCallback {
+public class GameScore extends AppCompatActivity implements Lobby.GetLobbiesCallback, Lobby.GetLobbiesByStatusCallback {
 
     private ListView listOfGames;
 
@@ -39,7 +40,7 @@ public class GameScore extends AppCompatActivity implements Lobby.GetLobbiesCall
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String token = sharedPreferences.getString("token", null);
         // get Lobbies
-        Lobby.getLobbies(token, GameScore.this);
+        Lobby.getLobbiesByStatus(token, Status.open,GameScore.this);
 
         Button resumeGame=findViewById(R.id.GameScore_ResumeGame);
         resumeGame.setOnClickListener(v -> {
@@ -73,5 +74,19 @@ public class GameScore extends AppCompatActivity implements Lobby.GetLobbiesCall
                     android.R.layout.simple_list_item_single_choice, lobbies);
             listOfGames.setAdapter(adapter);
         });
+    }
+
+    @Override
+    public void onGetLobbiesByStatusSuccess(String[] lobbies) {
+        runOnUiThread(() -> {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(GameScore.this,
+                    android.R.layout.simple_list_item_single_choice, lobbies);
+            listOfGames.setAdapter(adapter);
+        });
+    }
+
+    @Override
+    public void onGetLobbiesByStatusFailure(String errorMessage) {
+        runOnUiThread(() -> Toast.makeText(GameScore.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
 }
