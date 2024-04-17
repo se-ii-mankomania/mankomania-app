@@ -38,7 +38,7 @@ public class Lobby {
     public static void getLobbies(String token, final GetLobbiesCallback callback) {
         Request request = new Request.Builder()
                 .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/lobby/getAll")
-                .header("Authorisation", token)
+                .header("Authorization", token)
                 .build();
 
         HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
