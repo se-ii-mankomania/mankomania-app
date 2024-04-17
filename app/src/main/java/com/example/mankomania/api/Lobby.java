@@ -1,5 +1,7 @@
 package com.example.mankomania.api;
 
+import static org.json.JSONObject.NULL;
+
 import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
@@ -78,7 +80,15 @@ public class Lobby {
         JSONObject jsonRequest = new JSONObject();
         try {
             jsonRequest.put("name", name);
-            jsonRequest.put("password", password);
+
+            // JSONObjects need special NULL Value from library instead of standard null value
+            // this if-else is needed to pass null value into DB for no-password-lobbies
+            if(password == null) {
+                jsonRequest.put("password", NULL);
+            } else {
+                jsonRequest.put("password", password);
+            }
+
             jsonRequest.put("isPrivate", isPrivate);
             jsonRequest.put("maxPlayers", maxPlayer);
             jsonRequest.put("status", status);
