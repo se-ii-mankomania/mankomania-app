@@ -24,6 +24,7 @@ import okhttp3.Response;
 
 public class LobbyAPI {
     private static List<Lobby> allLobbies;
+    private static List<Lobby> openLobbies;
     private static String[] lobbyNames;
     private static String message;
 
@@ -72,7 +73,7 @@ public class LobbyAPI {
 
                         for(int i = 0; i < responseArray.length(); i++) {
                             JSONObject jsonLobby = responseArray.getJSONObject(i);
-                            addLobbyToAllLobbiesList(jsonLobby);
+                            addLobbyToList(jsonLobby, allLobbies);
                             lobbyNames[i] = jsonLobby.getString("name");
                         }
 
@@ -111,12 +112,22 @@ public class LobbyAPI {
 
                     try {
                         JSONArray responseArray = new JSONArray(responseBody);
+                        openLobbies = new ArrayList<>();
                         lobbyNames = new String[responseArray.length()];
 
                         for(int i = 0; i < responseArray.length(); i++) {
                             JSONObject jsonLobby = responseArray.getJSONObject(i);
+                            if(status == Status.open) {
+                                addLobbyToList(jsonLobby, openLobbies);
+                            }
                             lobbyNames[i] = jsonLobby.getString("name");
                         }
+
+                        // logging...
+                        for(Lobby l : openLobbies) {
+                            Log.v("Katrin", l.toString());
+                        }
+
                         callback.onGetLobbiesByStatusSuccess(lobbyNames);
                     } catch (JSONException e) {
                         callback.onGetLobbiesByStatusFailure("Fehler beim Lesen der Response!");
@@ -192,7 +203,7 @@ public class LobbyAPI {
      * this method takes a JSONObject that represents a lobby, creates an equivalent Lobby object
      * and adds it to the lobbies list
      */
-    private static void addLobbyToAllLobbiesList(JSONObject jsonLobby) throws JSONException {
+    private static void addLobbyToList(JSONObject jsonLobby, List<Lobby> list) throws JSONException {
         UUID id = UUID.fromString(jsonLobby.getString("id"));
         String name = jsonLobby.getString("name");
         String password = jsonLobby.getString("password");
@@ -226,7 +237,7 @@ public class LobbyAPI {
         }
 
         Lobby lobby = new Lobby(id, name, password, isPrivate, maxPlayers, status);
-        allLobbies.add(lobby);
+        list.add(lobby);
     }
 
 }
