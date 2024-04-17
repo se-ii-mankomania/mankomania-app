@@ -1,0 +1,69 @@
+package com.example.mankomania.api;
+
+import java.util.UUID;
+
+public class Lobby {
+    private UUID id;
+    private String name;
+    private String password;
+    private boolean isPrivate;
+    private int maxPlayers;
+    private Status status;
+
+    public Lobby(UUID id, String name, String password, boolean isPrivate, int maxPlayers, Status status) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.isPrivate = isPrivate;
+        this.maxPlayers = maxPlayers;
+        this.status = status;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
+    }
+
+    public int getMaxPlayers() {
+        return maxPlayers;
+    }
+
+    public void setMaxPlayers(int maxPlayers) {
+        this.maxPlayers = maxPlayers;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+}
