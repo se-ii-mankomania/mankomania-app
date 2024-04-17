@@ -41,7 +41,6 @@ public class GameScore extends AppCompatActivity implements LobbyAPI.GetLobbiesC
         String token = sharedPreferences.getString("token", null);
         // get Lobbies
         LobbyAPI.getLobbiesByStatus(token, Status.open, GameScore.this);
-        // LobbyAPI.getLobbies(token, GameScore.this);
 
         Button resumeGame=findViewById(R.id.GameScore_ResumeGame);
         resumeGame.setOnClickListener(v -> {
@@ -70,6 +69,10 @@ public class GameScore extends AppCompatActivity implements LobbyAPI.GetLobbiesC
 
     @Override
     public void onGetLobbiesSuccess(String[] lobbies) {
+        // will display the following rows:
+        // <P/O> | x/<m> | <name>
+        // P.. private lobby, O.. non-private lobby
+        // m.. max. players
         runOnUiThread(() -> {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(GameScore.this,
                     android.R.layout.simple_list_item_single_choice, lobbies);
@@ -79,6 +82,10 @@ public class GameScore extends AppCompatActivity implements LobbyAPI.GetLobbiesC
 
     @Override
     public void onGetLobbiesByStatusSuccess(String[] lobbies) {
+        // will display the following rows:
+        // <P/O> | x/<m> | <name>
+        // P.. private lobby, O.. non-private lobby
+        // m.. max. players
         runOnUiThread(() -> {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(GameScore.this,
                     android.R.layout.simple_list_item_single_choice, lobbies);

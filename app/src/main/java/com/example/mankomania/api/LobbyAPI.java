@@ -25,7 +25,8 @@ import okhttp3.Response;
 public class LobbyAPI {
     private static List<Lobby> allLobbies;
     private static List<Lobby> openLobbies;
-    private static String[] lobbyNames;
+    private static String[] allLobbiesDisplayStrings;
+    private static String[] openLobbiesDisplayStrings;
     private static String message;
 
     // interface to notify whether login is successful or not
@@ -69,12 +70,25 @@ public class LobbyAPI {
                     try {
                         JSONArray responseArray = new JSONArray(responseBody);
                         allLobbies = new ArrayList<>();
-                        lobbyNames = new String[responseArray.length()];
+                        allLobbiesDisplayStrings = new String[responseArray.length()];
 
                         for(int i = 0; i < responseArray.length(); i++) {
                             JSONObject jsonLobby = responseArray.getJSONObject(i);
                             addLobbyToList(jsonLobby, allLobbies);
-                            lobbyNames[i] = jsonLobby.getString("name");
+
+                            // TODO: replace x with actual value of players in lobby
+                            // TODO: find a better way to make it actually look pretty (sprint 3?)
+                            // generate string as display for GameScore.java
+                            allLobbiesDisplayStrings[i] = "";
+                            if(jsonLobby.getBoolean("isprivate")) {
+                                allLobbiesDisplayStrings[i] += "P";
+                            } else {
+                                allLobbiesDisplayStrings[i] += "O";
+                            }
+                            allLobbiesDisplayStrings[i] += " | ";
+                            allLobbiesDisplayStrings[i] += " x/" + jsonLobby.getInt("maxplayers");
+                            allLobbiesDisplayStrings[i] += " | ";
+                            allLobbiesDisplayStrings[i] += jsonLobby.getString("name");
                         }
 
                         // logging...
@@ -82,7 +96,7 @@ public class LobbyAPI {
                             Log.v("Katrin", l.toString());
                         }
 
-                        callback.onGetLobbiesSuccess(lobbyNames);
+                        callback.onGetLobbiesSuccess(allLobbiesDisplayStrings);
                     } catch (JSONException e) {
                         callback.onGetLobbiesFailure("Fehler beim Lesen der Response!");
                     }
@@ -113,14 +127,27 @@ public class LobbyAPI {
                     try {
                         JSONArray responseArray = new JSONArray(responseBody);
                         openLobbies = new ArrayList<>();
-                        lobbyNames = new String[responseArray.length()];
+                        openLobbiesDisplayStrings = new String[responseArray.length()];
 
                         for(int i = 0; i < responseArray.length(); i++) {
                             JSONObject jsonLobby = responseArray.getJSONObject(i);
                             if(status == Status.open) {
                                 addLobbyToList(jsonLobby, openLobbies);
+
+                                // TODO: replace x with actual value of players in lobby
+                                // TODO: find a better way to make it actually look pretty (sprint 3?)
+                                // generate string as display for GameScore.java
+                                openLobbiesDisplayStrings[i] = "";
+                                if(jsonLobby.getBoolean("isprivate")) {
+                                    openLobbiesDisplayStrings[i] += "P";
+                                } else {
+                                    openLobbiesDisplayStrings[i] += "O";
+                                }
+                                openLobbiesDisplayStrings[i] += " | ";
+                                openLobbiesDisplayStrings[i] += "x/" + jsonLobby.getInt("maxplayers");
+                                openLobbiesDisplayStrings[i] += " | ";
+                                openLobbiesDisplayStrings[i] += jsonLobby.getString("name");
                             }
-                            lobbyNames[i] = jsonLobby.getString("name");
                         }
 
                         // logging...
@@ -128,7 +155,7 @@ public class LobbyAPI {
                             Log.v("Katrin", l.toString());
                         }
 
-                        callback.onGetLobbiesByStatusSuccess(lobbyNames);
+                        callback.onGetLobbiesByStatusSuccess(openLobbiesDisplayStrings);
                     } catch (JSONException e) {
                         callback.onGetLobbiesByStatusFailure("Fehler beim Lesen der Response!");
                     }
