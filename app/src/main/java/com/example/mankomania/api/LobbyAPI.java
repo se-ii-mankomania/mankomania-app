@@ -2,6 +2,8 @@ package com.example.mankomania.api;
 
 import static org.json.JSONObject.NULL;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
@@ -9,6 +11,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -18,6 +23,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class LobbyAPI {
+    private static List<Lobby> allLobbies;
     private static String[] lobbyNames;
     private static String message;
 
@@ -61,12 +67,20 @@ public class LobbyAPI {
 
                     try {
                         JSONArray responseArray = new JSONArray(responseBody);
+                        allLobbies = new ArrayList<>();
                         lobbyNames = new String[responseArray.length()];
 
                         for(int i = 0; i < responseArray.length(); i++) {
                             JSONObject jsonLobby = responseArray.getJSONObject(i);
+                            addLobbyToAllLobbiesList(jsonLobby);
                             lobbyNames[i] = jsonLobby.getString("name");
                         }
+
+                        // logging...
+                        for(Lobby l : allLobbies) {
+                            Log.v("Katrin", l.toString());
+                        }
+
                         callback.onGetLobbiesSuccess(lobbyNames);
                     } catch (JSONException e) {
                         callback.onGetLobbiesFailure("Fehler beim Lesen der Response!");
@@ -174,5 +188,45 @@ public class LobbyAPI {
         });
     }
 
+    /**
+     * this method takes a JSONObject that represents a lobby, creates an equivalent Lobby object
+     * and adds it to the lobbies list
+     */
+    private static void addLobbyToAllLobbiesList(JSONObject jsonLobby) throws JSONException {
+        UUID id = UUID.fromString(jsonLobby.getString("id"));
+        String name = jsonLobby.getString("name");
+        String password = jsonLobby.getString("password");
+        boolean isPrivate = jsonLobby.getBoolean("isprivate");
+        int maxPlayers = jsonLobby.getInt("maxplayers");
+        Status status;
+
+        switch (jsonLobby.getString("status")) {
+            case "open":
+                status = Status.open;
+                break;
+
+            case "starting":
+                status = Status.starting;
+                break;
+
+            case "inGame":
+                status = Status.inGame;
+                break;
+
+            case "finished":
+                status = Status.finished;
+                break;
+
+            case "closed":
+                status = Status.closed;
+                break;
+
+            default:
+                throw new IllegalArgumentException("Ungültiger Status!");
+        }
+
+        Lobby lobby = new Lobby(id, name, password, isPrivate, maxPlayers, status);
+        allLobbies.add(lobby);
+    }
 
 }

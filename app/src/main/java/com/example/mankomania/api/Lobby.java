@@ -1,5 +1,7 @@
 package com.example.mankomania.api;
 
+import androidx.annotation.NonNull;
+
 import java.util.UUID;
 
 public class Lobby {
@@ -65,5 +67,19 @@ public class Lobby {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        String string = "";
+        string += "ID: " + this.id;
+        string += "\nName: " + this.name;
+        string += "\nPassword: " + this.password;
+        string += "\nPrivate: " + this.isPrivate;
+        string += "\nMax. Players: " + this.maxPlayers;
+        string += "\nStatus: " + this.status;
+
+        return string;
     }
 }

@@ -40,7 +40,8 @@ public class GameScore extends AppCompatActivity implements LobbyAPI.GetLobbiesC
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String token = sharedPreferences.getString("token", null);
         // get Lobbies
-        LobbyAPI.getLobbiesByStatus(token, Status.open,GameScore.this);
+        // LobbyAPI.getLobbiesByStatus(token, Status.open, GameScore.this);
+        LobbyAPI.getLobbies(token, GameScore.this);
 
         Button resumeGame=findViewById(R.id.GameScore_ResumeGame);
         resumeGame.setOnClickListener(v -> {
