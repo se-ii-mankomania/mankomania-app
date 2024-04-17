@@ -65,7 +65,7 @@ public class Lobby {
                         callback.onGetLobbiesFailure("Fehler beim Lesen der Response!");
                     }
                 } else {
-                    callback.onGetLobbiesFailure("Fehler!");
+                    callback.onGetLobbiesFailure(response.message());
                 }
             }
         });
@@ -117,7 +117,7 @@ public class Lobby {
                         callback.onAddLobbyFailure("Fehler beim Lesen der Response!");
                     }
                 } else {
-                    callback.onAddLobbyFailure("Fehler!");
+                    callback.onAddLobbyFailure(response.message());
                 }
             }
         });
