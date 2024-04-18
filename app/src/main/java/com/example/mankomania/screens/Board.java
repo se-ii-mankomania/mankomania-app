@@ -1,9 +1,11 @@
 package com.example.mankomania.screens;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
@@ -32,8 +34,6 @@ public class Board extends AppCompatActivity {
         setContentView(R.layout.activity_board);
 
 
-
-
         ZoomLayout zoomLayout = findViewById(R.id.zoom_linear_layout);
         zoomLayout.setOnTouchListener((View v, MotionEvent event) -> {
             zoomLayout.init(Board.this);
@@ -47,6 +47,12 @@ public class Board extends AppCompatActivity {
         });
 
         ToolbarFunctionalities.setUpToolbar(this);
+
+        Button rollDice=findViewById(R.id.Board_ButtonDice);
+        rollDice.setOnClickListener(v -> {
+           Intent toEventRollDice=new Intent(Board.this,EventRollDice.class);
+           startActivity(toEventRollDice);
+        });
     }
 
     @Override

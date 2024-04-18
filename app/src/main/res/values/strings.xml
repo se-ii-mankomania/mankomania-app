@@ -92,4 +92,5 @@
     <string name="createNewLobby_passwordEditText_hint">Passwort</string>
     <string name="createNewLobby_maxSpielerTextView_text">Max. Spieler:</string>
     <string name="createNewLobby_createLobbyButton_text">Lobby erstellen</string>
+    <string name="RollDice">Würfeln</string>
 </resources>
