@@ -38,7 +38,7 @@ public class BoardTest {
         assertNotEquals(fieldsHandler.fields[0].id, playerblue.getCurrentField().id);
     }
     @Test
-    public void gameFieldMoveTestStartPosition(){
+    public void gameFieldMoveTestFromStartPosition(){
         Player playerblue = new Player("BLUE", Color.BLUE);
         playerblue.setCurrentField(fieldsHandler.fields[48]);
         Player playergreen = new Player("GREEN", Color.GREEN);
@@ -59,7 +59,7 @@ public class BoardTest {
         assertEquals(fieldsHandler.fields[39].id, playerpurple.getCurrentField().id);
     }
     @Test
-    public void gameFieldMoveTestBackToStart(){
+    public void gameFieldMoveToNewRound(){
         Player playerblue = new Player("BLUE", Color.BLUE);
         playerblue.setCurrentField(fieldsHandler.fields[40]);
 
@@ -68,7 +68,7 @@ public class BoardTest {
     }
 
     @Test
-    public void gameFieldMoveTestFromActionfield(){
+    public void gameFieldMoveTestStartAtActionfield(){
         Player playerblue = new Player("BLUE", Color.BLUE);
         playerblue.setCurrentField(fieldsHandler.fields[44]);
         Player playergreen = new Player("GREEN", Color.GREEN);
@@ -88,6 +88,35 @@ public class BoardTest {
         assertEquals(fieldsHandler.fields[23].id, playerred.getCurrentField().id);
         assertEquals(fieldsHandler.fields[40].id, playerpurple.getCurrentField().id);
     }
+    @Test
+    public void caseStartLeftBottomMoveBy12(){
+        Player playerpurple = new Player("PURPLE",Color.PURPLE);
+        playerpurple.setCurrentField(fieldsHandler.fields[51]);
+
+        fieldsHandler.movePlayer(playerpurple, 12);
+
+        assertEquals(fieldsHandler.fields[0].id, playerpurple.getCurrentField().id);
+    }
+    @Test
+    public void caseStartAtCasinoMoveByMoreThan8(){
+        Player playerpurple = new Player("PURPLE",Color.PURPLE);
+        playerpurple.setCurrentField(fieldsHandler.fields[47]);
+
+        fieldsHandler.movePlayer(playerpurple, 9);
+
+        assertEquals(fieldsHandler.fields[0].id, playerpurple.getCurrentField().id);
+    }
+
+    @Test
+    public void caseStartAtAuctionHouseMoveByLessThan4(){
+        Player playerpurple = new Player("PURPLE",Color.PURPLE);
+        playerpurple.setCurrentField(fieldsHandler.fields[44]);
+
+        fieldsHandler.movePlayer(playerpurple, 3);
+
+        assertEquals(fieldsHandler.fields[43].id, playerpurple.getCurrentField().id);
+    }
+
 
 
 

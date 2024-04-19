@@ -92,7 +92,7 @@ public class FieldsHandler {
         if (diceNr > 3) {
             player.setCurrentField(fields[diceNr - 4]);
         } else {
-            player.setCurrentField(fields[41 + diceNr]);
+            player.setCurrentField(fields[40 + diceNr]);
         }
     }
 
