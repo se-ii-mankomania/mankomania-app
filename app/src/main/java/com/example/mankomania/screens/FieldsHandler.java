@@ -11,92 +11,99 @@ public class FieldsHandler {
     public GameboardField[] fields = new GameboardField[52];
 
 
-    public void movePlayer(Player player, int diceNr){
-        //Starts
-        //links oben
-        if(player.getCurrentField().id == 49){
-            player.setCurrentField(fields[diceNr - 1]);
+    public void movePlayer(Player player, int diceNr) {
+        int currentId = player.getCurrentField().id;
 
+        //links oben Startposition
+        if (currentId == 49) {
+            moveFromStartTopLeft(player, diceNr);
         }
-        //rechts oben
-        else if(player.getCurrentField().id == 50){
-            int newID = 10 + diceNr ;
-            player.setCurrentField(fields[newID]);
+        //rechts oben Startposition
+        else if (currentId == 50) {
+            moveFromTopRight(player, diceNr);
         }
-        //rechts unten
-        else if(player.getCurrentField().id == 51){
-            int newID = 21 + diceNr ;
-            player.setCurrentField(fields[newID]);
+        //rechts unten Startposition
+        else if (currentId == 51) {
+            moveFromBottomRight(player, diceNr);
         }
-        //links unten
-        else if(player.getCurrentField().id == 52){
-            if(diceNr > 11){
-                int newID = diceNr - 12;
-                player.setCurrentField(fields[newID]); //bleibt +1?
-            }
-            else{
-                int newID = 32 + diceNr ;
-                player.setCurrentField(fields[newID]);
-            }
+        //links unten Startposition
+        else if (currentId == 52) {
+            moveFromBottomLeft(player, diceNr);
         }
-
-        //ActivityFelder
-        // Pferderennen
-        else if(player.getCurrentField().id == 46){
-            int newID = 14 + diceNr;
-            player.setCurrentField(fields[newID-1]);
+        //Pferderennen
+        else if (currentId == 46) {
+            moveFromHorseRace(player, diceNr);
         }
         //Börse
-        else if(player.getCurrentField().id == 47){
-            int newID = 19 + diceNr - 1;
-            player.setCurrentField(fields[newID]);
+        else if (currentId == 47) {
+            moveFromStockMarket(player, diceNr);
         }
         //Casino
-        else if(player.getCurrentField().id == 48){
-            if(diceNr > 8){
-                int calc = diceNr - 8;
-                int newID =calc -1;
-                player.setCurrentField(fields[newID]);
-            }
-            else{
-                int newID = 36 + diceNr;
-                player.setCurrentField(fields[newID-1]);
-            }
+        else if (currentId == 48) {
+            moveFromCasino(player, diceNr);
         }
         //Auktionshaus
-        else if(player.getCurrentField().id == 45){
-            if(diceNr > 3){
-                int calc = diceNr - 3;
-                int newID = calc -1;
-                player.setCurrentField(fields[newID]);
-            }
-            else{
-                int newID = 41 + diceNr;
-                player.setCurrentField(fields[newID]);
-            }
-
+        else if (currentId == 45) {
+            moveFromAuctionHouse(player, diceNr);
         }
-        //innerhalb des Quadrats
-
-        //
-        else if(player.getCurrentField().id>=1 && player.getCurrentField().id <= 43){
-            //neue Runde
-            if(player.getCurrentField().id + diceNr > 43){
-                int calc = 44 - player.getCurrentField().id;
-                int newID = diceNr - calc;
-                player.setCurrentField(fields[newID-1]);
-            }
-            else{
-                player.setCurrentField(fields[player.getCurrentField().id + diceNr -1]);
-            }
-
+        //Bewegung innerhalb des Quadrats
+        else if (currentId >= 1 && currentId <= 43) {
+            moveWithinBoard(player, diceNr);
         }
+    }
 
+    private void moveFromStartTopLeft(Player player, int diceNr) {
+        player.setCurrentField(fields[diceNr - 1]);
+    }
 
+    private void moveFromTopRight(Player player, int diceNr) {
+        player.setCurrentField(fields[10 + diceNr]);
+    }
 
+    private void moveFromBottomRight(Player player, int diceNr) {
+        player.setCurrentField(fields[21 + diceNr]);
+    }
 
+    private void moveFromBottomLeft(Player player, int diceNr) {
+        if (diceNr > 11) {
+            player.setCurrentField(fields[diceNr - 12]);
+        } else {
+            player.setCurrentField(fields[32 + diceNr]);
+        }
+    }
 
+    private void moveFromHorseRace(Player player, int diceNr) {
+        player.setCurrentField(fields[13 + diceNr]);
+    }
 
+    private void moveFromStockMarket(Player player, int diceNr) {
+        player.setCurrentField(fields[18 + diceNr]);
+    }
+
+    private void moveFromCasino(Player player, int diceNr) {
+        if (diceNr > 8) {
+            player.setCurrentField(fields[diceNr - 9]);
+        } else {
+            player.setCurrentField(fields[35 + diceNr]);
+        }
+    }
+
+    private void moveFromAuctionHouse(Player player, int diceNr) {
+        if (diceNr > 3) {
+            player.setCurrentField(fields[diceNr - 4]);
+        } else {
+            player.setCurrentField(fields[41 + diceNr]);
+        }
+    }
+
+    private void moveWithinBoard(Player player, int diceNr) {
+        int newPosition = player.getCurrentField().id + diceNr;
+        if (newPosition > 43) {
+            int newID = newPosition - 45;
+            player.setCurrentField(fields[newID]);
+        } else {
+            player.setCurrentField(fields[newPosition - 1]);
+        }
     }
 
     public void initFields(Cellposition[][] cellPositions) {
