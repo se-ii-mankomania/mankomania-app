@@ -47,7 +47,7 @@ public class EventRollDice extends AppCompatActivity {
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 Intent backToBoard = new Intent(EventRollDice.this, Board.class);
                 startActivity(backToBoard);
-            }, 700);
+            }, 1000);
 
             Toast.makeText(getApplicationContext(), "Deine Spielfigur zieht " + Arrays.toString(randomNumber) + " Felder weiter.", Toast.LENGTH_SHORT).show();
         });
