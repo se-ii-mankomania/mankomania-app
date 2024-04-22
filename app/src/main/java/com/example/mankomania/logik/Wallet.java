@@ -46,6 +46,30 @@ public class Wallet {
                 neededValue -= currentAmount * noteTypes.getValue();
                 notes.put(noteTypes, 0);
             }
+            removeOtherAvailableNotes(neededValue);
+        }
+    }
+
+    private void removeOtherAvailableNotes(int neededValue){
+        //Iteriert über die Scheine und sortiert sie nach ihrem Wert absteigend
+        NoteTypes[] noteValues = NoteTypes.values();
+        java.util.Arrays.sort(noteValues, (a, b) -> Integer.compare(b.getValue(), a.getValue()));
+
+        for(NoteTypes note : noteValues){
+            int noteValue = note.getValue();
+            if(neededValue <= 0) break;
+
+            // Holt die Anzahl der verfügbaren Scheine dieses Typs
+            int noteCount = notes.getOrDefault(note, 0);
+            // Überprüft, ob Scheine verfügbar sind und ob der Wert des Scheines zur Deckung des benötigten Wertes beitragen kann
+            if(noteCount > 0 && noteValue <= neededValue){
+                // Bestimmt die maximale Anzahl von Scheinen, die verwendet werden kann ohne den benötigten Wert zu überschreiten oder mehr Scheine zu verwenden, als vorhanden sind
+                int maxAmountToUse = Math.min(noteCount, neededValue / noteValue);
+                int valueToRemove = maxAmountToUse * noteValue;
+                
+                notes.put(note, noteCount - maxAmountToUse);
+                neededValue -= valueToRemove;
+            }
         }
     }
     public int totalAmount(){
