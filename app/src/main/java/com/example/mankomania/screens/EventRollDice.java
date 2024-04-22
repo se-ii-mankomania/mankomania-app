@@ -2,7 +2,6 @@ package com.example.mankomania.screens;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -84,6 +83,15 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
             }
         }
     }
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+    private void unblockBackButton() {
+        this.backPressedBlocked=true;
+    }
+    private void blockBackButton(){
+        this.backPressedBlocked=false;
+    }
 
     private void rollDice() {
         sensorManager.unregisterListener(this);
@@ -95,28 +103,36 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
         ImageView diceOne=findViewById(R.id.RollDice_diceOne);
         ImageView diceTwo=findViewById(R.id.RollDice_diceTwo);
 
-        String resultStringDiceOne="R.drawable.dice"+randomNumber[0];
-        String resultStringDiceTwo="R.drawable.dice"+randomNumber[1];
+        int sourceDiceOne=getDiceDrawable(randomNumber[0]);
+        int sourceDiceTwo=getDiceDrawable(randomNumber[1]);
 
-        diceOne.setImageDrawable(Drawable.createFromPath(resultStringDiceOne));
-        diceTwo.setImageDrawable(Drawable.createFromPath(resultStringDiceTwo));
+        diceOne.setImageResource(sourceDiceOne);
+        diceTwo.setImageResource(sourceDiceTwo);
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent backToBoard = new Intent(EventRollDice.this, Board.class);
             startActivity(backToBoard);
             unblockBackButton();
-        }, 1000);
+        }, 1500);
         Toast.makeText(getApplicationContext(), "Deine Spielfigur zieht " + resultOfRollingDice + " Felder weiter.", Toast.LENGTH_SHORT).show();
     }
 
-    private void unblockBackButton() {
-        this.backPressedBlocked=true;
-    }
-    private void blockBackButton(){
-        this.backPressedBlocked=false;
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    private int getDiceDrawable(int result){
+        switch (result) {
+            case 1:
+                return R.drawable.dice1;
+            case 2:
+                return R.drawable.dice2;
+            case 3:
+                return R.drawable.dice3;
+            case 4:
+                return R.drawable.dice4;
+            case 5:
+                return R.drawable.dice5;
+            case 6:
+                return R.drawable.dice6;
+            default:
+                return R.drawable.dice;
+        }
     }
 }
