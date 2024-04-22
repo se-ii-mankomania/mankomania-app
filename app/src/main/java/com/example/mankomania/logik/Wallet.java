@@ -66,7 +66,7 @@ public class Wallet {
                 // Bestimmt die maximale Anzahl von Scheinen, die verwendet werden kann ohne den benötigten Wert zu überschreiten oder mehr Scheine zu verwenden, als vorhanden sind
                 int maxAmountToUse = Math.min(noteCount, neededValue / noteValue);
                 int valueToRemove = maxAmountToUse * noteValue;
-                
+
                 notes.put(note, noteCount - maxAmountToUse);
                 neededValue -= valueToRemove;
             }
