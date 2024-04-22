@@ -36,23 +36,25 @@
             android:layout_below="@id/RollDice_resultTxt" />
 
         <ImageView
-            android:id="@+id/diceOne"
+            android:id="@+id/RollDice_diceOne"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/dice"
             android:layout_below="@id/RollDice_Explanation"
+            android:layout_marginStart="280dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="60dp"
-            android:layout_marginStart="280dp" />
+            android:contentDescription="@string/dice"
+            app:srcCompat="@drawable/dice" />
 
         <ImageView
-            android:id="@+id/diceTwo"
+            android:id="@+id/RollDice_diceTwo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/dice"
             android:layout_below="@id/RollDice_Explanation"
             android:layout_marginTop="20dp"
-            android:layout_toEndOf="@id/diceOne" />
+            android:layout_toEndOf="@id/RollDice_diceOne"
+            android:contentDescription="@string/dice"
+            app:srcCompat="@drawable/dice" />
 
     </RelativeLayout>
 

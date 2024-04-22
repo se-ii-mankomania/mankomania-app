@@ -2,6 +2,7 @@ package com.example.mankomania.screens;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -9,7 +10,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -90,17 +91,22 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
         int[] randomNumber=dice.throwDice();
         //TODO entsprechende Anzahl am Spielfeld weiterrücken
         String resultOfRollingDice = String.valueOf(randomNumber[0] + randomNumber[1]);
-        TextView result=findViewById(R.id.RollDice_resultAnswer);
-        result.setText(resultOfRollingDice);
+
+        ImageView diceOne=findViewById(R.id.RollDice_diceOne);
+        ImageView diceTwo=findViewById(R.id.RollDice_diceTwo);
+
+        String resultStringDiceOne="R.drawable.dice"+randomNumber[0];
+        String resultStringDiceTwo="R.drawable.dice"+randomNumber[1];
+
+        diceOne.setImageDrawable(Drawable.createFromPath(resultStringDiceOne));
+        diceTwo.setImageDrawable(Drawable.createFromPath(resultStringDiceTwo));
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent backToBoard = new Intent(EventRollDice.this, Board.class);
             startActivity(backToBoard);
             unblockBackButton();
         }, 1000);
-
         Toast.makeText(getApplicationContext(), "Deine Spielfigur zieht " + resultOfRollingDice + " Felder weiter.", Toast.LENGTH_SHORT).show();
-
     }
 
     private void unblockBackButton() {
@@ -113,6 +119,4 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
-
-
 }
