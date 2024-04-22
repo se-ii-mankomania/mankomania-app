@@ -45,6 +45,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
 
         ToolbarFunctionalities.setUpToolbar(this);
 
+        //den BackButton blockieren, damit Würfeln nicht abgebrochen werden kann
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -77,14 +78,18 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
             float x = event.values[0];
             float y = event.values[1];
             float z = event.values[2];
-
+            //Sensibilität des Sensors festlegen
             if ((Math.abs(x) > 10 || Math.abs(y) > 10 || Math.abs(z) > 10)) {
+                //Wenn geschüttelt => Würfeln
                 rollDice();
             }
         }
     }
+
+
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        //muss nicht überschrieben werden, ist aber notwendig, um BackButton zu blockieren
     }
     private void unblockBackButton() {
         this.backPressedBlocked=false;
@@ -101,6 +106,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
         //TODO entsprechende Anzahl am Spielfeld weiterrücken
         String resultOfRollingDice = String.valueOf(randomNumber[0] + randomNumber[1]);
 
+        //Ergebnis auf Würfel displayen
         ImageView diceOne=findViewById(R.id.RollDice_diceOne);
         ImageView diceTwo=findViewById(R.id.RollDice_diceTwo);
 
@@ -113,11 +119,18 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent backToBoard = new Intent(EventRollDice.this, Board.class);
             startActivity(backToBoard);
+            //BackButton kann wieder freigegeben werden
             unblockBackButton();
         }, 1500);
         Toast.makeText(getApplicationContext(), "Deine Spielfigur zieht " + resultOfRollingDice + " Felder weiter.", Toast.LENGTH_SHORT).show();
     }
 
+
+    /**
+     * Diese Methode ordnet dem gewürfelten Ergenbnis das passende Image zu
+     * @param result Ergebnis des Würfelwurfs
+     * @return R.drawable mit richtigem Image für Würfelergebnis
+     */
     private int getDiceDrawable(int result){
         switch (result) {
             case 1:
