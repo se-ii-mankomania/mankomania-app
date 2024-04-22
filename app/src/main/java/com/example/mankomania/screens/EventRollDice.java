@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -25,10 +26,12 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
+    private boolean backPressedBlocked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        blockBackButton();
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_event_roll_dice);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -41,6 +44,19 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         ToolbarFunctionalities.setUpToolbar(this);
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (backPressedBlocked) {
+                    Toast.makeText(EventRollDice.this, "Bitte zuerst würfeln!", Toast.LENGTH_SHORT).show();
+                } else {
+                    this.setEnabled(false);
+                    EventRollDice.super.finish();
+                }
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Override
@@ -80,13 +96,23 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent backToBoard = new Intent(EventRollDice.this, Board.class);
             startActivity(backToBoard);
+            unblockBackButton();
         }, 1000);
 
         Toast.makeText(getApplicationContext(), "Deine Spielfigur zieht " + resultOfRollingDice + " Felder weiter.", Toast.LENGTH_SHORT).show();
 
     }
 
+    private void unblockBackButton() {
+        this.backPressedBlocked=true;
+    }
+    private void blockBackButton(){
+        this.backPressedBlocked=false;
+    }
+
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
+
+
 }
