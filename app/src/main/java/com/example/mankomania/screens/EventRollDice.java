@@ -87,14 +87,15 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
     private void unblockBackButton() {
-        this.backPressedBlocked=true;
+        this.backPressedBlocked=false;
     }
     private void blockBackButton(){
-        this.backPressedBlocked=false;
+        this.backPressedBlocked=true;
     }
 
     private void rollDice() {
         sensorManager.unregisterListener(this);
+
         Dice dice=new Dice();
         int[] randomNumber=dice.throwDice();
         //TODO entsprechende Anzahl am Spielfeld weiterrücken
