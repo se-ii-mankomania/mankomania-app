@@ -14,30 +14,33 @@
 
         <include layout="@layout/toolbar_layout" />
 
-        <Button
-            android:id="@+id/RollDice_RollButton"
+        <TextView
+            android:id="@+id/RollDice_resultTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="395dp"
-            android:layout_marginTop="220dp"
-            android:text="@string/Wuerfeln" />
+            android:layout_marginStart="330dp"
+            android:layout_marginTop="80dp"
+            android:text="@string/RollDice_resultTxt"
+            android:textSize="28sp"
+            android:layout_centerHorizontal="true" />
 
         <TextView
             android:id="@+id/RollDice_resultAnswer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="445dp"
-            android:layout_marginTop="150dp"
-            android:textSize="28sp" />
+            android:layout_marginTop="200dp"
+            android:textSize="28sp"
+            android:layout_centerHorizontal="true" />
 
         <TextView
-            android:id="@+id/RollDice_resultTxt"
+            android:id="@+id/RollDice_Explanation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="330dp"
-            android:layout_marginTop="100dp"
-            android:text="@string/RollDice_resultTxt"
-            android:textSize="28sp" />
+            android:text="@string/RollDice_Explanation"
+            android:layout_marginTop="130dp"
+            android:layout_centerHorizontal="true"
+            android:textSize="18sp" />
 
     </RelativeLayout>
 
