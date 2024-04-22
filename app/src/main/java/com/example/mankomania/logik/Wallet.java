@@ -25,12 +25,27 @@ public class Wallet {
         }
     }
 
-    public void removeMoney(NoteTypes note, int amount){
-        int currentAmmount = notes.getOrDefault(note, 0);
-        if(currentAmmount >= amount){
-            notes.put(note, currentAmmount - amount);
-        }else {
-            throw new IllegalArgumentException("Nicht genug Scheine");
+    public void removeMoney(NoteTypes noteTypes, int amount){
+        if(amount <= 0){
+            throw new IllegalArgumentException("Der zu entfernende Betrag muss größer als 0 sein.");
+        }
+        //Speichert die aktuelle Anzahl an Scheinen des gewünschten Typs
+        int currentAmount = notes.getOrDefault(noteTypes, 0);
+        //Berechnet den Gesamtbetrag welcher benötigt wird
+        int neededValue = noteTypes.getValue() * amount;
+
+        //Entfernen von Scheinen wenn davon genug vorhanden sind
+        if(currentAmount >= amount){
+            notes.put(noteTypes, currentAmount - amount);
+        } else {
+            if(totalAmount() < neededValue){
+                throw new IllegalArgumentException("Sie haben gewonnen");
+            }
+            //Entfernt was möglich ist und zieht von den anderen Scheine den restlichen Betrag ab
+            if(currentAmount > 0){
+                neededValue -= currentAmount * noteTypes.getValue();
+                notes.put(noteTypes, 0);
+            }
         }
     }
     public int totalAmount(){
