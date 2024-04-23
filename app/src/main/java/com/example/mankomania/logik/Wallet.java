@@ -39,7 +39,7 @@ public class Wallet {
             notes.put(noteTypes, currentAmount - amount);
         } else {
             if(totalAmount() < neededValue){
-                throw new IllegalArgumentException("Sie haben gewonnen");
+                throw new IllegalArgumentException("Sie haben gewonnen!");
             }
             //Entfernt was möglich ist und zieht von den anderen Scheine den restlichen Betrag ab
             if(currentAmount > 0){
