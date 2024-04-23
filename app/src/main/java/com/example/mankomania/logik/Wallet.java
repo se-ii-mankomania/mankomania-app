@@ -72,6 +72,10 @@ public class Wallet {
             }
         }
     }
+    // Methode, um die Anzahl der Scheine eines bestimmten Typs zu bekommen
+    public int getNoteCount(NoteTypes noteType) {
+        return notes.getOrDefault(noteType, 0);
+    }
     public int totalAmount(){
         int total = 0;
         for (NoteTypes note : NoteTypes.values()) {

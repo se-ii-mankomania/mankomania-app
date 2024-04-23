@@ -45,7 +45,7 @@ public class WalletTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> wallet.removeMoney(NoteTypes.FIVETHOUSAND, 0));
         assertEquals("Der zu entfernende Betrag muss größer als 0 sein.", exception.getMessage());
     }
-    
+
 
     @Test
     public void testTotalAmountCalculatesCorrectly() {
