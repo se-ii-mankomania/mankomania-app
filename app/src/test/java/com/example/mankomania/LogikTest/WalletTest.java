@@ -8,6 +8,9 @@ import com.example.mankomania.logik.Wallet;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 
 public class WalletTest {
     private Wallet wallet = new Wallet();
@@ -22,7 +25,7 @@ public class WalletTest {
     }
 
     @Test
-    public void testRemoveMoneyDecreasesTotalAmount() throws Exception {
+    public void testRemoveMoneyDecreasesTotalAmount(){
         int initialTotal = wallet.totalAmount();
         wallet.removeMoney(NoteTypes.TENTHOUSAND, 2);
         int removedValue = 2 * NoteTypes.TENTHOUSAND.getValue();
@@ -30,10 +33,19 @@ public class WalletTest {
     }
 
     @Test
-    public void testRemoveMoneyThrowsExceptionIfNotEnoughNotes() {
-        Exception exception = assertThrows(Exception.class, () -> wallet.removeMoney(NoteTypes.FIFTYTHOUSAND, 10));
-        assertEquals("Nicht genug Scheine", exception.getMessage());
+    public void testRemoveMoneyWithNegativeAmount() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                wallet.removeMoney(NoteTypes.FIVETHOUSAND, -1)
+        );
+        assertEquals("Der zu entfernende Betrag muss größer als 0 sein.", exception.getMessage());
     }
+
+    @Test
+    public void testRemoveMoneyWithZeroAmount(){
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> wallet.removeMoney(NoteTypes.FIVETHOUSAND, 0));
+        assertEquals("Der zu entfernende Betrag muss größer als 0 sein.", exception.getMessage());
+    }
+    
 
     @Test
     public void testTotalAmountCalculatesCorrectly() {
