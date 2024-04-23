@@ -1,13 +1,12 @@
 package com.example.mankomania.LogikTest;
 
-
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.example.mankomania.logik.StockMarket;
 import com.example.mankomania.logik.StockTypes;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 public class StockMarketTest {

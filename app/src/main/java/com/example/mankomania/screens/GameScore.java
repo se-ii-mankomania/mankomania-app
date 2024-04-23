@@ -1,4 +1,4 @@
-package com.example.mankomania;
+package com.example.mankomania.screens;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +15,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mankomania.R;
 import com.example.mankomania.api.Lobby;
 
 public class GameScore extends AppCompatActivity implements Lobby.GetLobbiesCallback {
@@ -55,7 +56,6 @@ public class GameScore extends AppCompatActivity implements Lobby.GetLobbiesCall
 
         Button startNewGame=findViewById(R.id.GameScore_NewGame);
         startNewGame.setOnClickListener(v -> {
-            //TODO neue Instanzen für neues Spiel erzeugen
             Intent createNewLobbyIntent = new Intent(GameScore.this, CreateNewLobby.class);
             startActivity(createNewLobbyIntent);
         });

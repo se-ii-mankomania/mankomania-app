@@ -5,22 +5,72 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Board">
+    tools:context=".screens.Board">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="162dp"
-        tools:layout_editor_absoluteY="-48dp">
+        android:layout_height="match_parent">
+
+        <com.example.mankomania.screens.ZoomLayout
+            android:id="@+id/zoom_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/gameboard"
+                    android:layout_width="240dp"
+                    android:layout_height="240dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/gameboard">
+                </ImageView>
+
+                <ImageView
+                    android:id="@+id/player_blue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/spielfigurblau">
+                </ImageView>
+                <ImageView
+                    android:id="@+id/player_green"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/spielfigurgruen">
+                </ImageView>
+
+                <ImageView
+                    android:id="@+id/player_purple"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/spielfigurlila">
+                </ImageView>
+
+                <ImageView
+                    android:id="@+id/player_red"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/spielfigurrot">
+                </ImageView>
+
+            </FrameLayout>
+        </com.example.mankomania.screens.ZoomLayout>
 
         <include layout="@layout/toolbar_layout" />
 
-        <ImageView
-            android:id="@+id/Board_Board"
-            android:layout_width="match_parent"
-            android:layout_height="360dp"
-            android:contentDescription="@string/Spielbrett"
-            app:srcCompat="@android:drawable/presence_audio_online"
-            tools:srcCompat="@android:drawable/presence_audio_online" />
+        <Button
+            android:id="@+id/Board_ButtonDice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="30dp"
+            android:text="@string/RollDice"
+            app:layout_constraintBottom_toTopOf="@id/zoom_linear_layout"
+            tools:ignore="RelativeOverlap" />
+        <!--Überlappen wird vorübergehend ignoriert, da der Button später wegkommt-->
+
 
         <TextView
             android:id="@+id/Board_Messages"

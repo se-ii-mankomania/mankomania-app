@@ -1,4 +1,4 @@
-package com.example.mankomania;
+package com.example.mankomania.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,9 +13,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mankomania.R;
 import com.example.mankomania.api.Auth;
-
-import java.util.regex.Pattern;
 
 public class Register extends AppCompatActivity implements Auth.RegisterCallback {
 
@@ -33,22 +32,19 @@ public class Register extends AppCompatActivity implements Auth.RegisterCallback
 
 
         Button register=findViewById(R.id.Register_RegisterButton);
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText emailInput=findViewById(R.id.Register_Email);
-                EditText passwordInput=findViewById(R.id.Register_Passwort);
+        register.setOnClickListener((View v) -> {
+            EditText emailInput=findViewById(R.id.Register_Email);
+            EditText passwordInput=findViewById(R.id.Register_Passwort);
 
-                String email = emailInput.getText().toString();
-                String password = passwordInput.getText().toString();
+            String email = emailInput.getText().toString();
+            String password = passwordInput.getText().toString();
 
-                if(isNoValidEmail(email)) {
-                    emailInput.setError("E-Mail-Adresse ist ungültig.");
-                } else if (password.length() <= 7) {
-                    passwordInput.setError("Passwort muss >7 Zeichen lang sein.");
-                } else {
-                    Auth.register(email, password, Register.this);
-                }
+            if(MainActivityLogin.isNoValidEmail(email)) {
+                emailInput.setError("E-Mail-Adresse ist ungültig.");
+            } else if (password.length() <= 7) {
+                passwordInput.setError("Passwort muss >7 Zeichen lang sein.");
+            } else {
+                Auth.register(email, password, Register.this);
             }
         });
 
@@ -66,12 +62,5 @@ public class Register extends AppCompatActivity implements Auth.RegisterCallback
     @Override
     public void onRegisterFailure(String errorMessage) {
         runOnUiThread(() -> Toast.makeText(Register.this, "Registrierung fehlgeschlagen: " + errorMessage, Toast.LENGTH_SHORT).show());
-    }
-
-    // von MainActivityLogin
-    static boolean isNoValidEmail(String email){
-        String emailRegex ="^(.+)@(\\S+)$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        return !pattern.matcher(email).matches();
     }
 }

@@ -1,4 +1,4 @@
-package com.example.mankomania;
+package com.example.mankomania.screens;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -11,12 +11,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import com.example.mankomania.R;
 
 public class ChooseYourCharacter extends AppCompatActivity {
 
@@ -36,19 +37,16 @@ public class ChooseYourCharacter extends AppCompatActivity {
         });
 
         Button start=findViewById(R.id.ChooseYourCharacter_StartButton);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateAvailableRadioButtons();
-                RadioGroup colorSelection=findViewById(R.id.ChooseYourCharacter_ColorSelectionRadioGroup);
-                int selectedColor=colorSelection.getCheckedRadioButtonId();
-                if(selectedColor!=-1) {
-                    saveColorChoice(selectedColor);
-                    Intent startGameWithChosenCharacter=new Intent(ChooseYourCharacter.this, Board.class);
-                    startActivity(startGameWithChosenCharacter);
-                }else{
-                    Toast.makeText(getApplicationContext(), "Bitte wähle eine Farbe aus.", Toast.LENGTH_SHORT).show();
-                }
+        start.setOnClickListener((View v) -> {
+            updateAvailableRadioButtons();
+            RadioGroup colorSelection=findViewById(R.id.ChooseYourCharacter_ColorSelectionRadioGroup);
+            int selectedColor=colorSelection.getCheckedRadioButtonId();
+            if(selectedColor!=-1) {
+                saveColorChoice(selectedColor);
+                Intent startGameWithChosenCharacter=new Intent(ChooseYourCharacter.this, Board.class);
+                startActivity(startGameWithChosenCharacter);
+            }else{
+                Toast.makeText(getApplicationContext(), "Bitte wähle eine Farbe aus.", Toast.LENGTH_SHORT).show();
             }
         });
 

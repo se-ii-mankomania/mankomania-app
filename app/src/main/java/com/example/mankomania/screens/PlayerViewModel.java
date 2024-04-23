@@ -1,6 +1,5 @@
-package com.example.mankomania;
+package com.example.mankomania.screens;
 
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class PlayerViewModel extends ViewModel {

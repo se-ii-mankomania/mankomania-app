@@ -1,32 +1,30 @@
-package com.example.mankomania;
+package com.example.mankomania.screens;
 
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mankomania.R;
 import com.example.mankomania.api.Lobby;
 import com.example.mankomania.api.Status;
 
 public class CreateNewLobby extends AppCompatActivity implements Lobby.AddLobbyCallback{
 
     EditText nameInput;
-    Switch privateLobbySwitch;
+    SwitchCompat privateLobbySwitch;
     EditText passwordInput;
     Spinner maxPlayerSpinner;
     Button createLobbyButton;
@@ -62,15 +60,12 @@ public class CreateNewLobby extends AppCompatActivity implements Lobby.AddLobbyC
         maxPlayerSpinner.setAdapter(adapter);
 
         // only allow a password if the lobby is private
-        privateLobbySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                passwordInput.setEnabled(isChecked);
-                passwordInput.setFocusable(isChecked);
-                passwordInput.setFocusableInTouchMode(isChecked);
-                if (!isChecked) {
-                    passwordInput.setText("");
-                }
+        privateLobbySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            passwordInput.setEnabled(isChecked);
+            passwordInput.setFocusable(isChecked);
+            passwordInput.setFocusableInTouchMode(isChecked);
+            if (!isChecked) {
+                passwordInput.setText("");
             }
         });
 
@@ -81,7 +76,7 @@ public class CreateNewLobby extends AppCompatActivity implements Lobby.AddLobbyC
             int maxPlayers = Integer.parseInt((String) maxPlayerSpinner.getSelectedItem());
 
             // make sure to "send" password = null if password == "" !!!
-            if (lobbyPassword.equals("")) {
+            if (lobbyPassword.isEmpty()) {
                 lobbyPassword = null;
             }
 
@@ -89,7 +84,7 @@ public class CreateNewLobby extends AppCompatActivity implements Lobby.AddLobbyC
             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
             String token = sharedPreferences.getString("token", null);
             // add lobby
-            Lobby.addLobby(token, lobbyName, lobbyPassword, isLobbyPrivate, maxPlayers, Status.open, CreateNewLobby.this);
+            Lobby.addLobby(token, lobbyName, lobbyPassword, isLobbyPrivate, maxPlayers, Status.OPEN, CreateNewLobby.this);
         });
     }
 

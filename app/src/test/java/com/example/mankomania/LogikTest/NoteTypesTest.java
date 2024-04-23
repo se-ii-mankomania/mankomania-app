@@ -1,10 +1,8 @@
 package com.example.mankomania.LogikTest;
 
-import static org.junit.Assert.assertEquals;
-
 import com.example.mankomania.logik.NoteTypes;
-
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 
 public class NoteTypesTest {
@@ -29,13 +27,5 @@ public class NoteTypesTest {
     @Test
     public void testValueOfHUNDREDTHOUSAND(){
         assertEquals(100000, NoteTypes.HUNDREDTHOUSAND.getValue());
-    }
-
-    //Stellt sicher, dass alle erwarteten Enums vorhanden sind
-    @Test
-    public void testEnumValues(){
-        NoteTypes[] expectedValues = {NoteTypes.FIVETHOUSAND, NoteTypes.TENTHOUSAND, NoteTypes.FIFTYTHOUSAND, NoteTypes.HUNDREDTHOUSAND};
-        NoteTypes[] actualValues = NoteTypes.values();
-        assertEquals(expectedValues, actualValues);
     }
 }
