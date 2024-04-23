@@ -8,7 +8,13 @@ import com.example.mankomania.gameboardfields.ProfitField;
 import com.example.mankomania.logik.Player;
 
 public class FieldsHandler {
-    public GameboardField[] fields = new GameboardField[52];
+    private GameboardField[] fields = new GameboardField[52];
+    public GameboardField getField(int index) {
+        if (index < 0 || index >= fields.length) {
+            throw new IllegalArgumentException("Field index is out of bounds");
+        }
+        return fields[index];
+    }
 
 
     public void movePlayer(Player player, int diceNr) {

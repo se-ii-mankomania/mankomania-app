@@ -72,13 +72,13 @@ public class Board extends AppCompatActivity {
 
 
         Player playerBlue = new Player("Blue", Color.BLUE );
-        playerBlue.setCurrentField(fieldsHandler.fields[44]);
+        playerBlue.setCurrentField(fieldsHandler.getField(44));
         Player playerGreen = new Player("GREEN", Color.GREEN);
-        playerGreen.setCurrentField(fieldsHandler.fields[45]);
+        playerGreen.setCurrentField(fieldsHandler.getField(45));
         Player playerRed = new Player("RED", Color.RED);
-        playerRed.setCurrentField(fieldsHandler.fields[46]);
+        playerRed.setCurrentField(fieldsHandler.getField(46));
         Player playerPurple = new Player("PURPLE", Color.PURPLE );
-        playerPurple.setCurrentField(fieldsHandler.fields[47]);
+        playerPurple.setCurrentField(fieldsHandler.getField(47));
         players[0] = playerBlue;
         players[1] = playerGreen;
         players[2] = playerRed;
