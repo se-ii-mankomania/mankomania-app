@@ -12,7 +12,7 @@ public class FieldsHandler {
 
 
     public void movePlayer(Player player, int diceNr) {
-        int currentId = player.getCurrentField().id;
+        int currentId = player.getCurrentField().getId();
 
         //links oben Startposition
         if (currentId == 49) {
@@ -97,7 +97,7 @@ public class FieldsHandler {
     }
 
     private void moveWithinBoard(Player player, int diceNr) {
-        int newPosition = player.getCurrentField().id + diceNr;
+        int newPosition = player.getCurrentField().getId() + diceNr;
         if (newPosition > 43) {
             int newID = newPosition - 45;
             player.setCurrentField(fields[newID]);

@@ -85,17 +85,11 @@ public class Board extends AppCompatActivity {
         players[3] = playerPurple;
 
         //Testing
-        fieldsHandler.movePlayer(playerblue, 15);
-        fieldsHandler.movePlayer(playergreen, 15);
-        fieldsHandler.movePlayer(playerRed, 15);
-        fieldsHandler.movePlayer(playerPurple, 15);
+        fieldsHandler.movePlayer(playerblue, 5);
+        fieldsHandler.movePlayer(playergreen, 5);
+        fieldsHandler.movePlayer(playerRed, 5);
+        fieldsHandler.movePlayer(playerPurple, 5);
 
-
-
-        fieldsHandler.movePlayer(playerblue, 12);
-        fieldsHandler.movePlayer(playergreen, 12);
-        fieldsHandler.movePlayer(playerRed, 12);
-        fieldsHandler.movePlayer(playerPurple, 12);
         updatePlayerPositions();
 
 
@@ -127,23 +121,23 @@ public class Board extends AppCompatActivity {
             ) {
            if(player.getColor() == Color.BLUE){
                ImageView playerBlue = findViewById(R.id.player_blue);
-               playerBlue.setX(player.getCurrentField().x);
-               playerBlue.setY(player.getCurrentField().y);
+               playerBlue.setX(player.getCurrentField().getX());
+               playerBlue.setY(player.getCurrentField().getY());
            }
            if(player.getColor() == Color.RED){
                ImageView playerRed = findViewById(R.id.player_red);
-               playerRed.setX(player.getCurrentField().x);
-               playerRed.setY(player.getCurrentField().y);
+               playerRed.setX(player.getCurrentField().getX());
+               playerRed.setY(player.getCurrentField().getY());
            }
            if(player.getColor() == Color.GREEN){
                ImageView playerGreen = findViewById(R.id.player_green);
-               playerGreen.setX(player.getCurrentField().x);
-               playerGreen.setY(player.getCurrentField().y);
+               playerGreen.setX(player.getCurrentField().getX());
+               playerGreen.setY(player.getCurrentField().getY());
            }
            if(player.getColor() == Color.PURPLE){
                ImageView playerPurple = findViewById(R.id.player_purple);
-               playerPurple.setX(player.getCurrentField().x);
-               playerPurple.setY(player.getCurrentField().y);
+               playerPurple.setX(player.getCurrentField().getX());
+               playerPurple.setY(player.getCurrentField().getY());
            }
        }
 
