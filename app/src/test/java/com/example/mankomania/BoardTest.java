@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-public class BoardTest {
+ class BoardTest {
     FieldsHandler fieldsHandler = new FieldsHandler();
 
     @BeforeEach
@@ -27,7 +27,7 @@ public class BoardTest {
 
     }
     @Test
-    public void gameFieldMoveTest(){
+     void gameFieldMoveTest(){
         Player playerblue = new Player("BLUE", Color.BLUE);
         playerblue.setCurrentField(fieldsHandler.getField(0));
 
@@ -38,7 +38,7 @@ public class BoardTest {
         assertNotEquals(fieldsHandler.getField(0).getId(), playerblue.getCurrentField().getId());
     }
     @Test
-    public void gameFieldMoveTestFromStartPosition(){
+     void gameFieldMoveTestFromStartPosition(){
         Player playerblue = new Player("BLUE", Color.BLUE);
         playerblue.setCurrentField(fieldsHandler.getField(48));
         Player playergreen = new Player("GREEN", Color.GREEN);
@@ -59,7 +59,7 @@ public class BoardTest {
         assertEquals(fieldsHandler.getField(39).getId(), playerpurple.getCurrentField().getId());
     }
     @Test
-    public void gameFieldMoveToNewRound(){
+     void gameFieldMoveToNewRound(){
         Player playerblue = new Player("BLUE", Color.BLUE);
         playerblue.setCurrentField(fieldsHandler.getField(40));
 
@@ -68,7 +68,7 @@ public class BoardTest {
     }
 
     @Test
-    public void gameFieldMoveTestStartAtActionfield(){
+     void gameFieldMoveTestStartAtActionfield(){
         Player playerblue = new Player("BLUE", Color.BLUE);
         playerblue.setCurrentField(fieldsHandler.getField(44));
         Player playergreen = new Player("GREEN", Color.GREEN);
@@ -89,7 +89,7 @@ public class BoardTest {
         assertEquals(fieldsHandler.getField(40).getId(), playerpurple.getCurrentField().getId());
     }
     @Test
-    public void caseStartLeftBottomMoveBy12(){
+     void caseStartLeftBottomMoveBy12(){
         Player playerpurple = new Player("PURPLE",Color.PURPLE);
         playerpurple.setCurrentField(fieldsHandler.getField(51));
 
@@ -98,7 +98,7 @@ public class BoardTest {
         assertEquals(fieldsHandler.getField(0).getId(), playerpurple.getCurrentField().getId());
     }
     @Test
-    public void caseStartAtCasinoMoveByMoreThan8(){
+     void caseStartAtCasinoMoveByMoreThan8(){
         Player playerpurple = new Player("PURPLE",Color.PURPLE);
         playerpurple.setCurrentField(fieldsHandler.getField(47));
 
@@ -108,7 +108,7 @@ public class BoardTest {
     }
 
     @Test
-    public void caseStartAtAuctionHouseMoveByLessThan4(){
+     void caseStartAtAuctionHouseMoveByLessThan4(){
         Player playerpurple = new Player("PURPLE",Color.PURPLE);
         playerpurple.setCurrentField(fieldsHandler.getField(44));
 
