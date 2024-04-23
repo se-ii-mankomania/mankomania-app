@@ -19,7 +19,7 @@
             android:id="@+id/RollDice_resultTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="330dp"
+            android:layout_marginStart="280dp"
             android:layout_marginTop="20dp"
             android:text="@string/RollDice_resultTxt"
             android:textSize="28sp"
@@ -55,6 +55,15 @@
             android:layout_toEndOf="@id/RollDice_diceOne"
             android:contentDescription="@string/dice"
             app:srcCompat="@drawable/dice" />
+
+        <Button
+            android:id="@+id/RollDice_RollingDiceButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="70dp"
+            android:layout_toEndOf="@+id/RollDice_diceTwo"
+            android:text="@string/RollDice" />
 
     </RelativeLayout>
 

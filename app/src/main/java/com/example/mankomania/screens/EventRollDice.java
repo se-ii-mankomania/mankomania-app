@@ -9,6 +9,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -27,6 +28,8 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private boolean backPressedBlocked;
+
+    private static final int SENSIBILITY_BORDER_FOR_SENSOR =10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,9 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
+
+        Button rollDiceButton=findViewById(R.id.RollDice_RollingDiceButton);
+        rollDiceButton.setOnClickListener(v -> rollDice());
     }
 
     @Override
@@ -78,8 +84,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
             float x = event.values[0];
             float y = event.values[1];
             float z = event.values[2];
-            //Sensibilität des Sensors festlegen
-            if ((Math.abs(x) > 10 || Math.abs(y) > 10 || Math.abs(z) > 10)) {
+            if ((Math.abs(x) > SENSIBILITY_BORDER_FOR_SENSOR || Math.abs(y) > SENSIBILITY_BORDER_FOR_SENSOR || Math.abs(z) > SENSIBILITY_BORDER_FOR_SENSOR)) {
                 //Wenn geschüttelt => Würfeln
                 rollDice();
             }
