@@ -131,7 +131,7 @@ import org.junit.jupiter.api.Test;
        assertEquals(indexOutOfBoundsException.getMessage(), "Invalid ID");
        playerpurple.setCurrentField(new GameboardField(1,2, 44));
       IndexOutOfBoundsException indexOutOfBoundsException1 =  Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {fieldsHandler.movePlayer(playerpurple, 3);});
-      assertEquals(indexOutOfBoundsException1.getMessage(), "Invalid ID");
+      assertEquals("Invalid ID", indexOutOfBoundsException1.getMessage());
     }
     @Test void testWrongSizeIniFields(){
        FieldsHandler fieldsHandler1 = new FieldsHandler();
@@ -139,7 +139,7 @@ import org.junit.jupiter.api.Test;
        Assertions.assertThrows(IllegalArgumentException.class, () -> {fieldsHandler1.initFields(new Cellposition[14][1]);});
        IllegalArgumentException illegalArgumentException = Assertions.assertThrows(IllegalArgumentException.class, () -> {fieldsHandler1.initFields(new Cellposition[1][1]);});
        Assertions.assertThrows(IllegalArgumentException.class, () -> {fieldsHandler1.initFields(new Cellposition[15][15]);});
-       assertEquals(illegalArgumentException.getMessage(), "wrong size");
+       assertEquals("wrong size", illegalArgumentException.getMessage());
     }
 
     @Test
@@ -148,26 +148,26 @@ import org.junit.jupiter.api.Test;
        Player player = new Player("Blue", Color.BLUE);
        assertNull(hotel.getOwner());
        hotel.setOwner(player);
-       assertEquals(hotel.getX(), 1);
-       assertEquals(hotel.getY(), 2);
-       assertEquals(hotel.getId(), 3);
-       assertEquals(hotel.getRent(), 2000);
-       assertEquals(hotel.getCost(), 20000);
-       assertEquals(hotel.getOwner(), player);
+       assertEquals( 1, hotel.getX());
+       assertEquals(2, hotel.getY());
+       assertEquals(3, hotel.getId() );
+       assertEquals(2000, hotel.getRent());
+       assertEquals(20000, hotel.getCost());
+       assertEquals(player, hotel.getOwner());
     }
     @Test
     void testProfitField(){
        ProfitField profitField = new ProfitField(1,2,3, 3000);
-       assertEquals(profitField.getProfit(), 3000);
-       assertEquals(profitField.getX(), 1);
-       assertEquals(profitField.getY(), 2);
-       assertEquals(profitField.getId(), 3);
+       assertEquals(3000, profitField.getProfit());
+       assertEquals( 1, profitField.getX());
+       assertEquals( 2, profitField.getY());
+       assertEquals(3,profitField.getId());
     }
     @Test void testFieldsHandlerInvalidID(){
        IllegalArgumentException exceptionTooBig = assertThrows(IllegalArgumentException.class, () -> {fieldsHandler.getField(53);});
        IllegalArgumentException exceptionTooSmall = assertThrows(IllegalArgumentException.class, () -> {fieldsHandler.getField(-1);});
-       assertEquals(exceptionTooSmall.getMessage(), "Field index is out of bounds");
-       assertEquals(exceptionTooBig.getMessage(), "Field index is out of bounds");
+       assertEquals("Field index is out of bounds", exceptionTooSmall.getMessage() );
+       assertEquals("Field index is out of bounds", exceptionTooBig.getMessage());
 
 
     }
