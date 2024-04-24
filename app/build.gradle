@@ -64,7 +64,8 @@ sonar {
               "**/Event_RollDice,**/FinancesAndStocks.java,**/GameScore.java," +
                 "**/MainActivityLogin.java, **/PlayerViewModel.java," +
                 "**/Register.java, **/ToolbarFunctionalities.java, **/EventRollDice.java," +
-                "**/CreateNewLobby.java, **/Status.java"
+                "**/CreateNewLobby.java, **/Status.java, **/ZoomLayout.java"
+
     }
 }
 dependencies {
