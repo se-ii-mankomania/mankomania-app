@@ -16,7 +16,7 @@ public class DiceTest {
     private Dice dice = new Dice();
 
     @Test
-    public void testDiceRange() {
+    void testDiceRange() {
         for(int i = 0; i < 5; i++){
             int[] result = dice.throwDice();
             assertTrue(result[0] >= 1 && result[0] <= 6 );
@@ -24,7 +24,7 @@ public class DiceTest {
         }
     }
     @Test
-    public void testRollSix(){
+    void testRollSix(){
         assertArrayEquals(new int[]{6, 6}, dice.rollSix());
     }
 }
