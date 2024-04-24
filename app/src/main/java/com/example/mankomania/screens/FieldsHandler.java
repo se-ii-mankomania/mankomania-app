@@ -56,6 +56,9 @@ public class FieldsHandler {
         else if (currentId >= 1 && currentId <= 43) {
             moveWithinBoard(player, diceNr);
         }
+        else{
+            throw new IndexOutOfBoundsException("Invalid ID");
+        }
     }
 
     private void moveFromStartTopLeft(Player player, int diceNr) {
