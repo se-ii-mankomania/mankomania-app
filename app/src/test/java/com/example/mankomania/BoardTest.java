@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.example.mankomania.gameboardfields.HotelField;
+import com.example.mankomania.gameboardfields.ProfitField;
 import com.example.mankomania.logik.Color;
 import com.example.mankomania.logik.Player;
 import com.example.mankomania.screens.Cellposition;
@@ -130,6 +131,14 @@ import org.junit.jupiter.api.Test;
        assertEquals(hotel.getRent(), 2000);
        assertEquals(hotel.getCost(), 20000);
        assertEquals(hotel.getOwner(), player);
+    }
+    @Test
+    void testProfitField(){
+       ProfitField profitField = new ProfitField(1,2,3, 3000);
+       assertEquals(profitField.getProfit(), 3000);
+       assertEquals(profitField.getX(), 1);
+       assertEquals(profitField.getY(), 2);
+       assertEquals(profitField.getId(), 3);
     }
 
 
