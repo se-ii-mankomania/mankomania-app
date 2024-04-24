@@ -88,7 +88,7 @@ public class Player {
         stocks.merge(String.valueOf(stockTypes), amount, Integer::sum);
     }
     public Map<String, Integer> getAmountOfStock(){
-        return new HashMap<String, Integer>(stocks);
+        return new HashMap<>(stocks);
     }
     public void resetAllShares(){
         for(StockTypes stockTypes : StockTypes.values()){
