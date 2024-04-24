@@ -128,7 +128,7 @@ import org.junit.jupiter.api.Test;
        playerpurple.setCurrentField(new GameboardField(1,2, -1));
 
        IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {fieldsHandler.movePlayer(playerpurple, 3);});
-       assertEquals(indexOutOfBoundsException.getMessage(), "Invalid ID");
+       assertEquals("Invalid ID", indexOutOfBoundsException.getMessage());
        playerpurple.setCurrentField(new GameboardField(1,2, 44));
       IndexOutOfBoundsException indexOutOfBoundsException1 =  Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {fieldsHandler.movePlayer(playerpurple, 3);});
       assertEquals("Invalid ID", indexOutOfBoundsException1.getMessage());
