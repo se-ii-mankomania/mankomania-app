@@ -1,7 +1,9 @@
 package com.example.mankomania;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
+import com.example.mankomania.gameboardfields.HotelField;
 import com.example.mankomania.logik.Color;
 import com.example.mankomania.logik.Player;
 import com.example.mankomania.screens.Cellposition;
@@ -116,7 +118,19 @@ import org.junit.jupiter.api.Test;
 
         assertEquals(fieldsHandler.getField(43).getId(), playerpurple.getCurrentField().getId());
     }
-
+    @Test
+    void testHotelfield(){
+       HotelField hotel = new HotelField(1,2, 3,2000, 20000, null);
+       Player player = new Player("Blue", Color.BLUE);
+       assertNull(hotel.getOwner());
+       hotel.setOwner(player);
+       assertEquals(hotel.getX(), 1);
+       assertEquals(hotel.getY(), 2);
+       assertEquals(hotel.getId(), 3);
+       assertEquals(hotel.getRent(), 2000);
+       assertEquals(hotel.getCost(), 20000);
+       assertEquals(hotel.getOwner(), player);
+    }
 
 
 
