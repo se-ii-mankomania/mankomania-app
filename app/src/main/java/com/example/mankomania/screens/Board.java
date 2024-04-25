@@ -71,54 +71,48 @@ public class Board extends AppCompatActivity {
         fieldsHandler.initFields(cellPositions);
 
 
-        Player playerblue = new Player("Blue", Color.BLUE );
-        playerblue.setCurrentField(fieldsHandler.fields[44]);
-        Player playergreen = new Player("GREEN", Color.GREEN);
-        playergreen.setCurrentField(fieldsHandler.fields[45]);
+        Player playerBlue = new Player("BLUE", Color.BLUE );
+        playerBlue.setCurrentField(fieldsHandler.getField(44));
+        Player playerGreen = new Player("GREEN", Color.GREEN);
+        playerGreen.setCurrentField(fieldsHandler.getField(45));
         Player playerRed = new Player("RED", Color.RED);
-        playerRed.setCurrentField(fieldsHandler.fields[46]);
+        playerRed.setCurrentField(fieldsHandler.getField(46));
         Player playerPurple = new Player("PURPLE", Color.PURPLE );
-        playerPurple.setCurrentField(fieldsHandler.fields[47]);
-        players[0] = playerblue;
-        players[1] = playergreen;
+        playerPurple.setCurrentField(fieldsHandler.getField(47));
+        players[0] = playerBlue;
+        players[1] = playerGreen;
         players[2] = playerRed;
         players[3] = playerPurple;
 
         //Testing
-        fieldsHandler.movePlayer(playerblue, 15);
-        fieldsHandler.movePlayer(playergreen, 15);
-        fieldsHandler.movePlayer(playerRed, 15);
-        fieldsHandler.movePlayer(playerPurple, 15);
+        fieldsHandler.movePlayer(playerBlue, 5);
+        fieldsHandler.movePlayer(playerGreen, 5);
+        fieldsHandler.movePlayer(playerRed, 5);
+        fieldsHandler.movePlayer(playerPurple, 5);
 
-
-
-        fieldsHandler.movePlayer(playerblue, 12);
-        fieldsHandler.movePlayer(playergreen, 12);
-        fieldsHandler.movePlayer(playerRed, 12);
-        fieldsHandler.movePlayer(playerPurple, 12);
         updatePlayerPositions();
 
 
 
-        ImageView player_blue = findViewById(R.id.player_blue);
-        player_blue.getLayoutParams().height = cellHeight;
-        player_blue.getLayoutParams().width = cellWidth;
-        player_blue.requestLayout();
+        ImageView playerBlueImage = findViewById(R.id.player_blue);
+        playerBlueImage.getLayoutParams().height = cellHeight;
+        playerBlueImage.getLayoutParams().width = cellWidth;
+        playerBlueImage.requestLayout();
 
-        ImageView player_green = findViewById(R.id.player_green);
-        player_green.getLayoutParams().height = cellHeight;
-        player_green.getLayoutParams().width = cellWidth;
-        player_green.requestLayout();
+        ImageView playerGreenImage = findViewById(R.id.player_green);
+        playerGreenImage.getLayoutParams().height = cellHeight;
+        playerGreenImage.getLayoutParams().width = cellWidth;
+        playerGreenImage.requestLayout();
 
-        ImageView player_purple = findViewById(R.id.player_purple);
-        player_purple.getLayoutParams().height = cellHeight;
-        player_purple.getLayoutParams().width = cellWidth;
-        player_purple.requestLayout();
+        ImageView playerPurpleImage = findViewById(R.id.player_purple);
+        playerPurpleImage.getLayoutParams().height = cellHeight;
+        playerPurpleImage.getLayoutParams().width = cellWidth;
+        playerPurpleImage.requestLayout();
 
-        ImageView player_red = findViewById(R.id.player_red);
-        player_red.getLayoutParams().height = cellHeight;
-        player_red.getLayoutParams().width = cellWidth;
-        player_red.requestLayout();
+        ImageView playerRedImage = findViewById(R.id.player_red);
+        playerRedImage.getLayoutParams().height = cellHeight;
+        playerRedImage.getLayoutParams().width = cellWidth;
+        playerRedImage.requestLayout();
 
 
     }
@@ -127,23 +121,23 @@ public class Board extends AppCompatActivity {
             ) {
            if(player.getColor() == Color.BLUE){
                ImageView playerBlue = findViewById(R.id.player_blue);
-               playerBlue.setX(player.getCurrentField().x);
-               playerBlue.setY(player.getCurrentField().y);
+               playerBlue.setX(player.getCurrentField().getX());
+               playerBlue.setY(player.getCurrentField().getY());
            }
            if(player.getColor() == Color.RED){
                ImageView playerRed = findViewById(R.id.player_red);
-               playerRed.setX(player.getCurrentField().x);
-               playerRed.setY(player.getCurrentField().y);
+               playerRed.setX(player.getCurrentField().getX());
+               playerRed.setY(player.getCurrentField().getY());
            }
            if(player.getColor() == Color.GREEN){
                ImageView playerGreen = findViewById(R.id.player_green);
-               playerGreen.setX(player.getCurrentField().x);
-               playerGreen.setY(player.getCurrentField().y);
+               playerGreen.setX(player.getCurrentField().getX());
+               playerGreen.setY(player.getCurrentField().getY());
            }
            if(player.getColor() == Color.PURPLE){
                ImageView playerPurple = findViewById(R.id.player_purple);
-               playerPurple.setX(player.getCurrentField().x);
-               playerPurple.setY(player.getCurrentField().y);
+               playerPurple.setX(player.getCurrentField().getX());
+               playerPurple.setY(player.getCurrentField().getY());
            }
        }
 
