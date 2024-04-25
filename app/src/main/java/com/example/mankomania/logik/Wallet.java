@@ -5,6 +5,8 @@ import java.util.Map;
 
 public class Wallet {
     private Map<NoteTypes, Integer> notes = new EnumMap<>(NoteTypes.class);
+    private boolean isEmpty = false;
+
 
     public Wallet(){
         notes.put(NoteTypes.FIVETHOUSAND, 6);
@@ -16,14 +18,15 @@ public class Wallet {
         int currentAmount = notes.getOrDefault(note, 0);
         notes.put(note, currentAmount + amount);
     }
-    public void cheatMoney(NoteTypes noteTypes, int amount){
-        int currentAmount = notes.getOrDefault(noteTypes, 0);
-        if(currentAmount >= amount){
-            notes.put(noteTypes, currentAmount - amount);
-        }else {
-        throw new IllegalArgumentException("Nicht genug Scheine");
-        }
-    }
+    
+//    public void cheatMoney(NoteTypes noteTypes, int amount){
+//        int currentAmount = notes.getOrDefault(noteTypes, 0);
+//        if(currentAmount >= amount){
+//            notes.put(noteTypes, currentAmount - amount);
+//        }else {
+//        throw new IllegalArgumentException("Nicht genug Scheine");
+//        }
+//    }
 
     public void removeMoney(NoteTypes noteTypes, int amount){
         if(amount <= 0){
@@ -39,7 +42,8 @@ public class Wallet {
             notes.put(noteTypes, currentAmount - amount);
         } else {
             if(totalAmount() < neededValue){
-                throw new IllegalArgumentException("Sie haben gewonnen!");
+                isEmpty = true;
+                throw new IllegalArgumentException("Sie haben gewonnen");
             }
             //Entfernt was möglich ist und zieht von den anderen Scheine den restlichen Betrag ab
             if(currentAmount > 0){
@@ -76,6 +80,11 @@ public class Wallet {
     public int getNoteCount(NoteTypes noteType) {
         return notes.getOrDefault(noteType, 0);
     }
+
+    public boolean isEmpty() {
+        return isEmpty;
+    }
+
     public int totalAmount(){
         int total = 0;
         for (NoteTypes note : NoteTypes.values()) {
