@@ -71,7 +71,7 @@ public class Board extends AppCompatActivity {
         fieldsHandler.initFields(cellPositions);
 
 
-        Player playerBlue = new Player("Blue", Color.BLUE );
+        Player playerBlue = new Player("BLUE", Color.BLUE );
         playerBlue.setCurrentField(fieldsHandler.getField(44));
         Player playerGreen = new Player("GREEN", Color.GREEN);
         playerGreen.setCurrentField(fieldsHandler.getField(45));
