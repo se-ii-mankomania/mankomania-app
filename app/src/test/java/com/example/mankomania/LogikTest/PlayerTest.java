@@ -49,7 +49,7 @@ public class PlayerTest {
         player1.removeMoneyFromWallet(amountToRemove);
         assertEquals(initialTotal - amountToRemove, player1.getWalletBalance());
     }
-    
+
     @Test
     void testPayToPlayer() {
         int payAmount = 5000;

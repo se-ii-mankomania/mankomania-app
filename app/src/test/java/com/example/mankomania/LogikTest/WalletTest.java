@@ -78,12 +78,5 @@ public class WalletTest {
         int expectedTotal = (6 * 5000) + (7 * 10000) + (6 * 50000) + (6 * 100000);
         assertEquals(expectedTotal, wallet.totalAmount());
     }
-
-//    @Test
-//    void testCheatMoneyDecreasesTotalAmount() throws Exception {
-//        int initialTotal = wallet.totalAmount();
-//        wallet.cheatMoney(NoteTypes.HUNDREDTHOUSAND, 1);
-//        int cheatedValue = NoteTypes.HUNDREDTHOUSAND.getValue();
-//        assertEquals(initialTotal - cheatedValue, wallet.totalAmount());
-//    }
+    
 }
