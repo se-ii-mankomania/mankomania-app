@@ -2,10 +2,10 @@ package com.example.mankomania.LogikTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.example.mankomania.logik.Color;
-import com.example.mankomania.logik.NoteTypes;
 import com.example.mankomania.logik.Player;
 import com.example.mankomania.logik.StockTypes;
 
@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
 public class PlayerTest {
         private Player player1 = new Player("T1", Color.RED);
         private Player player2 = new Player("T2", Color.BLUE);
+
+
 
     @Test
     void playerInitializationTest() {
@@ -28,43 +30,41 @@ public class PlayerTest {
         void testMovement() {
             player1.movement(5);
             assertEquals(5, player1.getPosition());
+            player1.movement(-3);
+            assertEquals(2, player1.getPosition());
         }
     @Test
     void addMoneyToWalletTest() {
-        int initialBalance = player1.getWalletBalance();
-        player1.addMoneyToWallet(NoteTypes.FIVETHOUSAND, 2);
-        int expectedBalance = 2 * NoteTypes.FIVETHOUSAND.getValue() + initialBalance ;
-        assertEquals(expectedBalance, player1.getWalletBalance());
+       int initialTotal = player1.getWalletBalance();
+       int amountToAdd = 10000;
+       player1.addMoneyToWallet(amountToAdd);
+       assertEquals(initialTotal + amountToAdd, player1.getWalletBalance());
     }
+
     @Test
     void removeMoneyFromWallet(){
-        int initialBalance = player1.getWalletBalance();
-        player1.removeMoneyFromWallet(NoteTypes.FIVETHOUSAND, 4);
-        int expectedBalance = initialBalance - 4 * NoteTypes.FIVETHOUSAND.getValue();
-        assertEquals(expectedBalance, player1.getWalletBalance());
+        int initialTotal = player1.getWalletBalance();
+        int amountToRemove = 10000;
+        player1.removeMoneyFromWallet(amountToRemove);
+        assertEquals(initialTotal - amountToRemove, player1.getWalletBalance());
     }
-    @Test
-    void addCheatMoneyToWalletTest() {
-        int initialBalance = player1.getWalletBalance();
-        player1.cheatMoney(NoteTypes.FIVETHOUSAND, 2);
-        int expectedBalance = initialBalance - 2 * NoteTypes.FIVETHOUSAND.getValue();
-        assertEquals(expectedBalance, player1.getWalletBalance());
-    }
+
+//    @Test
+//    void addCheatMoneyToWalletTest() {
+//        int initialBalance = player1.getWalletBalance();
+//        player1.cheatMoney(NoteTypes.FIVETHOUSAND, 2);
+//        int expectedBalance = initialBalance - 2 * NoteTypes.FIVETHOUSAND.getValue();
+//        assertEquals(expectedBalance, player1.getWalletBalance());
+//    }
     @Test
     void testPayToPlayer() {
+        int payAmount = 5000;
+        int initialTotalPlayer1 = player1.getWalletBalance();
+        int initialTotalPlayer2 = player2.getWalletBalance();
+        player1.payToPlayer(player2, payAmount);
+        assertEquals(initialTotalPlayer1 - payAmount, player1.getWalletBalance());
+        assertEquals(initialTotalPlayer2 + payAmount, player2.getWalletBalance());
 
-        int initialPayerBalance = player1.getWalletBalance();
-        int initialRecipientBalance = player2.getWalletBalance();
-
-        int transferValue = 2 * NoteTypes.FIVETHOUSAND.getValue();
-
-        player1.payToPlayer(player2, NoteTypes.FIVETHOUSAND, 2);
-
-        int expectedPayer1Balance = initialPayerBalance - transferValue;
-        int expectedPlayer2Balance = initialRecipientBalance + transferValue;
-
-        assertEquals(expectedPayer1Balance, player1.getWalletBalance());
-        assertEquals(expectedPlayer2Balance, player2.getWalletBalance());
     }
 
         @Test

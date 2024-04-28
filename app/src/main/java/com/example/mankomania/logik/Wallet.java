@@ -15,9 +15,23 @@ public class Wallet {
         notes.put(NoteTypes.FIFTYTHOUSAND, 6);
         notes.put(NoteTypes.HUNDREDTHOUSAND, 6);
     }
-    public void addMoney(NoteTypes note, int amount){
-        int currentAmount = notes.getOrDefault(note, 0);
-        notes.put(note, currentAmount + amount);
+    public void addMoney(int amount){
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Der hinzuzufügende Betrag muss größer als 0 sein.");
+        }
+
+        NoteTypes[] noteValues = NoteTypes.values();
+        Arrays.sort(noteValues, (a, b) -> Integer.compare(b.getValue(), a.getValue())); // Scheine absteigend nach ihrem Wert sortieren
+
+        for (NoteTypes note : noteValues) {
+            int noteValue = note.getValue();
+            if (noteValue <= amount) {
+                int countToAdd = amount / noteValue; // Berechnen, wie viele Scheine dieses Typs hinzugefügt werden können
+                int currentAmount = notes.getOrDefault(note, 0);
+                notes.put(note, currentAmount + countToAdd);
+                amount = amount % noteValue; // Verbleibenden Betrag aktualisieren
+            }
+        }
     }
     
 //    public void cheatMoney(NoteTypes noteTypes, int amount){
@@ -35,7 +49,7 @@ public class Wallet {
         }
         int total = totalAmount();
 
-        if (total < amount){
+        if (total <= amount){
             isEmpty = true;
         }
         removeAmount(amount);

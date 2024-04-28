@@ -2,14 +2,13 @@ package com.example.mankomania.LogikTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.example.mankomania.logik.NoteTypes;
 import com.example.mankomania.logik.Wallet;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.EnumMap;
-import java.util.Map;
 
 
 public class WalletTest {
@@ -19,55 +18,60 @@ public class WalletTest {
     @Test
     void testAddMoneyIncreasesTotalAmount() {
         int initialTotal = wallet.totalAmount();
-        wallet.addMoney(NoteTypes.FIVETHOUSAND, 2);
-        int addedValue = 2 * NoteTypes.FIVETHOUSAND.getValue();
-        assertEquals(initialTotal + addedValue, wallet.totalAmount());
+        int addedMoney = 5000;
+        wallet.addMoney(addedMoney);
+        assertEquals(initialTotal + addedMoney, wallet.totalAmount());
+    }
+
+    @Test
+    void testAddMoneyWithZeroAmount(){
+        int addMoney = 0;
+        Exception e = assertThrows(IllegalArgumentException.class, () -> wallet.addMoney(0));
+        assertEquals("Der hinzuzufügende Betrag muss größer als 0 sein.", e.getMessage());
+    }
+    //Methode addMoney fügt immer die größtmöglichen Scheine als erstes hinzu
+    @Test
+    void testAddMoneyAddsCorrectNotetype(){
+            wallet.addMoney(80000);
+            assertEquals(6, wallet.getNoteCount(NoteTypes.HUNDREDTHOUSAND));
+            assertEquals(7, wallet.getNoteCount(NoteTypes.FIFTYTHOUSAND));
+            assertEquals(10, wallet.getNoteCount(NoteTypes.TENTHOUSAND));
+            assertEquals(6, wallet.getNoteCount(NoteTypes.FIVETHOUSAND));
     }
 
     @Test
     void testRemoveMoneyDecreasesTotalAmount(){
         int initialTotal = wallet.totalAmount();
-        wallet.removeMoney(NoteTypes.TENTHOUSAND, 2);
-        int removedValue = 2 * NoteTypes.TENTHOUSAND.getValue();
-        assertEquals(initialTotal - removedValue, wallet.totalAmount());
+        int amountToRemove = 5000;
+        wallet.removeMoney(amountToRemove);
+        assertEquals(initialTotal - amountToRemove, wallet.totalAmount());
     }
 
     @Test
     void testRemoveMoneyWithNegativeAmount() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
-                wallet.removeMoney(NoteTypes.FIVETHOUSAND, -1)
+                wallet.removeMoney(-5000)
         );
         assertEquals("Der zu entfernende Betrag muss größer als 0 sein.", exception.getMessage());
     }
 
     @Test
     void testRemoveMoneyWithZeroAmount(){
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> wallet.removeMoney(NoteTypes.FIVETHOUSAND, 0));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> wallet.removeMoney(0));
         assertEquals("Der zu entfernende Betrag muss größer als 0 sein.", exception.getMessage());
     }
 
     @Test
-    void testRemoveMoneyWithSufficientNotes(){
-        wallet.removeMoney(NoteTypes.HUNDREDTHOUSAND, 2);
-        assertEquals(4, wallet.getNoteCount(NoteTypes.HUNDREDTHOUSAND));
-    }
-    //Prüft ob die removeMoney Methode funktioniert auch wenn man nicht genug Scheine von einem Typ hat jedoch genug Geld in der Börse
-    //um diesen Betrag zu begleichen. Es wird der nächst kleinere Scheintyp hierführ herangezogen
-    @Test
-    void testRemoveMoneyWithInsufficientNotesButSufficientTotal() {
-        wallet.removeMoney(NoteTypes.HUNDREDTHOUSAND, 7);
-        assertEquals(300000, wallet.totalAmount());
-        assertEquals(0, wallet.getNoteCount(NoteTypes.HUNDREDTHOUSAND));
-        assertEquals(4, wallet.getNoteCount(NoteTypes.FIFTYTHOUSAND));
+    void testRemoveMoneyRemovesNotetypes(){
+        wallet.removeMoney(5000);
+        assertEquals(5, wallet.getNoteCount(NoteTypes.FIVETHOUSAND));
     }
 
     @Test
-    void testRemoveMoneyWithInsufficientTotal(){
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, ()->
-                wallet.removeMoney(NoteTypes.HUNDREDTHOUSAND, 11));
-        assertEquals("Sie haben gewonnen!", exception.getMessage());
+    void testIsEmpty(){
+        wallet.removeMoney(1000000);
+        assertTrue(wallet.isEmpty());
     }
-
 
     @Test
     void testTotalAmountCalculatesCorrectly() {
@@ -75,11 +79,11 @@ public class WalletTest {
         assertEquals(expectedTotal, wallet.totalAmount());
     }
 
-    @Test
-    void testCheatMoneyDecreasesTotalAmount() throws Exception {
-        int initialTotal = wallet.totalAmount();
-        wallet.cheatMoney(NoteTypes.HUNDREDTHOUSAND, 1);
-        int cheatedValue = NoteTypes.HUNDREDTHOUSAND.getValue();
-        assertEquals(initialTotal - cheatedValue, wallet.totalAmount());
-    }
+//    @Test
+//    void testCheatMoneyDecreasesTotalAmount() throws Exception {
+//        int initialTotal = wallet.totalAmount();
+//        wallet.cheatMoney(NoteTypes.HUNDREDTHOUSAND, 1);
+//        int cheatedValue = NoteTypes.HUNDREDTHOUSAND.getValue();
+//        assertEquals(initialTotal - cheatedValue, wallet.totalAmount());
+//    }
 }
