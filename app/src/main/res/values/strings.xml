@@ -93,4 +93,6 @@
     <string name="createNewLobby_maxSpielerTextView_text">Max. Spieler:</string>
     <string name="createNewLobby_createLobbyButton_text">Lobby erstellen</string>
     <string name="RollDice">Würfeln</string>
+    <string name="RollDice_Explanation">Schütteln um zu Würfeln</string>
+    <string name="dice">dice</string>
 </resources>

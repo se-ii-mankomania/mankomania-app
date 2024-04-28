@@ -1,14 +1,27 @@
 package com.example.mankomania.gameboardfields;
 
 public class GameboardField {
-    public int x;
-    public int y;
+    private int x;
+    private int y;
 
-    public int id;
+    private int id;
     public GameboardField(int x, int y, int id){
         this.x = x;
         this.y = y;
         this.id = id;
     }
+    // Getter
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getId() {
+        return id;
+    }
+
 
 }
