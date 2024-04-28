@@ -26,7 +26,7 @@ public class WalletTest {
     @Test
     void testAddMoneyWithZeroAmount(){
         int addMoney = 0;
-        Exception e = assertThrows(IllegalArgumentException.class, () -> wallet.addMoney(0));
+        Exception e = assertThrows(IllegalArgumentException.class, () -> wallet.addMoney(addMoney));
         assertEquals("Der hinzuzufügende Betrag muss größer als 0 sein.", e.getMessage());
     }
     //Methode addMoney fügt immer die größtmöglichen Scheine als erstes hinzu
@@ -78,5 +78,5 @@ public class WalletTest {
         int expectedTotal = (6 * 5000) + (7 * 10000) + (6 * 50000) + (6 * 100000);
         assertEquals(expectedTotal, wallet.totalAmount());
     }
-    
+
 }
