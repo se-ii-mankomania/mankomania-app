@@ -33,15 +33,6 @@ public class Wallet {
             }
         }
     }
-    
-//    public void cheatMoney(NoteTypes noteTypes, int amount){
-//        int currentAmount = notes.getOrDefault(noteTypes, 0);
-//        if(currentAmount >= amount){
-//            notes.put(noteTypes, currentAmount - amount);
-//        }else {
-//        throw new IllegalArgumentException("Nicht genug Scheine");
-//        }
-//    }
 
   public  void removeMoney(int amount){
         if(amount <= 0){
