@@ -62,13 +62,6 @@ public class Player {
             this.wallet.addMoney(amount);
     }
 
-//    public void cheatMoney(NoteTypes note, int amount){
-//        try {
-//            this.wallet.cheatMoney(note, amount);
-//        }catch (Exception e){
-//            logger.info(e.getMessage());
-//        }
-//    }
 
     public void removeMoneyFromWallet(int amount) {
             this.wallet.removeMoney(amount);

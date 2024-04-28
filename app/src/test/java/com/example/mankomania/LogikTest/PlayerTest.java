@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.example.mankomania.gameboardfields.GameboardField;
 import com.example.mankomania.logik.Color;
 import com.example.mankomania.logik.Player;
 import com.example.mankomania.logik.StockTypes;
@@ -48,14 +49,7 @@ public class PlayerTest {
         player1.removeMoneyFromWallet(amountToRemove);
         assertEquals(initialTotal - amountToRemove, player1.getWalletBalance());
     }
-
-//    @Test
-//    void addCheatMoneyToWalletTest() {
-//        int initialBalance = player1.getWalletBalance();
-//        player1.cheatMoney(NoteTypes.FIVETHOUSAND, 2);
-//        int expectedBalance = initialBalance - 2 * NoteTypes.FIVETHOUSAND.getValue();
-//        assertEquals(expectedBalance, player1.getWalletBalance());
-//    }
+    
     @Test
     void testPayToPlayer() {
         int payAmount = 5000;
