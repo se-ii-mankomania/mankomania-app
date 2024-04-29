@@ -2,7 +2,7 @@ package com.example.mankomania.LogikTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.example.mankomania.logik.StockTypes;
+import com.example.mankomania.logik.stocks.StockTypes;
 
 import org.junit.jupiter.api.Test;
 

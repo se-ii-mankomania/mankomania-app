@@ -1,6 +1,8 @@
-package com.example.mankomania.logik;
+package com.example.mankomania.logik.spieler;
 
 import com.example.mankomania.gameboardfields.GameboardField;
+import com.example.mankomania.logik.stocks.StockInitializer;
+import com.example.mankomania.logik.stocks.StockTypes;
 
 import java.security.SecureRandom;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.example.mankomania.logik;
+package com.example.mankomania.logik.spieler;
 
 public enum NoteTypes {
     FIVETHOUSAND(5000),TENTHOUSAND(10000), FIFTYTHOUSAND(50000), HUNDREDTHOUSAND(100000);

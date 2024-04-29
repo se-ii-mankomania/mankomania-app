@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.example.mankomania.logik.NoteTypes;
-import com.example.mankomania.logik.Wallet;
+import com.example.mankomania.logik.spieler.NoteTypes;
+import com.example.mankomania.logik.spieler.Wallet;
 
 import org.junit.jupiter.api.Test;
 
