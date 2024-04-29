@@ -14,7 +14,7 @@ public class StockInitializationTest {
 
     //Testet ob die Map nicht Null ist und ob insgesamt 2 Aktien vorhanden sind
     @Test
-    public void testThatTheMapIsNotNull() {
+    void testThatTheMapIsNotNull() {
         Map<String, Integer> stocks = StockInitializer.initializeRandomStocks();
         assertNotNull(stocks);
         int uniqueStocksCount = (int) stocks.values().stream().count();
