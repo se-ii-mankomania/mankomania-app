@@ -3,7 +3,7 @@ package com.example.mankomania.LogikTest;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.example.mankomania.logik.Dice;
+import com.example.mankomania.logik.spieler.Dice;
 
 import org.junit.jupiter.api.Test;
 

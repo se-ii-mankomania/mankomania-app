@@ -3,8 +3,8 @@ package com.example.mankomania.LogikTest;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.example.mankomania.logik.StockMarket;
-import com.example.mankomania.logik.StockTypes;
+import com.example.mankomania.logik.stocks.StockMarket;
+import com.example.mankomania.logik.stocks.StockTypes;
 
 import org.junit.jupiter.api.Test;
 
