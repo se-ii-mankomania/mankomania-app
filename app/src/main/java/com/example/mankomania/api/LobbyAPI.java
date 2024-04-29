@@ -22,9 +22,9 @@ import okhttp3.Response;
 
 public class LobbyAPI {
     private static List<Lobby> allLobbies;
-    private static List<Lobby> openLobbies;
+    private static List<Lobby> startedLobbies;
     private static String[] allLobbiesDisplayStrings;
-    private static String[] openLobbiesDisplayStrings;
+    private static String[] startingLobbiesDisplayStrings;
     private static String message;
 
     // interface to notify whether login is successful or not
@@ -113,13 +113,13 @@ public class LobbyAPI {
 
                     try {
                         JSONArray responseArray = new JSONArray(responseBody);
-                        openLobbies = new ArrayList<>();
-                        openLobbiesDisplayStrings = new String[responseArray.length()];
+                        startedLobbies = new ArrayList<>();
+                        startingLobbiesDisplayStrings = new String[responseArray.length()];
 
                         for(int i = 0; i < responseArray.length(); i++) {
                             JSONObject jsonLobby = responseArray.getJSONObject(i);
-                            if(status == Status.open) {
-                                addLobbyToList(jsonLobby, openLobbies);
+                            if(status == Status.starting) {
+                                addLobbyToList(jsonLobby, startedLobbies);
 
                                 // TODO: replace x with actual value of players in lobby
                                 // TODO: find a better way to make it actually look pretty (sprint 3?)
@@ -127,11 +127,11 @@ public class LobbyAPI {
                                 boolean isPrivate = jsonLobby.getBoolean("isprivate");
                                 int maxPlayers = jsonLobby.getInt("maxplayers");
                                 String name = jsonLobby.getString("name");
-                                openLobbiesDisplayStrings[i] = generateString(isPrivate, maxPlayers, name);
+                                startingLobbiesDisplayStrings[i] = generateString(isPrivate, maxPlayers, name);
                             }
                         }
 
-                        callback.onGetLobbiesByStatusSuccess(openLobbiesDisplayStrings);
+                        callback.onGetLobbiesByStatusSuccess(startingLobbiesDisplayStrings);
                     } catch (JSONException e) {
                         callback.onGetLobbiesByStatusFailure("Fehler beim Lesen der Response!");
                     }
