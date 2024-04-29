@@ -14,7 +14,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class Auth {
+public class AuthAPI {
     private static String token;
 
     private static String message;

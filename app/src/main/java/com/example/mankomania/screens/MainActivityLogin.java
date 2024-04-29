@@ -16,11 +16,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.mankomania.R;
-import com.example.mankomania.api.Auth;
+import com.example.mankomania.api.AuthAPI;
 
 import java.util.regex.Pattern;
 
-public class MainActivityLogin extends AppCompatActivity implements Auth.LoginCallback{
+public class MainActivityLogin extends AppCompatActivity implements AuthAPI.LoginCallback{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class MainActivityLogin extends AppCompatActivity implements Auth.LoginCa
             if(isNoValidEmail(email)) {
                 emailInput.setError("E-Mail-Adresse ist ungültig.");
             } else {
-                Auth.login(email, password, MainActivityLogin.this);
+                AuthAPI.login(email, password, MainActivityLogin.this);
             }
         });
 
