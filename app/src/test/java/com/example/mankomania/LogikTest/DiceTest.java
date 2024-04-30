@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class DiceTest {
+class DiceTest {
     private Dice dice = new Dice();
 
     @Test
