@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 
 
-public class StockInitializationTest {
+class StockInitializationTest {
 
     //Testet ob die Map nicht Null ist und ob insgesamt 2 Aktien vorhanden sind
     @Test

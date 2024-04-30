@@ -7,7 +7,7 @@ import com.example.mankomania.logik.StockTypes;
 import org.junit.jupiter.api.Test;
 
 
-public class StockTypesTest {
+class StockTypesTest {
     //Testet ob die richtigen Namen zurückgegeben werden
     @Test
     void testNameOfBRUCHSTAHL_AG(){
