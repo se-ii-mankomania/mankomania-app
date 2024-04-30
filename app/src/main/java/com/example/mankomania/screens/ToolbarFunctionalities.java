@@ -13,7 +13,9 @@ import com.example.mankomania.R;
  */
 public class ToolbarFunctionalities {
 
-    public ToolbarFunctionalities(Context context){
+    private ToolbarFunctionalities() {}
+
+    public static void setUpToolbar(Context context){
         Activity activity=(Activity)context;
         View toolbar=activity.findViewById(R.id.bottom_navigation);
 

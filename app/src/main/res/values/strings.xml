@@ -99,4 +99,7 @@
     <string name="spielFigurLila_farbcode">#dd3cf5</string>
 
 
+    <string name="RollDice">Würfeln</string>
+    <string name="RollDice_Explanation">Schütteln um zu Würfeln</string>
+    <string name="dice">dice</string>
 </resources>

@@ -18,8 +18,6 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                
-
 
                 <ImageView
                     android:id="@+id/gameboard"
@@ -67,6 +65,19 @@
         </com.example.mankomania.screens.ZoomLayout>
 
         <include layout="@layout/toolbar_layout" />
+
+        <Button
+            android:id="@+id/Board_ButtonDice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="30dp"
+            android:text="@string/RollDice"
+            app:layout_constraintBottom_toTopOf="@id/zoom_linear_layout"
+            tools:ignore="RelativeOverlap" />
+        <!--Überlappen wird vorübergehend ignoriert, da der Button später wegkommt-->
+
 
         <TextView
             android:id="@+id/Board_Messages"

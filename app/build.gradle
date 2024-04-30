@@ -60,11 +60,12 @@ sonar {
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
-        property "sonar.exclusions", "**/Board.java,**/ChooseYourCharacter.java," +
+        property "sonar.coverage.exclusions", "**/Board.java,**/ChooseYourCharacter.java," +
               "**/Event_RollDice,**/FinancesAndStocks.java,**/GameScore.java," +
                 "**/MainActivityLogin.java, **/PlayerViewModel.java," +
                 "**/Register.java, **/ToolbarFunctionalities.java, **/EventRollDice.java," +
-                "**/CreateNewLobby.java, **/Status.java"
+                "**/CreateNewLobby.java, **/Status.java, **/ZoomLayout.java"
+
     }
 }
 dependencies {
