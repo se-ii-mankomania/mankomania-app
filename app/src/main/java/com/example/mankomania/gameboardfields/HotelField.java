@@ -1,6 +1,6 @@
 package com.example.mankomania.gameboardfields;
 
-import com.example.mankomania.logik.Player;
+import com.example.mankomania.logik.spieler.Player;
 
 public class HotelField extends GameboardField{
    private int rent;

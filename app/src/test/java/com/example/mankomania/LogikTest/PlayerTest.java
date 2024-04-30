@@ -5,10 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.example.mankomania.gameboardfields.GameboardField;
-import com.example.mankomania.logik.Color;
-import com.example.mankomania.logik.Player;
-import com.example.mankomania.logik.StockTypes;
+import com.example.mankomania.logik.spieler.Color;
+import com.example.mankomania.logik.spieler.Player;
+import com.example.mankomania.logik.aktien.StockTypes;
 
 import org.junit.jupiter.api.Test;
 

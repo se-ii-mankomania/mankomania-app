@@ -1,4 +1,4 @@
-package com.example.mankomania.logik;
+package com.example.mankomania.logik.geldboerse;
 
 import java.util.Arrays;
 import java.util.EnumMap;

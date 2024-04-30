@@ -1,4 +1,4 @@
-package com.example.mankomania.logik;
+package com.example.mankomania.logik.aktien;
 
 public enum StockTypes {
     BRUCHSTAHL_AG("Bruchstahl AG"),

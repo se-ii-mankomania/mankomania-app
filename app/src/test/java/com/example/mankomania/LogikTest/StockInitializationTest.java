@@ -3,7 +3,7 @@ package com.example.mankomania.LogikTest;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.example.mankomania.logik.StockInitializer;
+import com.example.mankomania.logik.aktien.StockInitializer;
 
 import org.junit.jupiter.api.Test;
 

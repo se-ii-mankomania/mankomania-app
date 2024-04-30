@@ -16,8 +16,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mankomania.R;
 
-import com.example.mankomania.logik.Color;
-import com.example.mankomania.logik.Player;
+import com.example.mankomania.logik.spieler.Color;
+import com.example.mankomania.logik.spieler.Player;
 
 public class Board extends AppCompatActivity {
     Player[] players = new Player[4];
