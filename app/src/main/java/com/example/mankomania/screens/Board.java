@@ -152,7 +152,7 @@ public class Board extends AppCompatActivity {
                playerView = findViewById(viewId);
 
                if (playerView != null) {
-                   animateMove(playerView, playerView.getX(), playerView.getY(), player.getCurrentField().x, player.getCurrentField().y);
+                   animateMove(playerView, playerView.getX(), playerView.getY(), player.getCurrentField().getX(), player.getCurrentField().getY());
                }
            }
 
