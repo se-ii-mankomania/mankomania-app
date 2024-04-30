@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 
 
-public class PlayerTest {
+class PlayerTest {
         private Player player1 = new Player("T1", Color.RED);
         private Player player2 = new Player("T2", Color.BLUE);
 

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 
 
-public class WalletTest {
+class WalletTest {
     private Wallet wallet = new Wallet();
 
     //Stellt sicher, dass das hinzufügen funktioniert und der Gesamtbetrag aktualisiert wird

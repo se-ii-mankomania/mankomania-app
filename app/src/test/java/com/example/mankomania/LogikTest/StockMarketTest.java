@@ -9,7 +9,7 @@ import com.example.mankomania.logik.stocks.StockTypes;
 import org.junit.jupiter.api.Test;
 
 
-public class StockMarketTest {
+class StockMarketTest {
     private StockMarket stockMarket = new StockMarket();
 
     //Stellt sicher, dass beim Erstellen eines StockMarket-Objekts alle Aktientypen mit einem Startkurs initialisiert werden, der im definierten Bereich liegt.
