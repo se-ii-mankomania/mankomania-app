@@ -21,7 +21,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mankomania.R;
-import com.example.mankomania.logik.Dice;
+import com.example.mankomania.logik.spieler.Dice;
 
 public class EventRollDice extends AppCompatActivity implements SensorEventListener {
 

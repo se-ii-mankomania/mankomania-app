@@ -5,16 +5,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.example.mankomania.gameboardfields.GameboardField;
-import com.example.mankomania.logik.Color;
-import com.example.mankomania.logik.Player;
-import com.example.mankomania.logik.StockTypes;
+import com.example.mankomania.logik.spieler.Color;
+import com.example.mankomania.logik.spieler.Player;
+import com.example.mankomania.logik.aktien.StockTypes;
 
 import org.junit.jupiter.api.Test;
 
 
 
-public class PlayerTest {
+class PlayerTest {
         private Player player1 = new Player("T1", Color.RED);
         private Player player2 = new Player("T2", Color.BLUE);
 
