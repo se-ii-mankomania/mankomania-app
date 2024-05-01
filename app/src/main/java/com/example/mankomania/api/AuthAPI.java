@@ -15,6 +15,12 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class AuthAPI {
+
+    // must be changed later when server is deployed
+    // 10.0.2.2 to reach localhost of development machine
+    private static final String SERVER = "http://10.0.2.2";
+    private static final int PORT = 3000;
+
     private static String token;
 
     private static String message;
@@ -36,17 +42,8 @@ public class AuthAPI {
      * on success, the server responds with a token, which is needed later for more requests
      */
     public static void login(String email, String password, final LoginCallback callback) {
-        /*
-        // create JSON object for request
-        JSONObject jsonRequest = new JSONObject();
-        try {
-            jsonRequest.put("email", email);
-            jsonRequest.put("password", password);
-        } catch (JSONException e) {
-            callback.onLoginFailure("Request konnte nicht erstellt werden!");
-        }
-         */
-        JSONObject jsonRequest = createRequest(email, password);
+        // create JSON Object that holds email and password
+        JSONObject jsonRequest = createJSONRequest(email, password);
 
         // create Request
         RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
@@ -90,17 +87,8 @@ public class AuthAPI {
      * the server will provide a feedback
      */
     public static void register(String email, String password, final RegisterCallback callback) {
-        /*
-        // create JSON object for request
-        JSONObject jsonRequest = new JSONObject();
-        try {
-            jsonRequest.put("email", email);
-            jsonRequest.put("password", password);
-        } catch (JSONException e) {
-            callback.onRegisterFailure("Request konnte nicht erstellt werden!");
-        }
-         */
-        JSONObject jsonRequest = createRequest(email, password);
+        // create JSON Object that holds email and password
+        JSONObject jsonRequest = createJSONRequest(email, password);
 
         // create Request
         RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
@@ -139,7 +127,7 @@ public class AuthAPI {
     }
 
     @NonNull
-    public static JSONObject createRequest(String email, String password) {
+    public static JSONObject createJSONRequest(String email, String password) {
         // create JSON object for request
         JSONObject jsonRequest = new JSONObject();
         try {

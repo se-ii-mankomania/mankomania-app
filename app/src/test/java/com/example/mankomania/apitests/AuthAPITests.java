@@ -10,11 +10,11 @@ import org.junit.jupiter.api.Test;
 
 public class AuthAPITests {
     @Test
-    void testCreateRequestNormal() throws JSONException {
+    void testCreateJSONRequestNormal() throws JSONException {
         String email = "test@test.at";
         String password = "my_password";
 
-        JSONObject result = AuthAPI.createRequest(email, password);
+        JSONObject result = AuthAPI.createJSONRequest(email, password);
 
         assertNotNull(result);
 
@@ -23,11 +23,11 @@ public class AuthAPITests {
     }
 
     @Test
-    void testCreateRequestEmptyPassword() throws JSONException {
+    void testCreateJSONRequestEmptyPassword() throws JSONException {
         String email = "test@test.at";
         String password = "";
 
-        JSONObject result = AuthAPI.createRequest(email, password);
+        JSONObject result = AuthAPI.createJSONRequest(email, password);
 
         assertNotNull(result);
 
@@ -36,11 +36,11 @@ public class AuthAPITests {
     }
 
     @Test
-    void testCreateRequestEmptyEmail() throws JSONException {
+    void testCreateJSONRequestEmptyEmail() throws JSONException {
         String email = "";
         String password = "my_password";
 
-        JSONObject result = AuthAPI.createRequest(email, password);
+        JSONObject result = AuthAPI.createJSONRequest(email, password);
 
         assertNotNull(result);
 
@@ -49,11 +49,11 @@ public class AuthAPITests {
     }
 
     @Test
-    void testCreateRequestNull() throws JSONException {
+    void testCreateJSONRequestNull() throws JSONException {
         String email = null;
         String password = null;
 
-        JSONObject result = AuthAPI.createRequest(email, password);
+        JSONObject result = AuthAPI.createJSONRequest(email, password);
 
         assertNotNull(result);
 
