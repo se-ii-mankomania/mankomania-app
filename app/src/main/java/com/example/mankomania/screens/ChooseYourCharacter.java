@@ -91,10 +91,10 @@ public class ChooseYourCharacter extends AppCompatActivity {
         green.setTextColor(ContextCompat.getColor(this,R.color.greenPlayer));
         green.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.greenPlayer)));
 
-        RadioButton orange=findViewById(R.id.ChooseYourCharacter_OrangePlayer);
-        orange.setEnabled(true);
-        orange.setTextColor(ContextCompat.getColor(this,R.color.orangePlayer));
-        orange.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.orangePlayer)));
+        RadioButton red=findViewById(R.id.ChooseYourCharacter_OrangePlayer);
+        red.setEnabled(true);
+        red.setTextColor(ContextCompat.getColor(this,R.color.redPlayer));
+        red.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.redPlayer)));
 
         RadioButton blue=findViewById(R.id.ChooseYourCharacter_BluePlayer);
         blue.setEnabled(true);
