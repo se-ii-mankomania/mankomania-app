@@ -30,7 +30,7 @@ public class LobbyAPI {
 
     // interface to notify whether login is successful or not
     public interface GetLobbiesCallback {
-        void onGetLobbiesSuccess(String[] lobbies);
+        void onGetLobbiesSuccess(String[] lobbies, List<Lobby> allLobbies);
         void onGetLobbiesFailure(String errorMessage);
     }
 
@@ -70,7 +70,7 @@ public class LobbyAPI {
                         JSONArray responseArray = new JSONArray(responseBody);
                         allLobbies = new ArrayList<>();
                         allLobbiesDisplayStrings = new String[responseArray.length()];
-
+                        UUID lobbyid = null;
                         for(int i = 0; i < responseArray.length(); i++) {
                             JSONObject jsonLobby = responseArray.getJSONObject(i);
                             addLobbyToList(jsonLobby, allLobbies);
@@ -84,7 +84,7 @@ public class LobbyAPI {
                             allLobbiesDisplayStrings[i] = generateString(isPrivate, maxPlayers, name);
                         }
 
-                        callback.onGetLobbiesSuccess(allLobbiesDisplayStrings);
+                        callback.onGetLobbiesSuccess(allLobbiesDisplayStrings,allLobbies);
                     } catch (JSONException e) {
                         callback.onGetLobbiesFailure("Fehler beim Lesen der Response!");
                     }

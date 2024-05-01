@@ -1,6 +1,7 @@
 package com.example.mankomania.screens;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 
@@ -11,6 +12,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -18,8 +21,19 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.mankomania.R;
+import com.example.mankomania.api.SessionAPI;
+import com.example.mankomania.logik.Color;
 
-public class ChooseYourCharacter extends AppCompatActivity {
+import java.util.List;
+import java.util.UUID;
+
+public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI.GetUnavailableColorsByLobbyCallback, SessionAPI.SetColorCallback {
+
+    private Handler handler;
+    private static final int INTERVAL_MS = 1000;
+    private String token;
+    private UUID lobbyid;
+    private List<Color> unavailiableColors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +41,13 @@ public class ChooseYourCharacter extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_choose_your_character);
 
-        //TODO Wann finden Updates statt?
-        updateAvailableRadioButtons();
+        SharedPreferences sharedPreferencesToken = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        token = sharedPreferencesToken.getString("token", null);
+        SharedPreferences sharedPreferencesLobbyId = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        lobbyid = UUID.fromString(sharedPreferencesLobbyId.getString("lobbyid", null));
+
+        handler = new Handler(Looper.getMainLooper());
+        startRepeatingTask();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -38,7 +57,6 @@ public class ChooseYourCharacter extends AppCompatActivity {
 
         Button start=findViewById(R.id.ChooseYourCharacter_StartButton);
         start.setOnClickListener((View v) -> {
-            updateAvailableRadioButtons();
             RadioGroup colorSelection=findViewById(R.id.ChooseYourCharacter_ColorSelectionRadioGroup);
             int selectedColor=colorSelection.getCheckedRadioButtonId();
             if(selectedColor!=-1) {
@@ -51,6 +69,25 @@ public class ChooseYourCharacter extends AppCompatActivity {
         });
 
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopRepeatingTask();
+    }
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            restoreRadioButtons();
+            //updateAvailableRadioButtons();
+            handler.postDelayed(this, INTERVAL_MS);
+        }
+    };
+    void startRepeatingTask() {
+        handler.postDelayed(runnable, INTERVAL_MS);
+    }
+    void stopRepeatingTask() {
+        handler.removeCallbacks(runnable);
+    }
 
     /**
      * updateAvailableRadioButtons() überprüft, welche Farben noch zur Auswahl
@@ -59,14 +96,13 @@ public class ChooseYourCharacter extends AppCompatActivity {
 
     private void updateAvailableRadioButtons(){
         RadioGroup colorSelection=findViewById(R.id.ChooseYourCharacter_ColorSelectionRadioGroup);
-         for(int i=0;i<colorSelection.getChildCount();i++){
-             RadioButton currentButton= (RadioButton) colorSelection.getChildAt(i);
-             //TODO führe Check durch, ob die Farbe schon vergeben ist (via id oder Farbe)
-             //Notes: muss in Echtzeit geschehen => mit Sockets oder ähnlichem
-             boolean unavaliable=false;
-             //id=ChooseYourCharacter_GreenPlayer => via Farbe nicht accesible
-             //Idee: id umbenennen=> Vergleich mit Strings => naming conventions für andere Strings
-             if(unavaliable){
+        //TODO add sharedPrefrences
+        SessionAPI.getUnavailableColorsByLobby(token,lobbyid,ChooseYourCharacter.this);
+        for(int i=0;i<colorSelection.getChildCount();i++){
+            RadioButton currentButton= (RadioButton) colorSelection.getChildAt(i);
+            String colorString= String.valueOf(currentButton.getText());
+            Color color=convertTextToEnum(colorString);
+            if(unavailiableColors.contains(color)){
                  currentButton.setEnabled(false);
                  currentButton.setTextColor(ContextCompat.getColor(this,R.color.disabled_grey));
                  currentButton.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.disabled_grey)));
@@ -78,8 +114,6 @@ public class ChooseYourCharacter extends AppCompatActivity {
      * restoreRadioButtons() bewirkt, dass die gesamte RadioGroup wieder in ihren
      * anfänglichen Zustand zurückgesetzt wird. Jeder Button ist auswählbar.
      */
-
-    //TODO wann muss ich die Button wieder in ihren ursprünglichen Zustand versetzen
     private void restoreRadioButtons(){
         RadioButton purple=findViewById(R.id.ChooseYourCharacter_PurplePlayer);
         purple.setEnabled(true);
@@ -110,8 +144,37 @@ public class ChooseYourCharacter extends AppCompatActivity {
 
     private void saveColorChoice(int buttonId){
         RadioButton selectedButton=findViewById(buttonId);
-        String color= String.valueOf(selectedButton.getText());
-        //Bsp: color=Blau
+        String color= String.valueOf(selectedButton.getText()).toLowerCase();
         //TODO Farbe für Spieler speichern
+        SessionAPI.setColor(token,lobbyid, color,ChooseYourCharacter.this);
+    }
+    private Color convertTextToEnum(String color){
+        switch (color){
+            case "Blau": return Color.BLUE;
+            case "Rot":return Color.RED;
+            case "Grün":return Color.GREEN;
+            case "Lila":return Color.PURPLE;
+            default: return null;
+        }
+    }
+
+    @Override
+    public void onGetUnavailableColorsByLobbySuccess(List<Color> colors) {
+        unavailiableColors=colors;
+    }
+
+    @Override
+    public void onGetUnavailableColorsByLobbyFailure(String errorMessage) {
+        runOnUiThread(() -> Toast.makeText(ChooseYourCharacter.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show());
+    }
+
+    @Override
+    public void onSetColorSuccess(String successMessage) {
+        //Session beitreten
+    }
+
+    @Override
+    public void onSetColorFailure(String errorMessage) {
+        runOnUiThread(() -> Toast.makeText(ChooseYourCharacter.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
 }

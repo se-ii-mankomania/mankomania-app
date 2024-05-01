@@ -21,6 +21,13 @@ public class Lobby {
         this.status = status;
     }
 
+    public UUID getId() {
+        return id;
+    }
+    public String getName(){
+        return name;
+    }
+
     @NonNull
     @Override
     public String toString() {
