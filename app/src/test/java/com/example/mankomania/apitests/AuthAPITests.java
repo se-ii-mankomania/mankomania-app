@@ -9,38 +9,18 @@ import okhttp3.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class AuthAPITests {
-    @Test
-    void testCreateJSONRequestNormal() throws JSONException {
-        String email = "test@test.at";
-        String password = "my_password";
 
-        JSONObject result = AuthAPI.createJSONRequest(email, password);
-
-        assertNotNull(result);
-
-        assertEquals(email, result.getString("email"));
-        assertEquals(password, result.getString("password"));
-    }
-
-    @Test
-    void testCreateJSONRequestEmptyPassword() throws JSONException {
-        String email = "test@test.at";
-        String password = "";
-
-        JSONObject result = AuthAPI.createJSONRequest(email, password);
-
-        assertNotNull(result);
-
-        assertEquals(email, result.getString("email"));
-        assertEquals(password, result.getString("password"));
-    }
-
-    @Test
-    void testCreateJSONRequestEmptyEmail() throws JSONException {
-        String email = "";
-        String password = "my_password";
+    @ParameterizedTest
+    @ValueSource(strings = {"test@test.at, my_password", ", my_password", "test@test.at, ", ","})
+    void testCreateJSONRequest(String emailAndPassword) throws JSONException {
+        // splitting generated with ChatGPT since i couldn't figure it out myself :(
+        String[] parts = emailAndPassword.split(",", 2);
+        String email = parts.length > 0 ? parts[0].trim() : "";
+        String password = parts.length > 1 ? parts[1].trim() : "";
 
         JSONObject result = AuthAPI.createJSONRequest(email, password);
 

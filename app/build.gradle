@@ -80,4 +80,5 @@ dependencies {
     testImplementation libs.junit.jupiter.api
     testRuntimeOnly libs.jupiter.junit.jupiter.engine
     testImplementation libs.json
+    testImplementation libs.junit.jupiter.params
 }
