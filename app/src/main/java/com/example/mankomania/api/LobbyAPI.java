@@ -16,6 +16,7 @@ import java.util.UUID;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -153,32 +154,7 @@ public class LobbyAPI {
         Request request = createPostRequest(jsonRequest, "/api/lobby/create", token);
 
         // execute request (at some point)
-        HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onFailure("Keine Antwort!");
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if(response.isSuccessful()) {
-                    String responseBody = response.body().string();
-
-                    try {
-                        // create JSON object for response
-                        JSONObject jsonResponse = new JSONObject(responseBody);
-
-                        // return the message
-                        message = jsonResponse.getString("message");
-                        callback.onSuccess(message);
-                    } catch (JSONException e) {
-                        callback.onFailure("Fehler beim Lesen der Response!");
-                    }
-                } else {
-                    callback.onFailure(response.message());
-                }
-            }
-        });
+        executePostRequest(HttpClient.getHttpClient(), request, callback);
     }
 
     /**
@@ -280,6 +256,35 @@ public class LobbyAPI {
                 .header("Authorization", token)
                 .post(requestBody)
                 .build();
+    }
+
+    private static void executePostRequest(OkHttpClient okHttpClient, Request request, final AddLobbyCallback callback) {
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                callback.onFailure("Keine Antwort!");
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if(response.isSuccessful()) {
+                    String responseBody = response.body().string();
+
+                    try {
+                        // create JSON object for response
+                        JSONObject jsonResponse = new JSONObject(responseBody);
+
+                        // return the message
+                        message = jsonResponse.getString("message");
+                        callback.onSuccess(message);
+                    } catch (JSONException e) {
+                        callback.onFailure("Fehler beim Lesen der Response!");
+                    }
+                } else {
+                    callback.onFailure(response.message());
+                }
+            }
+        });
     }
 
 }
