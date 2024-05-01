@@ -146,24 +146,8 @@ public class LobbyAPI {
      * this method tries to add a lobby to the db
      */
     public static void addLobby(String token, String name, String password, boolean isPrivate, int maxPlayer, Status status, final AddLobbyCallback callback) {
-        JSONObject jsonRequest = new JSONObject();
-        try {
-            jsonRequest.put("name", name);
-
-            // JSONObjects need special NULL Value from library instead of standard null value
-            // this if-else is needed to pass null value into DB for no-password-lobbies
-            if(password == null) {
-                jsonRequest.put("password", NULL);
-            } else {
-                jsonRequest.put("password", password);
-            }
-
-            jsonRequest.put("isPrivate", isPrivate);
-            jsonRequest.put("maxPlayers", maxPlayer);
-            jsonRequest.put("status", status);
-        } catch (JSONException e) {
-            callback.onAddLobbyFailure("Request konnte nicht erstellt werden!");
-        }
+        // create JSONObject for Lobby that should be added
+        JSONObject jsonRequest = createJSONLobby(name, password, isPrivate, maxPlayer, status);
 
         // create request
         RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
@@ -257,6 +241,28 @@ public class LobbyAPI {
         string += name;
 
         return string;
+    }
+
+    private static JSONObject createJSONLobby(String name, String password, boolean isPrivate, int maxPlayer, Status status) {
+        JSONObject jsonLobby = new JSONObject();
+        try {
+            jsonLobby.put("name", name);
+
+            // JSONObjects need special NULL Value from library instead of standard null value
+            // this if-else is needed to pass null value into DB for no-password-lobbies
+            if(password == null) {
+                jsonLobby.put("password", NULL);
+            } else {
+                jsonLobby.put("password", password);
+            }
+
+            jsonLobby.put("isPrivate", isPrivate);
+            jsonLobby.put("maxPlayers", maxPlayer);
+            jsonLobby.put("status", status);
+        } catch (JSONException e) {
+            // TODO: display error in some way
+        }
+        return jsonLobby;
     }
 
 }
