@@ -12,6 +12,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+import java.io.IOException;
+
 public class AuthAPITests {
 
     @ParameterizedTest
@@ -58,5 +63,37 @@ public class AuthAPITests {
         assertEquals("http://10.0.2.2:3000/some/path", request.url().toString());
         assertEquals("POST", request.method());
         assertNotNull(request.body());
+    }
+
+    @Test
+    void testExecuteRequest_ExceptionThrown() throws IOException {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock Call
+        Call call = mock(Call.class);
+        // set behaviour when enqueue is called
+        // use doAnswer instead of when...thenThrow so types match
+        // simulate onFailure(..) being called
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onFailure(call, new IOException());
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        // make the okHttpClient return the call
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock AuthCallback
+        AuthAPI.AuthCallback callback = mock(AuthAPI.AuthCallback.class);
+
+        // execute request (that should fail)
+        AuthAPI.executeRequest(okHttpClient, request, "token", "Falsche Credentials!", callback);
+
+        // verify callback
+        verify(callback, never()).onSuccess(anyString());
+        verify(callback).onFailure("Keine Antwort!");
     }
 }

@@ -81,4 +81,6 @@ dependencies {
     testRuntimeOnly libs.jupiter.junit.jupiter.engine
     testImplementation libs.json
     testImplementation libs.junit.jupiter.params
+    testImplementation libs.mockito.core
+
 }
