@@ -135,7 +135,6 @@ public class SessionAPI {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if(response.isSuccessful()) {
                     String responseBody = Objects.requireNonNull(response.body()).string();
-                    //TODO adjust loop for status
                     try {
                         JSONArray responseArray = new JSONArray(responseBody);
                         statusDisplayString = new String[responseArray.length()];
