@@ -36,6 +36,7 @@ public class AuthAPI {
      * on success, the server responds with a token, which is needed later for more requests
      */
     public static void login(String email, String password, final LoginCallback callback) {
+        /*
         // create JSON object for request
         JSONObject jsonRequest = new JSONObject();
         try {
@@ -44,6 +45,8 @@ public class AuthAPI {
         } catch (JSONException e) {
             callback.onLoginFailure("Request konnte nicht erstellt werden!");
         }
+         */
+        JSONObject jsonRequest = createRequest(email, password);
 
         // create Request
         RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
@@ -87,6 +90,7 @@ public class AuthAPI {
      * the server will provide a feedback
      */
     public static void register(String email, String password, final RegisterCallback callback) {
+        /*
         // create JSON object for request
         JSONObject jsonRequest = new JSONObject();
         try {
@@ -95,6 +99,8 @@ public class AuthAPI {
         } catch (JSONException e) {
             callback.onRegisterFailure("Request konnte nicht erstellt werden!");
         }
+         */
+        JSONObject jsonRequest = createRequest(email, password);
 
         // create Request
         RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
@@ -130,5 +136,17 @@ public class AuthAPI {
                 }
             }
         });
+    }
+
+    private static JSONObject createRequest(String email, String password) {
+        // create JSON object for request
+        JSONObject jsonRequest = new JSONObject();
+        try {
+            jsonRequest.put("email", email);
+            jsonRequest.put("password", password);
+        } catch (JSONException e) {
+            // TODO: display error in some way
+        }
+        return jsonRequest;
     }
 }
