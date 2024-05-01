@@ -138,7 +138,8 @@ public class AuthAPI {
         });
     }
 
-    private static JSONObject createRequest(String email, String password) {
+    @NonNull
+    public static JSONObject createRequest(String email, String password) {
         // create JSON object for request
         JSONObject jsonRequest = new JSONObject();
         try {

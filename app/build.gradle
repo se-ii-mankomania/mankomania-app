@@ -79,4 +79,5 @@ dependencies {
     implementation libs.okhttp
     testImplementation libs.junit.jupiter.api
     testRuntimeOnly libs.jupiter.junit.jupiter.engine
+    testImplementation libs.json
 }
