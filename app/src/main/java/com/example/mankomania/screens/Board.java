@@ -3,6 +3,7 @@ package com.example.mankomania.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mankomania.R;
 
+import com.example.mankomania.api.Auth;
+import com.example.mankomania.api.Movement;
 import com.example.mankomania.logik.Color;
 import com.example.mankomania.logik.Player;
 
@@ -56,7 +59,10 @@ public class Board extends AppCompatActivity {
            Intent toEventRollDice=new Intent(Board.this,EventRollDice.class);
            startActivity(toEventRollDice);
         });
+
     }
+
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -99,12 +105,20 @@ public class Board extends AppCompatActivity {
         //TESTING -> Button just for testing
         Button moveTest = findViewById(R.id.movetest);
         moveTest.setOnClickListener(v -> {
+
             fieldsHandler.movePlayer(playerBlue, 2);
             fieldsHandler.movePlayer(playerGreen, 2);
             fieldsHandler.movePlayer(playerRed, 2);
             fieldsHandler.movePlayer(playerPurple, 2);
+
+
             updatePlayerPositions();
+
+            sendPositionUpdatesToServer();
         });
+
+
+
 
         ImageView playerBlueImage = findViewById(R.id.player_blue);
         playerBlueImage.getLayoutParams().height = cellHeight;
@@ -126,6 +140,25 @@ public class Board extends AppCompatActivity {
         playerRedImage.getLayoutParams().width = cellWidth;
         playerRedImage.requestLayout();
 
+
+    }
+
+    // Methode zum Senden der Spielerpositionen an den Server
+    private void sendPositionUpdatesToServer() {
+        //TODO just hardcoded for now -> change to actual userID
+            Movement.updatePlayerPosition(Auth.getToken(), "4dfb2ff3-9065-494c-be25-c47b935f8edb", 1, new Movement.UpdatePositionCallback() {
+                @Override
+                public void onUpdateSuccess(String message) {
+                    // Erfolgsmeldung, evtl. Loggen oder Nutzer benachrichtigen
+                    Log.d("UpdatePosition", "Position erfolgreich aktualisiert: " + message);
+                }
+
+                @Override
+                public void onUpdateFailure(String errorMessage) {
+                    // Fehlerbehandlung, evtl. Fehler dem Nutzer anzeigen
+                    Log.e("UpdatePosition", "Fehler beim Aktualisieren der Position: " + errorMessage);
+                }
+            });
 
     }
 

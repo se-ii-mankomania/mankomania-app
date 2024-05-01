@@ -19,6 +19,10 @@ public class Auth {
 
     private static String message;
 
+    public static String getToken(){
+        return token;
+    }
+
     // interface to notify whether login is successful or not
     public interface LoginCallback {
         void onLoginSuccess(String token);
