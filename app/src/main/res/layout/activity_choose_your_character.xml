@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:buttonTint="@color/redPlayer"
-            android:text="@string/ChooseYourCharacter_OrangePlayer"
+            android:text="@string/ChooseYourCharacter_RedPlayer"
             android:textColor="@color/redPlayer"
             tools:layout_editor_absoluteX="503dp"
             tools:layout_editor_absoluteY="181dp" />
