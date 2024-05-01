@@ -22,10 +22,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class LobbyAPI {
-    // must be changed later when server is deployed
-    // 10.0.2.2 to reach localhost of development machine
-    private static final String SERVER = "http://10.0.2.2";
-    private static final int PORT = 3000;
+    private static final String SERVER = HttpClient.getServer();
+    private static final int PORT = HttpClient.getPort();
 
     public interface GetLobbiesCallback {
         void onSuccess(String[] lobbies);
