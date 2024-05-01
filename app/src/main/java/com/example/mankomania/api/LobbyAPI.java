@@ -26,21 +26,10 @@ public class LobbyAPI {
     // 10.0.2.2 to reach localhost of development machine
     private static final String SERVER = "http://10.0.2.2";
     private static final int PORT = 3000;
-    private static List<Lobby> allLobbies;
-    private static List<Lobby> openLobbies;
-    private static String[] allLobbiesDisplayStrings;
-    private static String[] openLobbiesDisplayStrings;
-    private static String message;
 
-    // interface to notify whether login is successful or not
     public interface GetLobbiesCallback {
-        void onGetLobbiesSuccess(String[] lobbies);
-        void onGetLobbiesFailure(String errorMessage);
-    }
-
-    public interface GetLobbiesByStatusCallback {
-        void onGetLobbiesByStatusSuccess(String[] lobbies);
-        void onGetLobbiesByStatusFailure(String errorMessage);
+        void onSuccess(String[] lobbies);
+        void onFailure(String errorMessage);
     }
 
     public interface AddLobbyCallback {
@@ -57,90 +46,16 @@ public class LobbyAPI {
         // create request
         Request request = createGetRequest(token, "/api/lobby/getAll", null);
 
-        HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onGetLobbiesFailure("Keine Antwort!");
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if(response.isSuccessful()) {
-                    String responseBody = response.body().string();
-
-                    try {
-                        JSONArray responseArray = new JSONArray(responseBody);
-                        allLobbies = new ArrayList<>();
-                        allLobbiesDisplayStrings = new String[responseArray.length()];
-
-                        for(int i = 0; i < responseArray.length(); i++) {
-                            JSONObject jsonLobby = responseArray.getJSONObject(i);
-                            addLobbyToList(jsonLobby, allLobbies);
-
-                            // TODO: replace x with actual value of players in lobby
-                            // TODO: find a better way to make it actually look pretty (sprint 3?)
-                            // generate string as display for GameScore.java
-                            boolean isPrivate = jsonLobby.getBoolean("isprivate");
-                            int maxPlayers = jsonLobby.getInt("maxplayers");
-                            String name = jsonLobby.getString("name");
-                            allLobbiesDisplayStrings[i] = generateString(isPrivate, maxPlayers, name);
-                        }
-
-                        callback.onGetLobbiesSuccess(allLobbiesDisplayStrings);
-                    } catch (JSONException e) {
-                        callback.onGetLobbiesFailure("Fehler beim Lesen der Response!");
-                    }
-                } else {
-                    callback.onGetLobbiesFailure(response.message());
-                }
-            }
-        });
+        // execute request
+        executeGetRequest(HttpClient.getHttpClient(), request, callback);
     }
 
-    public static void getLobbiesByStatus(String token, Status status, final GetLobbiesByStatusCallback callback) {
+    public static void getLobbiesByStatus(String token, Status status, final GetLobbiesCallback callback) {
         // create request
         Request request = createGetRequest(token, "/api/lobby/getByStatus/", status);
 
-        HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onGetLobbiesByStatusFailure("Keine Antwort!");
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if(response.isSuccessful()) {
-                    String responseBody = response.body().string();
-
-                    try {
-                        JSONArray responseArray = new JSONArray(responseBody);
-                        openLobbies = new ArrayList<>();
-                        openLobbiesDisplayStrings = new String[responseArray.length()];
-
-                        for(int i = 0; i < responseArray.length(); i++) {
-                            JSONObject jsonLobby = responseArray.getJSONObject(i);
-                            if(status == Status.open) {
-                                addLobbyToList(jsonLobby, openLobbies);
-
-                                // TODO: replace x with actual value of players in lobby
-                                // TODO: find a better way to make it actually look pretty (sprint 3?)
-                                // generate string as display for GameScore.java
-                                boolean isPrivate = jsonLobby.getBoolean("isprivate");
-                                int maxPlayers = jsonLobby.getInt("maxplayers");
-                                String name = jsonLobby.getString("name");
-                                openLobbiesDisplayStrings[i] = generateString(isPrivate, maxPlayers, name);
-                            }
-                        }
-
-                        callback.onGetLobbiesByStatusSuccess(openLobbiesDisplayStrings);
-                    } catch (JSONException e) {
-                        callback.onGetLobbiesByStatusFailure("Fehler beim Lesen der Response!");
-                    }
-                } else {
-                    callback.onGetLobbiesByStatusFailure(response.message());
-                }
-            }
-        });
+        // execute request
+        executeGetRequest(HttpClient.getHttpClient(), request, callback);
     }
 
     /**
@@ -198,20 +113,27 @@ public class LobbyAPI {
         list.add(lobby);
     }
 
-    private static String generateString(boolean isPrivate, int maxPlayers, String name) {
-        String string = "";
+    private static String[] generateStringArray(List<Lobby> lobbies) {
+        String[] lobbiesStringArray = new String[lobbies.size()];
 
-        if(isPrivate) {
-            string += "P";
-        } else {
-            string += "O";
+        for (int i = 0; i < lobbies.size(); i++) {
+            Lobby lobby = lobbies.get(i);
+            String string = "";
+
+            if(lobby.isPrivate()) {
+                string += "P";
+            } else {
+                string += "O";
+            }
+            string += " | ";
+            string += "x/" + lobby.getMaxPlayers();
+            string += " | ";
+            string += lobby.getName();
+
+            lobbiesStringArray[i] = string;
         }
-        string += " | ";
-        string += "x/" + maxPlayers;
-        string += " | ";
-        string += name;
 
-        return string;
+        return lobbiesStringArray;
     }
 
     private static JSONObject createJSONLobby(String name, String password, boolean isPrivate, int maxPlayer, Status status) {
@@ -275,8 +197,51 @@ public class LobbyAPI {
                         JSONObject jsonResponse = new JSONObject(responseBody);
 
                         // return the message
-                        message = jsonResponse.getString("message");
+                        String message = jsonResponse.getString("message");
                         callback.onSuccess(message);
+                    } catch (JSONException e) {
+                        callback.onFailure("Fehler beim Lesen der Response!");
+                    }
+                } else {
+                    callback.onFailure(response.message());
+                }
+            }
+        });
+    }
+
+    private static void executeGetRequest(OkHttpClient okHttpClient, Request request, final GetLobbiesCallback callback) {
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                callback.onFailure("Keine Antwort!");
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if(response.isSuccessful()) {
+                    String responseBody = response.body().string();
+
+                    try {
+                        // get JSONArray with lobbies
+                        JSONArray responseArray = new JSONArray(responseBody);
+
+                        // create list for storing them
+                        List<Lobby> lobbies = new ArrayList<>();
+
+                        // go through array
+                        for (int i = 0; i < responseArray.length(); i++) {
+                            // get JSONObject that represents single lobby
+                            JSONObject jsonLobby = responseArray.getJSONObject(i);
+
+                            // add to list
+                            addLobbyToList(jsonLobby, lobbies);
+                        }
+
+                        // generate String array for displaying lobbies
+                        String[] lobbiesStringArray = new String[responseArray.length()];
+                        lobbiesStringArray = generateStringArray(lobbies);
+
+                        callback.onSuccess(lobbiesStringArray);
                     } catch (JSONException e) {
                         callback.onFailure("Fehler beim Lesen der Response!");
                     }

@@ -19,7 +19,7 @@ import com.example.mankomania.R;
 import com.example.mankomania.api.LobbyAPI;
 import com.example.mankomania.api.Status;
 
-public class GameScore extends AppCompatActivity implements LobbyAPI.GetLobbiesCallback, LobbyAPI.GetLobbiesByStatusCallback {
+public class GameScore extends AppCompatActivity implements LobbyAPI.GetLobbiesCallback {
 
     private ListView listOfGames;
 
@@ -63,12 +63,12 @@ public class GameScore extends AppCompatActivity implements LobbyAPI.GetLobbiesC
     }
 
     @Override
-    public void onGetLobbiesFailure(String errorMessage) {
+    public void onFailure(String errorMessage) {
         runOnUiThread(() -> Toast.makeText(GameScore.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
 
     @Override
-    public void onGetLobbiesSuccess(String[] lobbies) {
+    public void onSuccess(String[] lobbies) {
         // will display the following rows:
         // <P/O> | x/<m> | <name>
         // P.. private lobby, O.. non-private lobby
@@ -78,23 +78,5 @@ public class GameScore extends AppCompatActivity implements LobbyAPI.GetLobbiesC
                     android.R.layout.simple_list_item_single_choice, lobbies);
             listOfGames.setAdapter(adapter);
         });
-    }
-
-    @Override
-    public void onGetLobbiesByStatusSuccess(String[] lobbies) {
-        // will display the following rows:
-        // <P/O> | x/<m> | <name>
-        // P.. private lobby, O.. non-private lobby
-        // m.. max. players
-        runOnUiThread(() -> {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(GameScore.this,
-                    android.R.layout.simple_list_item_single_choice, lobbies);
-            listOfGames.setAdapter(adapter);
-        });
-    }
-
-    @Override
-    public void onGetLobbiesByStatusFailure(String errorMessage) {
-        runOnUiThread(() -> Toast.makeText(GameScore.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
 }
