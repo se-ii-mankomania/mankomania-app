@@ -46,11 +46,7 @@ public class AuthAPI {
         JSONObject jsonRequest = createJSONRequest(email, password);
 
         // create Request
-        RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
-        Request request = new Request.Builder()
-                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/auth/login")
-                .post(requestBody)
-                .build();
+        Request request = createRequest(jsonRequest, "/api/auth/login");
 
         // execute request (at some point)
         HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
@@ -91,11 +87,7 @@ public class AuthAPI {
         JSONObject jsonRequest = createJSONRequest(email, password);
 
         // create Request
-        RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
-        Request request = new Request.Builder()
-                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/auth/register")
-                .post(requestBody)
-                .build();
+        Request request = createRequest(jsonRequest, "/api/auth/register");
 
         // execute request (at some point)
         HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
@@ -137,5 +129,14 @@ public class AuthAPI {
             // TODO: display error in some way
         }
         return jsonRequest;
+    }
+
+    public static Request createRequest(JSONObject jsonRequest, String path) {
+        RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
+
+        return new Request.Builder()
+                .url(SERVER + ":" + PORT + path)
+                .post(requestBody)
+                .build();
     }
 }
