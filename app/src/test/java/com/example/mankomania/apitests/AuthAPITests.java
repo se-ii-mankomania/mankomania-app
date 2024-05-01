@@ -96,4 +96,76 @@ public class AuthAPITests {
         verify(callback, never()).onSuccess(anyString());
         verify(callback).onFailure("Keine Antwort!");
     }
+
+    @Test
+    void testExecuteRequest_FailureResponse() throws IOException {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock Response that is not successful
+        Response response = mock(Response.class);
+        when(response.isSuccessful()).thenReturn(false);
+
+        // mock Call
+        // simulate onResponse(..) being called
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onResponse(call, response);
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock AuthCallback
+        AuthAPI.AuthCallback callback = mock(AuthAPI.AuthCallback.class);
+
+        // execute request
+        AuthAPI.executeRequest(okHttpClient, request, "token", "Falsche Credentials!", callback);
+
+        // verify callback
+        verify(callback, never()).onSuccess(anyString());
+        verify(callback).onFailure("Falsche Credentials!");
+    }
+
+
+    @Test
+    void testExecuteRequest_SuccessfulResponse() throws IOException {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock ResponseBody with token = test_token
+        ResponseBody responseBody = mock(ResponseBody.class);
+        when(responseBody.string()).thenReturn("{\"token\": \"test_token\"}");
+
+        // mock Response that is successful and has responseBody
+        Response response = mock(Response.class);
+        when(response.isSuccessful()).thenReturn(true);
+        when(response.body()).thenReturn(responseBody);
+
+        // mock Call
+        // simulate onResponse(..) being called
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onResponse(call, response);
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock AuthCallback
+        AuthAPI.AuthCallback callback = mock(AuthAPI.AuthCallback.class);
+
+        // execute request
+        AuthAPI.executeRequest(okHttpClient, request, "token", "Error message", callback);
+
+        // verify callback
+        verify(callback).onSuccess("test_token");
+        verify(callback, never()).onFailure(anyString());
+    }
 }
