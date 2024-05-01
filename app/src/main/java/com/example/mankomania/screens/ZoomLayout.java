@@ -74,6 +74,8 @@ public class ZoomLayout extends LinearLayout implements ScaleGestureDetector.OnS
                     prevDx = dx;
                     prevDy = dy;
                     break;
+                default:
+                    break;
             }
             scaleDetector.onTouchEvent(event);
 
@@ -109,7 +111,12 @@ public class ZoomLayout extends LinearLayout implements ScaleGestureDetector.OnS
     }
 
     @Override
+    @SuppressWarnings("unused")
     public void onScaleEnd(@NonNull ScaleGestureDetector scaleDetector) {
+        /* This method is called when a scale gesture finishes.
+         Currently, no action is required when the scaling ends.
+         If future behavior depends on the scale ending, this method can be updated accordingly.
+         */
     }
 
     private void applyScaleAndTranslation() {

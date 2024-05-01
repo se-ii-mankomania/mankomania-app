@@ -1,6 +1,9 @@
-package com.example.mankomania.logik;
+package com.example.mankomania.logik.spieler;
 
 import com.example.mankomania.gameboardfields.GameboardField;
+import com.example.mankomania.logik.aktien.StockInitializer;
+import com.example.mankomania.logik.aktien.StockTypes;
+import com.example.mankomania.logik.geldboerse.Wallet;
 
 import java.security.SecureRandom;
 import java.util.HashMap;
@@ -54,33 +57,19 @@ public class Player {
     }
 
     //Auslagern in einer späteren Phase
-    public void payToPlayer(Player player, NoteTypes note, int amount){
-        try {
-            this.wallet.removeMoney(note, amount);
-            player.wallet.addMoney(note, amount);
-        }catch (Exception e){
-            logger.info(e.getMessage());
-        }
+    public void payToPlayer(Player player, int amount){
+            this.wallet.removeMoney(amount);
+            player.wallet.addMoney(amount);
     }
-    public void addMoneyToWallet(NoteTypes note, int amount) {
-        this.wallet.addMoney(note, amount);
+    public void addMoneyToWallet(int amount) {
+            this.wallet.addMoney(amount);
     }
 
-    public void cheatMoney(NoteTypes note, int amount){
-        try {
-            this.wallet.cheatMoney(note, amount);
-        }catch (Exception e){
-            logger.info(e.getMessage());
-        }
+
+    public void removeMoneyFromWallet(int amount) {
+            this.wallet.removeMoney(amount);
     }
 
-    public void removeMoneyFromWallet(NoteTypes note, int amount) {
-        try{
-            this.wallet.removeMoney(note, amount);
-        }catch (Exception e){
-            logger.info(e.getMessage());
-        }
-    }
     public int getWalletBalance() {
         return this.wallet.totalAmount();
     }
@@ -88,7 +77,7 @@ public class Player {
         stocks.merge(String.valueOf(stockTypes), amount, Integer::sum);
     }
     public Map<String, Integer> getAmountOfStock(){
-        return new HashMap<String, Integer>(stocks);
+        return new HashMap<>(stocks);
     }
     public void resetAllShares(){
         for(StockTypes stockTypes : StockTypes.values()){

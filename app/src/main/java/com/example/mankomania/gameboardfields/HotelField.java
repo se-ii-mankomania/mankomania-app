@@ -1,11 +1,11 @@
 package com.example.mankomania.gameboardfields;
 
-import com.example.mankomania.logik.Player;
+import com.example.mankomania.logik.spieler.Player;
 
 public class HotelField extends GameboardField{
-    int rent;
-    int cost;
-    Player owner;
+   private int rent;
+   private int cost;
+   private Player owner;
     public HotelField(int x, int y, int id, int rent, int cost, Player owner) {
         super(x, y, id);
         this.rent = rent;
@@ -17,5 +17,11 @@ public class HotelField extends GameboardField{
     }
     public void setOwner(Player owner){
         this.owner = owner;
+    }
+    public int getCost(){
+        return this.cost;
+    }
+    public int getRent(){
+        return this.rent;
     }
 }
