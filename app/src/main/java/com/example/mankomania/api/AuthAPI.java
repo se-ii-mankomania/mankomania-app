@@ -15,13 +15,10 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class AuthAPI {
-
     // must be changed later when server is deployed
     // 10.0.2.2 to reach localhost of development machine
     private static final String SERVER = "http://10.0.2.2";
     private static final int PORT = 3000;
-
-    private static String message;
 
     // interface to notify whether auth operation was successful or not
     public interface AuthCallback {
@@ -60,9 +57,16 @@ public class AuthAPI {
         executeRequest(request, "message", "User bereits registriert!", callback);
     }
 
+
+    /**
+     * Hier wird für Login/Registrierung ein JSONObject erstellt, das die benötigten Parameter enthält.
+     * Für Auth werden email und password benötigt.
+     * @param email: Benutzer-E-Mail (String)
+     * @param password: Benutzer-Passwort (String)
+     * @return jsonRequest (JSONObject)
+     */
     @NonNull
     public static JSONObject createJSONRequest(String email, String password) {
-        // create JSON object for request
         JSONObject jsonRequest = new JSONObject();
         try {
             jsonRequest.put("email", email);
@@ -73,6 +77,14 @@ public class AuthAPI {
         return jsonRequest;
     }
 
+    /**
+     * Hier wird ein Request-Object erzeugt, das die benötigten Informationen (Parameter email und
+     * password im Body, Methode = POST, Pfad zur jeweiligen Schnittstelle) enthält.
+     * Später wird diese Request über den HTTPClient ausgeführt.
+     * @param jsonRequest: in createJSONRequest generiertes JSONObject mit email und password
+     * @param path: Path für API
+     * @return Request
+     */
     public static Request createRequest(JSONObject jsonRequest, String path) {
         RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
 
@@ -82,6 +94,13 @@ public class AuthAPI {
                 .build();
     }
 
+    /**
+     *
+     * @param request
+     * @param responseParameter
+     * @param errorMessage
+     * @param callback
+     */
     public static void executeRequest(Request request, String responseParameter, String errorMessage, final AuthCallback callback) {
        HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
             @Override
