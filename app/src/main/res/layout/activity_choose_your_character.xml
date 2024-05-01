@@ -82,7 +82,7 @@
             tools:layout_editor_absoluteY="181dp" />
 
         <RadioButton
-            android:id="@+id/ChooseYourCharacter_OrangePlayer"
+            android:id="@+id/ChooseYourCharacter_RedPlayer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

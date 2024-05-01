@@ -10,7 +10,6 @@ public class Session {
     private final UUID userId;
     private final String email;
     private final Color color;
-
     private final int currentPosition;
     private final int balance;
     private final int amountKVShares;
