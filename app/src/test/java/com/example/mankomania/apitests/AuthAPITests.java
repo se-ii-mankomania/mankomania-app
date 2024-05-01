@@ -16,6 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 
 public class AuthAPITests {
 
@@ -168,4 +169,36 @@ public class AuthAPITests {
         verify(callback).onSuccess("test_token");
         verify(callback, never()).onFailure(anyString());
     }
+
+    // doesn't work (i wanna leave it here to work on it later)
+    /*
+    @Test
+    void testLogin_SuccessfulResponse() throws IOException {
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        ResponseBody responseBody = mock(ResponseBody.class);
+        when(responseBody.string()).thenReturn("{\"token\": \"test_token\"}");
+
+        Response response = mock(Response.class);
+        when(response.isSuccessful()).thenReturn(true);
+        when(response.body()).thenReturn(responseBody);
+
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onResponse(call, response);
+            return null;
+        }).when(call).enqueue(any());
+
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        AuthAPI.AuthCallback callback = mock(AuthAPI.AuthCallback.class);
+
+        AuthAPI.login("test@test.com", "password", callback);
+
+        verify(callback).onSuccess("test_token");
+        verify(callback, never()).onFailure(anyString());
+    }
+     */
 }
