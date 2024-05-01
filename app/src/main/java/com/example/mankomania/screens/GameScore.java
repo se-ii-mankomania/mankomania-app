@@ -3,6 +3,7 @@ package com.example.mankomania.screens;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,13 +25,14 @@ import com.example.mankomania.api.Status;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 
 public class GameScore extends AppCompatActivity implements SessionAPI.JoinSessionCallback,LobbyAPI.GetLobbiesCallback, LobbyAPI.GetLobbiesByStatusCallback {
 
     private ListView listOfGames;
     private List<Lobby> allLobbies;
-    private String selectedLobbyId;
+    private UUID selectedLobbyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +59,12 @@ public class GameScore extends AppCompatActivity implements SessionAPI.JoinSessi
             if(checkedPosition!= AdapterView.INVALID_POSITION) {
                 String selectedGame=(String) listOfGames.getItemAtPosition(checkedPosition);
                 for(Lobby lobby:allLobbies){
-                    if(lobby.getName().equals(selectedGame)){
-                        selectedLobbyId=lobby.getId().toString();
+                    if(lobby.getName().equals(selectedGame.substring(10))){
+                        selectedLobbyId=lobby.getId();
                     }
                 }
                 //TODO selctedGame starten
-                SessionAPI.joinSession(token, UUID.fromString(selectedLobbyId),GameScore.this);
+                SessionAPI.joinSession(token, selectedLobbyId,GameScore.this);
             }else{
                 Toast.makeText(GameScore.this, "Wähle ein Spiel aus.", Toast.LENGTH_SHORT).show();
             }
@@ -117,7 +119,7 @@ public class GameScore extends AppCompatActivity implements SessionAPI.JoinSessi
     public void onJoinSessionSuccess(String successMessage) {
         // store lobbyID
         SharedPreferences.Editor editor = getSharedPreferences("MyPrefs", MODE_PRIVATE).edit();
-        editor.putString("lobbyid", selectedLobbyId);
+        editor.putString("lobbyid", selectedLobbyId.toString());
         editor.apply();
 
         Intent chooseYourCharacterIntent = new Intent(GameScore.this, ChooseYourCharacter.class);
@@ -126,6 +128,6 @@ public class GameScore extends AppCompatActivity implements SessionAPI.JoinSessi
 
     @Override
     public void onJoinSessionFailure(String errorMessage) {
-        runOnUiThread(() -> Toast.makeText(GameScore.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show());
+        runOnUiThread(() -> Toast.makeText(GameScore.this, "FehlerJoinSession: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
 }

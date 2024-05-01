@@ -17,7 +17,9 @@ import java.util.UUID;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class SessionAPI {
@@ -52,10 +54,11 @@ public class SessionAPI {
         } catch (JSONException e) {
             callback.onJoinSessionFailure("Request konnte nicht erstellt werden!");
         }
-
+        RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
         Request request = new Request.Builder()
-                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/session/initialize"+ lobbyid.toString())
+                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/session/initialize")
                 .header("Authorization", token)
+                .post(requestBody)
                 .build();
 
         HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
@@ -183,10 +186,11 @@ public class SessionAPI {
         } catch (JSONException e) {
             callback.onSetColorFailure("Request konnte nicht erstellt werden!");
         }
-
+        RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
         Request request = new Request.Builder()
                 .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/session/setColor/"+ lobbyid.toString())
                 .header("Authorization", token)
+                .put(requestBody)
                 .build();
 
         HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
