@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import okhttp3.Call;
@@ -109,7 +110,7 @@ public class LobbyAPI {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if(response.isSuccessful()) {
-                    String responseBody = response.body().string();
+                    String responseBody = Objects.requireNonNull(response.body()).string();
 
                     try {
                         JSONArray responseArray = new JSONArray(responseBody);
