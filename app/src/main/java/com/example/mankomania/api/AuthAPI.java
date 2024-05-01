@@ -10,6 +10,7 @@ import java.io.IOException;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -38,7 +39,7 @@ public class AuthAPI {
         Request request = createRequest(jsonRequest, "/api/auth/login");
 
         // execute request (at some point)
-        executeRequest(request, "token", "Falsche Credentials!", callback);
+        executeRequest(HttpClient.getHttpClient(), request, "token", "Falsche Credentials!", callback);
     }
 
     /**
@@ -54,7 +55,7 @@ public class AuthAPI {
         Request request = createRequest(jsonRequest, "/api/auth/register");
 
         // execute request (at some point)
-        executeRequest(request, "message", "User bereits registriert!", callback);
+        executeRequest(HttpClient.getHttpClient(), request, "message", "User bereits registriert!", callback);
     }
 
 
@@ -101,8 +102,8 @@ public class AuthAPI {
      * @param errorMessage
      * @param callback
      */
-    public static void executeRequest(Request request, String responseParameter, String errorMessage, final AuthCallback callback) {
-       HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
+    public static void executeRequest(OkHttpClient okHttpClient, Request request, String responseParameter, String errorMessage, final AuthCallback callback) {
+        okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 callback.onFailure("Keine Antwort!");
