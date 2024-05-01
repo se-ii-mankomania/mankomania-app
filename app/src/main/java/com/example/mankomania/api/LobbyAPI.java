@@ -76,7 +76,7 @@ public class LobbyAPI {
      * this method takes a JSONObject that represents a lobby, creates an equivalent Lobby object
      * and adds it to the lobbies list
      */
-    private static void addLobbyToList(JSONObject jsonLobby, List<Lobby> list) throws JSONException {
+    public static void addLobbyToList(JSONObject jsonLobby, List<Lobby> list) throws JSONException {
         UUID id = UUID.fromString(jsonLobby.getString("id"));
         String name = jsonLobby.getString("name");
         String password = jsonLobby.getString("password");
@@ -113,7 +113,7 @@ public class LobbyAPI {
         list.add(lobby);
     }
 
-    private static String[] generateStringArray(List<Lobby> lobbies) {
+    public static String[] generateStringArray(List<Lobby> lobbies) {
         String[] lobbiesStringArray = new String[lobbies.size()];
 
         for (int i = 0; i < lobbies.size(); i++) {
@@ -136,7 +136,7 @@ public class LobbyAPI {
         return lobbiesStringArray;
     }
 
-    private static JSONObject createJSONLobby(String name, String password, boolean isPrivate, int maxPlayer, Status status) {
+    public static JSONObject createJSONLobby(String name, String password, boolean isPrivate, int maxPlayer, Status status) {
         JSONObject jsonLobby = new JSONObject();
         try {
             jsonLobby.put("name", name);
@@ -158,7 +158,7 @@ public class LobbyAPI {
         return jsonLobby;
     }
 
-    private static Request createGetRequest(String token, String path, Status status) {
+    public static Request createGetRequest(String token, String path, Status status) {
         // set up url depending on status
         String url = SERVER + ":" + PORT + path;
         if (status != null) {
@@ -170,7 +170,7 @@ public class LobbyAPI {
                 .header("Authorization", token)
                 .build();
     }
-    private static Request createPostRequest(JSONObject jsonRequest, String path, String token) {
+    public static Request createPostRequest(JSONObject jsonRequest, String path, String token) {
         RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
 
         return new Request.Builder()
@@ -180,7 +180,7 @@ public class LobbyAPI {
                 .build();
     }
 
-    private static void executePostRequest(OkHttpClient okHttpClient, Request request, final AddLobbyCallback callback) {
+    public static void executePostRequest(OkHttpClient okHttpClient, Request request, final AddLobbyCallback callback) {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -209,7 +209,7 @@ public class LobbyAPI {
         });
     }
 
-    private static void executeGetRequest(OkHttpClient okHttpClient, Request request, final GetLobbiesCallback callback) {
+    public static void executeGetRequest(OkHttpClient okHttpClient, Request request, final GetLobbiesCallback callback) {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
