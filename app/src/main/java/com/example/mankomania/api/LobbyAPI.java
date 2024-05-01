@@ -21,6 +21,10 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class LobbyAPI {
+    // must be changed later when server is deployed
+    // 10.0.2.2 to reach localhost of development machine
+    private static final String SERVER = "http://10.0.2.2";
+    private static final int PORT = 3000;
     private static List<Lobby> allLobbies;
     private static List<Lobby> openLobbies;
     private static String[] allLobbiesDisplayStrings;
@@ -39,8 +43,8 @@ public class LobbyAPI {
     }
 
     public interface AddLobbyCallback {
-        void onAddLobbySuccess(String message);
-        void onAddLobbyFailure(String errorMessage);
+        void onSuccess(String message);
+        void onFailure(String errorMessage);
     }
 
     /**
@@ -49,10 +53,8 @@ public class LobbyAPI {
      * TODO: other properties
      */
     public static void getLobbies(String token, final GetLobbiesCallback callback) {
-        Request request = new Request.Builder()
-                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/lobby/getAll")
-                .header("Authorization", token)
-                .build();
+        // create request
+        Request request = createGetRequest(token, "/api/lobby/getAll", null);
 
         HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
             @Override
@@ -95,10 +97,8 @@ public class LobbyAPI {
     }
 
     public static void getLobbiesByStatus(String token, Status status, final GetLobbiesByStatusCallback callback) {
-        Request request = new Request.Builder()
-                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/lobby/getByStatus/" + status.toString())
-                .header("Authorization", token)
-                .build();
+        // create request
+        Request request = createGetRequest(token, "/api/lobby/getByStatus/", status);
 
         HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
             @Override
@@ -150,18 +150,13 @@ public class LobbyAPI {
         JSONObject jsonRequest = createJSONLobby(name, password, isPrivate, maxPlayer, status);
 
         // create request
-        RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
-        Request request = new Request.Builder()
-                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/lobby/create")
-                .header("Authorization", token)
-                .post(requestBody)
-                .build();
+        Request request = createPostRequest(jsonRequest, "/api/lobby/create", token);
 
         // execute request (at some point)
         HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onAddLobbyFailure("Keine Antwort!");
+                callback.onFailure("Keine Antwort!");
             }
 
             @Override
@@ -175,12 +170,12 @@ public class LobbyAPI {
 
                         // return the message
                         message = jsonResponse.getString("message");
-                        callback.onAddLobbySuccess(message);
+                        callback.onSuccess(message);
                     } catch (JSONException e) {
-                        callback.onAddLobbyFailure("Fehler beim Lesen der Response!");
+                        callback.onFailure("Fehler beim Lesen der Response!");
                     }
                 } else {
-                    callback.onAddLobbyFailure(response.message());
+                    callback.onFailure(response.message());
                 }
             }
         });
@@ -263,6 +258,28 @@ public class LobbyAPI {
             // TODO: display error in some way
         }
         return jsonLobby;
+    }
+
+    private static Request createGetRequest(String token, String path, Status status) {
+        // set up url depending on status
+        String url = SERVER + ":" + PORT + path;
+        if (status != null) {
+            url += status.toString();
+        }
+
+        return new Request.Builder()
+                .url(url)
+                .header("Authorization", token)
+                .build();
+    }
+    private static Request createPostRequest(JSONObject jsonRequest, String path, String token) {
+        RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
+
+        return new Request.Builder()
+                .url(SERVER + ":" + PORT + path)
+                .header("Authorization", token)
+                .post(requestBody)
+                .build();
     }
 
 }

@@ -89,7 +89,7 @@ public class CreateNewLobby extends AppCompatActivity implements LobbyAPI.AddLob
     }
 
     @Override
-    public void onAddLobbySuccess(String message) {
+    public void onSuccess(String message) {
         runOnUiThread(() -> Toast.makeText(CreateNewLobby.this, "Lobby erfolgreich erstellt: " + message, Toast.LENGTH_SHORT).show());
 
         // go back to login page
@@ -98,7 +98,7 @@ public class CreateNewLobby extends AppCompatActivity implements LobbyAPI.AddLob
     }
 
     @Override
-    public void onAddLobbyFailure(String errorMessage) {
+    public void onFailure(String errorMessage) {
         runOnUiThread(() -> Toast.makeText(CreateNewLobby.this, "Lobbyerstellung fehlgeschlagen: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
 }
