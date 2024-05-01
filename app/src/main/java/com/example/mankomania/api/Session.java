@@ -2,15 +2,14 @@ package com.example.mankomania.api;
 
 import androidx.annotation.NonNull;
 
+import com.example.mankomania.logik.Color;
+
 import java.util.UUID;
 
 public class Session {
-
-    private final UUID id;
-    private final UUID lobbyId;
     private final UUID userId;
-
-    private final String color;
+    private final String email;
+    private final Color color;
 
     private final int currentPosition;
     private final int balance;
@@ -19,10 +18,9 @@ public class Session {
     private final int amountBShares;
     private final boolean isPlayersTurn;
 
-    public Session(UUID id, UUID lobbyId, UUID userId, String color, int currentPosition, int balance, int amountKVShares, int amountTShares, int amountBShares, boolean isPlayersTurn) {
-        this.id = id;
-        this.lobbyId = lobbyId;
+    public Session(UUID userId, String email,Color color, int currentPosition, int balance, int amountKVShares, int amountTShares, int amountBShares, boolean isPlayersTurn) {
         this.userId = userId;
+        this.email=email;
         this.color = color;
         this.currentPosition = currentPosition;
         this.balance = balance;
@@ -36,9 +34,8 @@ public class Session {
     @Override
     public String toString() {
         return "Session{" +
-                "id=" + id +
-                ", lobbyId=" + lobbyId +
-                ", userId=" + userId +
+                "userId=" + userId +
+                ", email='" + email +
                 ", color='" + color + '\'' +
                 ", currentPosition=" + currentPosition +
                 ", balance=" + balance +

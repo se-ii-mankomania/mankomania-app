@@ -2,11 +2,16 @@ package com.example.mankomania.api;
 
 import androidx.annotation.NonNull;
 
+import com.example.mankomania.logik.Color;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -16,9 +21,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class SessionAPI {
-    private static String successMessage; //zweite?
-    private static String[] unavailableColorsDisplayString;
-    private static String[] statusDisplayString;
+    private static String successMessage;
+    private static List<Color> unavailableColors;
+    private static HashMap<UUID, Session> sessions;
 
     public interface JoinSessionCallback {
         void onJoinSessionSuccess(String successMessage);
@@ -26,12 +31,12 @@ public class SessionAPI {
     }
 
     public interface GetUnavailableColorsByLobbyCallback {
-        void onGetUnavailableColorsByLobbySuccess(String[] colors);
+        void onGetUnavailableColorsByLobbySuccess(List<Color> colors);
         void onGetUnavailableColorsByLobbyFailure(String errorMessage);
     }
 
     public interface GetStatusByLobbyCallback {
-        void onGetStatusByLobbySuccess(String[] status);
+        void onGetStatusByLobbySuccess(HashMap<UUID,Session> sessions);
         void onGetStatusByLobbyFailure(String errorMessage);
     }
     public interface SetColorCallback {
@@ -99,17 +104,17 @@ public class SessionAPI {
 
                     try {
                         JSONArray responseArray = new JSONArray(responseBody);
-                        unavailableColorsDisplayString = new String[responseArray.length()];
-
+                        unavailableColors=new ArrayList<>();
                         for(int i = 0; i < responseArray.length(); i++) {
                             JSONObject jsonSession = responseArray.getJSONObject(i);
                             UUID jsonLobbyId=UUID.fromString(jsonSession.getString("lobbyid"));
                             if(jsonLobbyId==lobbyid) {
-                                unavailableColorsDisplayString[i] = jsonSession.getString("color");
+                                String color = jsonSession.getString("color");
+                                Color enumValueOfColor=convertToEnums(color);
+                                unavailableColors.add(enumValueOfColor);
                             }
                         }
-
-                        callback.onGetUnavailableColorsByLobbySuccess(unavailableColorsDisplayString);
+                        callback.onGetUnavailableColorsByLobbySuccess(unavailableColors);
                     } catch (JSONException e) {
                         callback.onGetUnavailableColorsByLobbyFailure("Fehler beim Lesen der Response!");
                     }
@@ -118,6 +123,15 @@ public class SessionAPI {
                 }
             }
         });
+    }
+    private static Color convertToEnums(String color){
+        switch (color){
+            case "blue": return Color.BLUE;
+            case "red": return Color.RED;
+            case "green": return Color.GREEN;
+            case "lila":  return Color.PURPLE;
+            default: return null;
+        }
     }
     public static void getStatusByLobby(String token, UUID lobbyid, final SessionAPI.GetStatusByLobbyCallback callback) {
         Request request = new Request.Builder()
@@ -135,17 +149,23 @@ public class SessionAPI {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if(response.isSuccessful()) {
                     String responseBody = Objects.requireNonNull(response.body()).string();
-                    //TODO adjust loop for status
                     try {
                         JSONArray responseArray = new JSONArray(responseBody);
-                        statusDisplayString = new String[responseArray.length()];
-
+                        sessions=new HashMap<>();
                         for(int i = 0; i < responseArray.length(); i++) {
+                            //TODO add amountShares when implemented
                             JSONObject jsonSession = responseArray.getJSONObject(i);
-                            statusDisplayString[i] = jsonSession.getString("status");
+                            UUID userid= UUID.fromString(jsonSession.getString("userid"));
+                            String email=jsonSession.getString("email");
+                            Color color=convertToEnums(jsonSession.getString("color"));
+                            int currentPosition=jsonSession.getInt("currentposition");
+                            int balance=jsonSession.getInt("balance");
+                            boolean isPlayersTurn=jsonSession.getBoolean("isplayersturn");
+                            Session session=new Session(userid,email,color,currentPosition,balance,0,0,0,isPlayersTurn);
+                            sessions.put(userid,session);
                         }
 
-                        callback.onGetStatusByLobbySuccess(statusDisplayString);
+                        callback.onGetStatusByLobbySuccess(sessions);
                     } catch (JSONException e) {
                         callback.onGetStatusByLobbyFailure("Fehler beim Lesen der Response!");
                     }
