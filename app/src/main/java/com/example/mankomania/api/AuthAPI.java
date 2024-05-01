@@ -21,27 +21,19 @@ public class AuthAPI {
     private static final String SERVER = "http://10.0.2.2";
     private static final int PORT = 3000;
 
-    private static String token;
-
     private static String message;
 
-    // interface to notify whether login is successful or not
-    public interface LoginCallback {
-        void onLoginSuccess(String token);
-        void onLoginFailure(String errorMessage);
-    }
-
-    // interface to notify whether register is successful or not
-    public interface RegisterCallback {
-        void onRegisterSuccess(String message);
-        void onRegisterFailure(String errorMessage);
+    // interface to notify whether auth operation was successful or not
+    public interface AuthCallback {
+        void onSuccess(String message);
+        void onFailure(String errorMessage);
     }
 
     /**
      * this method sends the user credentials to the server
      * on success, the server responds with a token, which is needed later for more requests
      */
-    public static void login(String email, String password, final LoginCallback callback) {
+    public static void login(String email, String password, final AuthCallback callback) {
         // create JSON Object that holds email and password
         JSONObject jsonRequest = createJSONRequest(email, password);
 
@@ -49,32 +41,7 @@ public class AuthAPI {
         Request request = createRequest(jsonRequest, "/api/auth/login");
 
         // execute request (at some point)
-        HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onLoginFailure("Keine Antwort!");
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseBody = response.body().string();
-
-                    try {
-                        // create JSON object for response
-                        JSONObject jsonResponse = new JSONObject(responseBody);
-
-                        // return the token
-                        token = jsonResponse.getString("token");
-                        callback.onLoginSuccess(token);
-                    } catch (JSONException e) {
-                        callback.onLoginFailure("Fehler beim Lesen der Response!");
-                    }
-                } else {
-                    callback.onLoginFailure("Email oder Passwort falsch!");
-                }
-            }
-        });
+        executeRequest(request, "token", "Falsche Credentials!", callback);
     }
 
     /**
@@ -82,7 +49,7 @@ public class AuthAPI {
      * on success, the new user gets added into the db
      * the server will provide a feedback
      */
-    public static void register(String email, String password, final RegisterCallback callback) {
+    public static void register(String email, String password, final AuthCallback callback) {
         // create JSON Object that holds email and password
         JSONObject jsonRequest = createJSONRequest(email, password);
 
@@ -90,32 +57,7 @@ public class AuthAPI {
         Request request = createRequest(jsonRequest, "/api/auth/register");
 
         // execute request (at some point)
-        HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onRegisterFailure("Keine Antwort!");
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseBody = response.body().string();
-
-                    try {
-                        // create JSON object for response
-                        JSONObject jsonResponse = new JSONObject(responseBody);
-
-                        // return the message
-                        message = jsonResponse.getString("message");
-                        callback.onRegisterSuccess(message);
-                    } catch (JSONException e) {
-                        callback.onRegisterFailure("Fehler beim Lesen der Response!");
-                    }
-                } else {
-                    callback.onRegisterFailure("User bereits registriert!");
-                }
-            }
-        });
+        executeRequest(request, "message", "User bereits registriert!", callback);
     }
 
     @NonNull
@@ -138,5 +80,34 @@ public class AuthAPI {
                 .url(SERVER + ":" + PORT + path)
                 .post(requestBody)
                 .build();
+    }
+
+    public static void executeRequest(Request request, String responseParameter, String errorMessage, final AuthCallback callback) {
+       HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                callback.onFailure("Keine Antwort!");
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseBody = response.body().string();
+
+                    try {
+                        // create JSON object for response
+                        JSONObject jsonResponse = new JSONObject(responseBody);
+
+                        // return the token (login) or message (register)
+                        String message = jsonResponse.getString(responseParameter);
+                        callback.onSuccess(message);
+                    } catch (JSONException e) {
+                        callback.onFailure("Fehler beim Lesen der Response!");
+                    }
+                } else {
+                    callback.onFailure(errorMessage);
+                }
+            }
+        });
     }
 }

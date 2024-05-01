@@ -20,7 +20,7 @@ import com.example.mankomania.api.AuthAPI;
 
 import java.util.regex.Pattern;
 
-public class MainActivityLogin extends AppCompatActivity implements AuthAPI.LoginCallback{
+public class MainActivityLogin extends AppCompatActivity implements AuthAPI.AuthCallback{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class MainActivityLogin extends AppCompatActivity implements AuthAPI.Logi
     }
 
     @Override
-    public void onLoginSuccess(String token) {
+    public void onSuccess(String token) {
         // store token
         SharedPreferences.Editor editor = getSharedPreferences("MyPrefs", MODE_PRIVATE).edit();
         editor.putString("token", token);
@@ -69,7 +69,7 @@ public class MainActivityLogin extends AppCompatActivity implements AuthAPI.Logi
     }
 
     @Override
-    public void onLoginFailure(String errorMessage) {
+    public void onFailure(String errorMessage) {
         // handle login failure
         runOnUiThread(() -> Toast.makeText(MainActivityLogin.this, "Login fehlgeschlagen: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
