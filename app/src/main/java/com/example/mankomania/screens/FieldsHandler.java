@@ -53,7 +53,7 @@ public class FieldsHandler {
             moveFromAuctionHouse(player, diceNr);
         }
         //Bewegung innerhalb des Quadrats
-        else if (currentId >= 1 && currentId <= 43) {
+        else if (currentId >= 1 && currentId <= 44) {
             moveWithinBoard(player, diceNr);
         }
         else{
@@ -107,7 +107,7 @@ public class FieldsHandler {
 
     private void moveWithinBoard(Player player, int diceNr) {
         int newPosition = player.getCurrentField().getId() + diceNr;
-        if (newPosition > 43) {
+        if (newPosition > 44) {
             int newID = newPosition - 45;
             player.setCurrentField(fields[newID]);
         } else {
