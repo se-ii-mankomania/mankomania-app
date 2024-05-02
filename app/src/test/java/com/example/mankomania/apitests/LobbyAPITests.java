@@ -287,5 +287,101 @@ public class LobbyAPITests {
         verify(callback).onSuccess(any(String[].class));
         verify(callback, never()).onFailure(anyString());
     }
-}
 
+    @Test
+    void testExecutePostRequest_ExceptionThrown() {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock Call
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onFailure(call, new IOException());
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock AuthCallback
+        LobbyAPI.AddLobbyCallback callback = mock(LobbyAPI.AddLobbyCallback.class);
+
+        // execute request (that should fail)
+        LobbyAPI.executePostRequest(okHttpClient, request, callback);
+
+        // verify callback
+        verify(callback, never()).onSuccess(anyString());
+        verify(callback).onFailure("Keine Antwort!");
+    }
+
+    @Test
+    void testExecutePostRequest_FailureResponse() {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock Response
+        Response response = mock(Response.class);
+        when(response.isSuccessful()).thenReturn(false);
+        when(response.message()).thenReturn("Some Error");
+
+        // mock Call
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onResponse(call, response);
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock AuthCallback
+        LobbyAPI.AddLobbyCallback callback = mock(LobbyAPI.AddLobbyCallback.class);
+
+        // execute request (that should fail)
+        LobbyAPI.executePostRequest(okHttpClient, request, callback);
+
+        // verify callback
+        verify(callback, never()).onSuccess(anyString());
+        verify(callback).onFailure("Some Error");
+    }
+
+    @Test
+    void testExecutePostRequest_SuccessResponse() throws IOException {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock Response
+        ResponseBody responseBody = mock(ResponseBody.class);
+        when(responseBody.string()).thenReturn("{\"message\":\"Lobby added successfully\"}");
+
+        Response response = mock(Response.class);
+        when(response.isSuccessful()).thenReturn(true);
+        when(response.body()).thenReturn(responseBody);
+
+        // mock Call
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onResponse(call, response);
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock AuthCallback
+        LobbyAPI.AddLobbyCallback callback = mock(LobbyAPI.AddLobbyCallback.class);
+
+        // execute request (that should fail)
+        LobbyAPI.executePostRequest(okHttpClient, request, callback);
+
+        // verify callback
+        verify(callback).onSuccess("Lobby added successfully");
+        verify(callback, never()).onFailure(anyString());
+    }
+}
