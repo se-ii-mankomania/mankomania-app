@@ -151,8 +151,7 @@ public class SessionAPI {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                ResponseBody responseBody = response.body();
-                try {
+                try (ResponseBody responseBody = response.body()) {
                     if (response.isSuccessful() && responseBody != null) {
                         String responseString = responseBody.string();
                         JSONArray responseArray = new JSONArray(responseString);
@@ -174,10 +173,6 @@ public class SessionAPI {
                     }
                 } catch (JSONException e) {
                     callback.onGetStatusByLobbyFailure("Fehler beim Lesen der Response!");
-                } finally {
-                    if (responseBody != null) {
-                        responseBody.close();
-                    }
                 }
             }
         });
