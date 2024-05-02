@@ -11,11 +11,12 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import okhttp3.Request;
 
 public class LobbyAPITests {
 
@@ -132,6 +133,54 @@ public class LobbyAPITests {
         assertEquals(isPrivate, jsonLobby.getBoolean("isPrivate"));
         assertEquals(maxPlayers, jsonLobby.getInt("maxPlayers"));
         assertEquals(status, jsonLobby.get("status"));
+    }
+
+    @Test
+    void testCreateGetRequestWithStatus() {
+        // set up
+        String token = "test_token";
+        String path = "/api/lobby/getByStatus/";
+        Status status = Status.open;
+
+        // call method
+        Request request = LobbyAPI.createGetRequest(token, path, status);
+
+        // verify
+        assertEquals("http://10.0.2.2:3000/api/lobby/getByStatus/open", request.url().toString());
+    }
+
+    @Test
+    void testCreateGetRequestNoStatus() {
+        // set up
+        String token = "test_token";
+        String path = "/api/lobby/getAll";
+        Status status = null;
+
+        // call method
+        Request request = LobbyAPI.createGetRequest(token, path, status);
+
+        // verify
+        assertEquals("http://10.0.2.2:3000/api/lobby/getAll", request.url().toString());
+    }
+
+    @Test
+    void testCreatePostRequest() throws JSONException {
+        // set up
+        JSONObject jsonLobby = new JSONObject();
+        jsonLobby.put("name", "Test Lobby");
+        jsonLobby.put("password", "password");
+        jsonLobby.put("isPrivate", true);
+        jsonLobby.put("maxPlayers", 2);
+        jsonLobby.put("status", Status.open);
+
+        String token = "test_token";
+        String path = "/api/lobby/create";
+
+        // call method
+        Request request = LobbyAPI.createPostRequest(jsonLobby, token, path);
+
+        // verify
+        assertEquals("http://10.0.2.2:3000/api/lobby/create", request.url().toString());
     }
 }
 

@@ -77,7 +77,7 @@ public class LobbyAPI {
         JSONObject jsonRequest = createJSONLobby(name, password, isPrivate, maxPlayer, status);
 
         // create request
-        Request request = createPostRequest(jsonRequest, "/api/lobby/create", token);
+        Request request = createPostRequest(jsonRequest, token, "/api/lobby/create");
 
         // execute request (at some point)
         executePostRequest(HttpClient.getHttpClient(), request, callback);
