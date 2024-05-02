@@ -12,11 +12,20 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class LobbyAPITests {
 
@@ -183,5 +192,100 @@ public class LobbyAPITests {
         assertEquals("http://10.0.2.2:3000/api/lobby/create", request.url().toString());
     }
 
+    @Test
+    void testExecuteGetRequest_ExceptionThrown() {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock Call
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onFailure(call, new IOException());
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock AuthCallback
+        LobbyAPI.GetLobbiesCallback callback = mock(LobbyAPI.GetLobbiesCallback.class);
+
+        // execute request (that should fail)
+        LobbyAPI.executeGetRequest(okHttpClient, request, callback);
+
+        // verify callback
+        verify(callback, never()).onSuccess(any(String[].class));
+        verify(callback).onFailure("Keine Antwort!");
+    }
+
+    @Test
+    void testExecuteGetRequest_FailureResponse() {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock Response that is not successful
+        Response response = mock(Response.class);
+        when(response.isSuccessful()).thenReturn(false);
+
+        // mock Call
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onResponse(call, response);
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock AuthCallback
+        LobbyAPI.GetLobbiesCallback callback = mock(LobbyAPI.GetLobbiesCallback.class);
+
+        // execute request
+        LobbyAPI.executeGetRequest(okHttpClient, request, callback);
+
+        // verify callback
+        verify(callback, never()).onSuccess(any(String[].class));
+        verify(callback).onFailure(response.message());
+    }
+
+    @Test
+    void testExecuteGetRequest_SuccessfulResponse() throws IOException {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock successful Response
+        ResponseBody responseBody = mock(ResponseBody.class);
+        when(responseBody.string()).thenReturn("[{\"id\":\"23d9eea7-50cf-4b97-a3a0-e5158f4ffec0\",\"name\":\"Test Lobby\",\"password\":\"password\",\"isprivate\":true,\"maxplayers\":4,\"status\":\"open\"}]");
+
+        Response response = mock(Response.class);
+        when(response.isSuccessful()).thenReturn(true);
+        when(response.body()).thenReturn(responseBody);
+
+        // mock Call
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onResponse(call, response);
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock AuthCallback
+        LobbyAPI.GetLobbiesCallback callback = mock(LobbyAPI.GetLobbiesCallback.class);
+
+        // execute request
+        LobbyAPI.executeGetRequest(okHttpClient, request, callback);
+
+        // verify callback
+        verify(callback).onSuccess(any(String[].class));
+        verify(callback, never()).onFailure(anyString());
+    }
 }
 
