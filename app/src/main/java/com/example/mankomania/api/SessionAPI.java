@@ -190,7 +190,7 @@ public class SessionAPI {
         Request request = new Request.Builder()
                 .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/session/setColor/"+ lobbyid.toString())
                 .header("Authorization", token)
-                .put(requestBody)
+                .post(requestBody)
                 .build();
 
         HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {

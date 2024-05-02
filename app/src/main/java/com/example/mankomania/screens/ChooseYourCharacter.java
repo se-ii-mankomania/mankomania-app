@@ -61,8 +61,6 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
             int selectedColor=colorSelection.getCheckedRadioButtonId();
             if(selectedColor!=-1) {
                 saveColorChoice(selectedColor);
-                Intent startGameWithChosenCharacter=new Intent(ChooseYourCharacter.this, Board.class);
-                startActivity(startGameWithChosenCharacter);
             }else{
                 Toast.makeText(getApplicationContext(), "Bitte wähle eine Farbe aus.", Toast.LENGTH_SHORT).show();
             }
@@ -78,7 +76,7 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
         @Override
         public void run() {
             restoreRadioButtons();
-            //updateAvailableRadioButtons();
+            updateAvailableRadioButtons();
             handler.postDelayed(this, INTERVAL_MS);
         }
     };
@@ -102,11 +100,11 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
             RadioButton currentButton= (RadioButton) colorSelection.getChildAt(i);
             String colorString= String.valueOf(currentButton.getText());
             Color color=convertTextToEnum(colorString);
-            if(unavailiableColors.contains(color)){
+            /*if(unavailiableColors.contains(color)){
                  currentButton.setEnabled(false);
                  currentButton.setTextColor(ContextCompat.getColor(this,R.color.disabled_grey));
                  currentButton.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.disabled_grey)));
-             }
+             }*/
          }
     }
 
@@ -144,8 +142,7 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
 
     private void saveColorChoice(int buttonId){
         RadioButton selectedButton=findViewById(buttonId);
-        String color= String.valueOf(selectedButton.getText()).toLowerCase();
-        //TODO Farbe für Spieler speichern
+        String color= convertTextToEnglishReferenceName(String.valueOf(selectedButton.getText()));
         SessionAPI.setColor(token,lobbyid, color,ChooseYourCharacter.this);
     }
     private Color convertTextToEnum(String color){
@@ -157,7 +154,15 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
             default: return null;
         }
     }
-
+    private String convertTextToEnglishReferenceName(String color){
+        switch (color){
+            case "Blau": return "blue";
+            case "Rot":return "red";
+            case "Grün":return "green";
+            case "Lila":return "lila";
+            default: return "";
+        }
+    }
     @Override
     public void onGetUnavailableColorsByLobbySuccess(List<Color> colors) {
         unavailiableColors=colors;
@@ -165,16 +170,19 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
 
     @Override
     public void onGetUnavailableColorsByLobbyFailure(String errorMessage) {
-        runOnUiThread(() -> Toast.makeText(ChooseYourCharacter.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show());
+        runOnUiThread(() -> Toast.makeText(ChooseYourCharacter.this, "FehlerFail: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
 
     @Override
     public void onSetColorSuccess(String successMessage) {
         //Session beitreten
+        stopRepeatingTask();
+        Intent startGameWithChosenCharacter=new Intent(ChooseYourCharacter.this, Board.class);
+        startActivity(startGameWithChosenCharacter);
     }
 
     @Override
     public void onSetColorFailure(String errorMessage) {
-        runOnUiThread(() -> Toast.makeText(ChooseYourCharacter.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show());
+        runOnUiThread(() -> Toast.makeText(ChooseYourCharacter.this, "FehlerSetColor: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
 }
