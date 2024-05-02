@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,4 +90,48 @@ public class LobbyAPITests {
         // verify that IllegalArgumentException is thrown for invalid status
         assertThrows(IllegalArgumentException.class, () -> LobbyAPI.addLobbyToList(jsonLobby, lobbyList));
     }
+
+    @Test
+    void testCreatePublicJSONLobby() throws JSONException {
+        // prepare input
+        String name = "Test Lobby";
+        String password = null;
+        boolean isPrivate = false;
+        int maxPlayers = 4;
+        Status status = Status.open;
+
+        // call method
+        JSONObject jsonLobby = LobbyAPI.createJSONLobby(name, password, isPrivate, maxPlayers, status);
+
+        // verify
+        assertNotNull(jsonLobby);
+        assertNotNull(jsonLobby);
+        assertEquals(name, jsonLobby.getString("name"));
+        assertEquals(JSONObject.NULL, jsonLobby.get("password"));
+        assertEquals(isPrivate, jsonLobby.getBoolean("isPrivate"));
+        assertEquals(maxPlayers, jsonLobby.getInt("maxPlayers"));
+        assertEquals(status, jsonLobby.get("status"));
+    }
+
+    @Test
+    void testCreatePrivateJSONLobby() throws JSONException {
+        // prepare input
+        String name = "Test Lobby";
+        String password = "password";
+        boolean isPrivate = true;
+        int maxPlayers = 2;
+        Status status = Status.open;
+
+        // call method
+        JSONObject jsonLobby = LobbyAPI.createJSONLobby(name, password, isPrivate, maxPlayers, status);
+
+        // verify
+        assertNotNull(jsonLobby);
+        assertEquals(name, jsonLobby.getString("name"));
+        assertEquals(password, jsonLobby.getString("password"));
+        assertEquals(isPrivate, jsonLobby.getBoolean("isPrivate"));
+        assertEquals(maxPlayers, jsonLobby.getInt("maxPlayers"));
+        assertEquals(status, jsonLobby.get("status"));
+    }
 }
+
