@@ -93,7 +93,7 @@ public class LobbyAPITests {
     }
 
     @Test
-    void testCreatePublicJSONLobby() throws JSONException {
+    void testCreateJSONLobby_Public() throws JSONException {
         // prepare input
         String name = "Test Lobby";
         String password = null;
@@ -115,7 +115,7 @@ public class LobbyAPITests {
     }
 
     @Test
-    void testCreatePrivateJSONLobby() throws JSONException {
+    void testCreateJSONLobby_Private() throws JSONException {
         // prepare input
         String name = "Test Lobby";
         String password = "password";
@@ -136,7 +136,7 @@ public class LobbyAPITests {
     }
 
     @Test
-    void testCreateGetRequestWithStatus() {
+    void testCreateGetRequest_WithStatus() {
         // set up
         String token = "test_token";
         String path = "/api/lobby/getByStatus/";
@@ -150,7 +150,7 @@ public class LobbyAPITests {
     }
 
     @Test
-    void testCreateGetRequestNoStatus() {
+    void testCreateGetRequest_NoStatus() {
         // set up
         String token = "test_token";
         String path = "/api/lobby/getAll";
@@ -182,5 +182,6 @@ public class LobbyAPITests {
         // verify
         assertEquals("http://10.0.2.2:3000/api/lobby/create", request.url().toString());
     }
+
 }
 
