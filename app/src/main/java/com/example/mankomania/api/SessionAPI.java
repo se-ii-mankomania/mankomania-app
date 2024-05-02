@@ -151,30 +151,33 @@ public class SessionAPI {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if(response.isSuccessful()) {
-                    String responseBody = Objects.requireNonNull(response.body()).string();
-                    try {
-                        JSONArray responseArray = new JSONArray(responseBody);
-                        sessions=new HashMap<>();
-                        for(int i = 0; i < responseArray.length(); i++) {
-                            //TODO add amountShares when implemented
+                ResponseBody responseBody = response.body();
+                try {
+                    if (response.isSuccessful() && responseBody != null) {
+                        String responseString = responseBody.string();
+                        JSONArray responseArray = new JSONArray(responseString);
+                        sessions = new HashMap<>();
+                        for (int i = 0; i < responseArray.length(); i++) {
                             JSONObject jsonSession = responseArray.getJSONObject(i);
-                            UUID userid= UUID.fromString(jsonSession.getString("userid"));
-                            String email=jsonSession.getString("email");
-                            Color color=convertToEnums(jsonSession.getString("color"));
-                            int currentPosition=jsonSession.getInt("currentposition");
-                            int balance=jsonSession.getInt("balance");
-                            boolean isPlayersTurn=jsonSession.getBoolean("isplayersturn");
-                            Session session=new Session(userid,email,color,currentPosition,balance,0,0,0,isPlayersTurn);
-                            sessions.put(userid,session);
+                            UUID userid = UUID.fromString(jsonSession.getString("userid"));
+                            String email = jsonSession.getString("email");
+                            Color color = convertToEnums(jsonSession.getString("color"));
+                            int currentPosition = jsonSession.getInt("currentposition");
+                            int balance = jsonSession.getInt("balance");
+                            boolean isPlayersTurn = jsonSession.getBoolean("isplayersturn");
+                            Session session = new Session(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
+                            sessions.put(userid, session);
                         }
-
                         callback.onGetStatusByLobbySuccess(sessions);
-                    } catch (JSONException e) {
-                        callback.onGetStatusByLobbyFailure("Fehler beim Lesen der Response!");
+                    } else {
+                        callback.onGetStatusByLobbyFailure(response.message());
                     }
-                } else {
-                    callback.onGetStatusByLobbyFailure(response.message());
+                } catch (JSONException e) {
+                    callback.onGetStatusByLobbyFailure("Fehler beim Lesen der Response!");
+                } finally {
+                    if (responseBody != null) {
+                        responseBody.close();
+                    }
                 }
             }
         });
