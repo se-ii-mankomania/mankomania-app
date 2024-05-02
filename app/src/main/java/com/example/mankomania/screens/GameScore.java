@@ -3,7 +3,6 @@ package com.example.mankomania.screens;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,7 +24,6 @@ import com.example.mankomania.api.Status;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 
 public class GameScore extends AppCompatActivity implements SessionAPI.JoinSessionCallback,LobbyAPI.GetLobbiesCallback, LobbyAPI.GetLobbiesByStatusCallback {
@@ -55,6 +53,7 @@ public class GameScore extends AppCompatActivity implements SessionAPI.JoinSessi
 
         Button resumeGame=findViewById(R.id.GameScore_ResumeGame);
         resumeGame.setOnClickListener(v -> {
+            selectedLobbyId=null;
             int checkedPosition=listOfGames.getCheckedItemPosition();
             if(checkedPosition!= AdapterView.INVALID_POSITION) {
                 String selectedGame=(String) listOfGames.getItemAtPosition(checkedPosition);
@@ -118,7 +117,8 @@ public class GameScore extends AppCompatActivity implements SessionAPI.JoinSessi
     @Override
     public void onJoinSessionSuccess(String successMessage) {
         // store lobbyID
-        SharedPreferences.Editor editor = getSharedPreferences("MyPrefs", MODE_PRIVATE).edit();
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("lobbyid", selectedLobbyId.toString());
         editor.apply();
 

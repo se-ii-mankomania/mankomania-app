@@ -21,6 +21,7 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class SessionAPI {
     private static String successMessage;
@@ -102,24 +103,24 @@ public class SessionAPI {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if(response.isSuccessful()) {
-                    String responseBody = Objects.requireNonNull(response.body()).string();
-
-                    try {
-                        JSONArray responseArray = new JSONArray(responseBody);
-                        unavailableColors=new ArrayList<>();
-                        for(int i = 0; i < responseArray.length(); i++) {
-                            JSONObject jsonSession = responseArray.getJSONObject(i);
-                            UUID jsonLobbyId=UUID.fromString(jsonSession.getString("lobbyid"));
-                            if(jsonLobbyId==lobbyid) {
+                if (response.isSuccessful()) {
+                    try (ResponseBody responseBody = response.body()) {
+                        if (responseBody != null) {
+                            String responseBodyString = responseBody.string();
+                            JSONArray responseArray = new JSONArray(responseBodyString);
+                            unavailableColors=new ArrayList<>();
+                            for(int i = 0; i < responseArray.length(); i++) {
+                                JSONObject jsonSession = responseArray.getJSONObject(i);
                                 String color = jsonSession.getString("color");
                                 Color enumValueOfColor=convertToEnums(color);
                                 unavailableColors.add(enumValueOfColor);
                             }
+                            callback.onGetUnavailableColorsByLobbySuccess(unavailableColors);
+                        } else {
+                            callback.onGetUnavailableColorsByLobbyFailure("Response Body ist leer!");
                         }
-                        callback.onGetUnavailableColorsByLobbySuccess(unavailableColors);
                     } catch (JSONException e) {
-                        callback.onGetUnavailableColorsByLobbyFailure("Fehler beim Lesen der Response!");
+                        callback.onGetUnavailableColorsByLobbyFailure("Fehler beim Lesen der Response: " + e.getMessage());
                     }
                 } else {
                     callback.onGetUnavailableColorsByLobbyFailure(response.message());

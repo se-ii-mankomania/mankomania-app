@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -76,7 +77,8 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
         @Override
         public void run() {
             restoreRadioButtons();
-            updateAvailableRadioButtons();
+            Log.wtf("WTF",lobbyid.toString());
+            SessionAPI.getUnavailableColorsByLobby(token,lobbyid,ChooseYourCharacter.this);
             handler.postDelayed(this, INTERVAL_MS);
         }
     };
@@ -95,16 +97,15 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
     private void updateAvailableRadioButtons(){
         RadioGroup colorSelection=findViewById(R.id.ChooseYourCharacter_ColorSelectionRadioGroup);
         //TODO add sharedPrefrences
-        SessionAPI.getUnavailableColorsByLobby(token,lobbyid,ChooseYourCharacter.this);
         for(int i=0;i<colorSelection.getChildCount();i++){
             RadioButton currentButton= (RadioButton) colorSelection.getChildAt(i);
             String colorString= String.valueOf(currentButton.getText());
             Color color=convertTextToEnum(colorString);
-            /*if(unavailiableColors.contains(color)){
+            if(unavailiableColors.contains(color)){
                  currentButton.setEnabled(false);
                  currentButton.setTextColor(ContextCompat.getColor(this,R.color.disabled_grey));
                  currentButton.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.disabled_grey)));
-             }*/
+             }
          }
     }
 
@@ -165,7 +166,8 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
     }
     @Override
     public void onGetUnavailableColorsByLobbySuccess(List<Color> colors) {
-        unavailiableColors=colors;
+        this.unavailiableColors=colors;
+        updateAvailableRadioButtons();
     }
 
     @Override
