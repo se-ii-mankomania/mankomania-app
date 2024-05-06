@@ -128,6 +128,6 @@ public class GameScore extends AppCompatActivity implements SessionAPI.JoinSessi
 
     @Override
     public void onJoinSessionFailure(String errorMessage) {
-        runOnUiThread(() -> Toast.makeText(GameScore.this, "FehlerJoinSession: " + errorMessage, Toast.LENGTH_SHORT).show());
+        runOnUiThread(() -> Toast.makeText(GameScore.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
 }

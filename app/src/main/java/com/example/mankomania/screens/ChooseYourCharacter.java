@@ -172,7 +172,7 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
 
     @Override
     public void onGetUnavailableColorsByLobbyFailure(String errorMessage) {
-        runOnUiThread(() -> Toast.makeText(ChooseYourCharacter.this, "FehlerFail: " + errorMessage, Toast.LENGTH_SHORT).show());
+        runOnUiThread(() -> Toast.makeText(ChooseYourCharacter.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
 
     @Override
@@ -185,6 +185,6 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
 
     @Override
     public void onSetColorFailure(String errorMessage) {
-        runOnUiThread(() -> Toast.makeText(ChooseYourCharacter.this, "FehlerSetColor: " + errorMessage, Toast.LENGTH_SHORT).show());
+        runOnUiThread(() -> Toast.makeText(ChooseYourCharacter.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
 }
