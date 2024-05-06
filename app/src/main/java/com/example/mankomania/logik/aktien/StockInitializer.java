@@ -1,4 +1,5 @@
-package com.example.mankomania.logik;
+package com.example.mankomania.logik.aktien;
+
 
 import java.security.SecureRandom;
 import java.util.HashMap;

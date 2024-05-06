@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import com.example.mankomania.gameboardfields.GameboardField;
 import com.example.mankomania.gameboardfields.HotelField;
 import com.example.mankomania.gameboardfields.ProfitField;
-import com.example.mankomania.logik.Color;
-import com.example.mankomania.logik.Player;
+import com.example.mankomania.logik.spieler.Color;
+import com.example.mankomania.logik.spieler.Player;
 import com.example.mankomania.screens.Cellposition;
 import com.example.mankomania.screens.FieldsHandler;
 

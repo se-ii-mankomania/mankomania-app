@@ -1,4 +1,4 @@
-package com.example.mankomania.logik;
+package com.example.mankomania.logik.spieler;
 
 import java.security.SecureRandom;
 
