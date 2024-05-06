@@ -4,10 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.example.mankomania.logik.Color;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 public class Session {
