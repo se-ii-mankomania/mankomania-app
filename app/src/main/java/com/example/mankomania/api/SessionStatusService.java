@@ -1,0 +1,156 @@
+package com.example.mankomania.api;
+
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.IBinder;
+import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
+
+public class SessionStatusService extends Service {
+
+    private static final String TAG = "StatusUpdateService";
+    private static final long INTERVAL_MS = 5000; // 5 Sekunden
+    private final Set<PositionObserver> positionObservers = new HashSet<>();
+    private final Set<BalanceObserver> balanceObservers = new HashSet<>();
+    private final Set<PlayersTurnObserver> playersTurnObservers = new HashSet<>();
+
+    private Handler handler;
+    private Runnable runnable;
+    private String token;
+    private UUID lobbyId;
+
+    public SessionStatusService() {}
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                sendStatusRequest();
+                handler.postDelayed(this, INTERVAL_MS);
+            }
+        };
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        token = sharedPreferences.getString("token", null);
+        String lobbyIdString = sharedPreferences.getString("lobbyId", null);
+        if (lobbyIdString != null) {
+            lobbyId = UUID.fromString(lobbyIdString);
+        }
+        startRepeatingTask();
+        return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopRepeatingTask();
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    private void startRepeatingTask() {
+        handler.postDelayed(runnable, INTERVAL_MS);
+    }
+
+    private void stopRepeatingTask() {
+        handler.removeCallbacks(runnable);
+    }
+
+    private void sendStatusRequest() {
+        SessionAPI.getStatusByLobby(token, lobbyId, new SessionAPI.GetStatusByLobbyCallback() {
+            @Override
+            public void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions) {
+                // Brauche ich no was?
+            }
+
+            @Override
+            public void onGetStatusByLobbyFailure(String errorMessage) {
+                Toast.makeText(getApplicationContext(), "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void notifyUpdatesInSession(Session newSession, UUID userId){
+        HashMap<UUID,Session> sessions=SessionAPI.getSessions();
+        Session fromerSession=sessions.get(userId);
+
+        if(fromerSession==null || Objects.equals(fromerSession.getCurrentPosition(), newSession.getCurrentPosition())){
+            notifyPositionChanged(userId,newSession.getCurrentPosition());
+        }
+        if(fromerSession==null || Objects.equals(fromerSession.getBalance(), newSession.getBalance())){
+            notifyBalanceChanged(userId,newSession.getBalance());
+        }
+        if(fromerSession==null || Objects.equals(fromerSession.getIsPlayersTurn(), newSession.getIsPlayersTurn())){
+            notifyTurnChanged(userId,newSession.getIsPlayersTurn());
+        }
+    }
+    public interface PositionObserver {
+        void onPositionChanged(UUID userId, int newPosition);
+    }
+    public interface BalanceObserver{
+        void onBalanceChanged(UUID userId, int newBalance);
+    }
+    public interface PlayersTurnObserver{
+        void onTurnChanged(UUID userId, boolean newTurn);
+    }
+
+    public void registerObserver(SessionStatusService.PositionObserver observer) {
+        positionObservers.add(observer);
+    }
+
+    public void removeObserver(SessionStatusService.PositionObserver observer) {
+        positionObservers.remove(observer);
+    }
+    public void registerObserver(SessionStatusService.BalanceObserver observer) {
+        balanceObservers.add(observer);
+    }
+
+    public void removeObserver(SessionStatusService.BalanceObserver observer) {
+        balanceObservers.remove(observer);
+    }
+    public void registerObserver(SessionStatusService.PlayersTurnObserver observer) {
+        playersTurnObservers.add(observer);
+    }
+
+    public void removeObserver(SessionStatusService.PlayersTurnObserver observer) {
+        playersTurnObservers.remove(observer);
+    }
+
+    public void notifyPositionChanged(UUID userId,int newPosition) {
+        for (SessionStatusService.PositionObserver observer : positionObservers) {
+            observer.onPositionChanged(userId, newPosition);
+        }
+    }
+
+    public void notifyBalanceChanged(UUID userId,int newBalance) {
+        for (SessionStatusService.BalanceObserver observer : balanceObservers) {
+            observer.onBalanceChanged(userId, newBalance);
+        }
+    }
+
+    public void notifyTurnChanged(UUID userId,boolean newTurn) {
+        for (SessionStatusService.PlayersTurnObserver observer : playersTurnObservers) {
+            observer.onTurnChanged(userId, newTurn);
+        }
+    }
+}

@@ -77,6 +77,8 @@ public class SessionAPI {
                         // create JSON object for response
                         JSONObject jsonResponse = new JSONObject(responseBody);
 
+                        sessions = new HashMap<>();
+
                         // return the message
                         successMessage = jsonResponse.getString("message");
                         callback.onJoinSessionSuccess(successMessage);
@@ -155,7 +157,6 @@ public class SessionAPI {
                     if (response.isSuccessful() && responseBody != null) {
                         String responseString = responseBody.string();
                         JSONArray responseArray = new JSONArray(responseString);
-                        sessions = new HashMap<>();
                         for (int i = 0; i < responseArray.length(); i++) {
                             JSONObject jsonSession = responseArray.getJSONObject(i);
                             UUID userid = UUID.fromString(jsonSession.getString("userid"));
@@ -164,8 +165,12 @@ public class SessionAPI {
                             int currentPosition = jsonSession.getInt("currentposition");
                             int balance = jsonSession.getInt("balance");
                             boolean isPlayersTurn = jsonSession.getBoolean("isplayersturn");
-                            Session session = new Session(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
+
+                            Session session=new Session(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
+                            SessionStatusService sessionStatusService=new SessionStatusService();
+                            sessionStatusService.notifyUpdatesInSession(session,userid);
                             sessions.put(userid, session);
+
                         }
                         callback.onGetStatusByLobbySuccess(sessions);
                     } else {
@@ -218,5 +223,8 @@ public class SessionAPI {
                 }
             }
         });
+    }
+    public static HashMap<UUID, Session> getSessions() {
+        return sessions;
     }
 }

@@ -4,6 +4,10 @@ import androidx.annotation.NonNull;
 
 import com.example.mankomania.logik.Color;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 public class Session {
@@ -17,7 +21,7 @@ public class Session {
     private final int amountBShares;
     private final boolean isPlayersTurn;
 
-    public Session(UUID userId, String email,Color color, int currentPosition, int balance, int amountKVShares, int amountTShares, int amountBShares, boolean isPlayersTurn) {
+    public Session(UUID userId, String email, Color color, int currentPosition, int balance, int amountKVShares, int amountTShares, int amountBShares, boolean isPlayersTurn) {
         this.userId = userId;
         this.email=email;
         this.color = color;
@@ -27,6 +31,18 @@ public class Session {
         this.amountTShares = amountTShares;
         this.amountBShares = amountBShares;
         this.isPlayersTurn = isPlayersTurn;
+    }
+
+    public boolean getIsPlayersTurn() {
+        return isPlayersTurn;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public int getCurrentPosition() {
+        return currentPosition;
     }
 
     @NonNull
@@ -44,4 +60,5 @@ public class Session {
                 ", isPlayersTurn=" + isPlayersTurn +
                 '}';
     }
+
 }

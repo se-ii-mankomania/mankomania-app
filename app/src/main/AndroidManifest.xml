@@ -16,11 +16,15 @@
         android:theme="@style/Theme.Mankomania"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <service
+            android:name=".api.SessionStatusService"
+            android:enabled="true"
+            android:exported="false"/>
+
         <activity
             android:name=".screens.EventRollDice"
             android:exported="false"
-            android:screenOrientation="landscape"
-            />
+            android:screenOrientation="landscape" />
         <activity
             android:name=".screens.Register"
             android:exported="false"
@@ -44,8 +48,7 @@
         <activity
             android:name=".screens.CreateNewLobby"
             android:exported="false"
-            android:screenOrientation="landscape"
-            />
+            android:screenOrientation="landscape" />
         <activity
             android:name=".screens.MainActivityLogin"
             android:exported="true"
