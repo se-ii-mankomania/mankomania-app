@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.mankomania.R;
 import com.example.mankomania.api.SessionAPI;
+import com.example.mankomania.api.SessionStatusService;
 import com.example.mankomania.logik.Color;
 
 import java.util.List;
@@ -179,6 +180,8 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
     public void onSetColorSuccess(String successMessage) {
         //Session beitreten
         stopRepeatingTask();
+        Intent sessionStatusServiceIntent=new Intent(this, SessionStatusService.class);
+        startService(sessionStatusServiceIntent);
         Intent startGameWithChosenCharacter=new Intent(ChooseYourCharacter.this, Board.class);
         startActivity(startGameWithChosenCharacter);
     }

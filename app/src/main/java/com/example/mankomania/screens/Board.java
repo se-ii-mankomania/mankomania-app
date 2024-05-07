@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -16,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mankomania.R;
 
+import com.example.mankomania.api.SessionStatusService;
 import com.example.mankomania.logik.Color;
 import com.example.mankomania.logik.Player;
 
@@ -47,6 +49,18 @@ public class Board extends AppCompatActivity {
         });
 
         ToolbarFunctionalities.setUpToolbar(this);
+
+        //Wenn der Back-Button betätigt wird, wird der Polling-Service für den Status gestoppt
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                stopSessionStatusService();
+                if (isEnabled()) {
+                    getOnBackPressedDispatcher().onBackPressed();
+                }
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
 
         Button rollDice=findViewById(R.id.Board_ButtonDice);
         rollDice.setOnClickListener(v -> {
@@ -116,30 +130,35 @@ public class Board extends AppCompatActivity {
 
 
     }
-   public void updatePlayerPositions(){
-       for (Player player: players
-            ) {
-           if(player.getColor() == Color.BLUE){
+   public void updatePlayerPositions() {
+       for (Player player : players
+       ) {
+           if (player.getColor() == Color.BLUE) {
                ImageView playerBlue = findViewById(R.id.player_blue);
                playerBlue.setX(player.getCurrentField().getX());
                playerBlue.setY(player.getCurrentField().getY());
            }
-           if(player.getColor() == Color.RED){
+           if (player.getColor() == Color.RED) {
                ImageView playerRed = findViewById(R.id.player_red);
                playerRed.setX(player.getCurrentField().getX());
                playerRed.setY(player.getCurrentField().getY());
            }
-           if(player.getColor() == Color.GREEN){
+           if (player.getColor() == Color.GREEN) {
                ImageView playerGreen = findViewById(R.id.player_green);
                playerGreen.setX(player.getCurrentField().getX());
                playerGreen.setY(player.getCurrentField().getY());
            }
-           if(player.getColor() == Color.PURPLE){
+           if (player.getColor() == Color.PURPLE) {
                ImageView playerPurple = findViewById(R.id.player_purple);
                playerPurple.setX(player.getCurrentField().getX());
                playerPurple.setY(player.getCurrentField().getY());
            }
        }
-
    }
+
+   private void stopSessionStatusService() {
+        Intent sessionStatusServiceIntent=new Intent(this, SessionStatusService.class);
+        stopService(sessionStatusServiceIntent);
+   }
+
 }

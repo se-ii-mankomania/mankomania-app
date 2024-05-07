@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.mankomania.R;
+import com.example.mankomania.api.SessionStatusService;
 
 /**
  * Diese Klasse fügt den "Logout"- und den "Finances & Stocks"-Button eine Funktionlität zu.
@@ -27,9 +28,15 @@ public class ToolbarFunctionalities {
 
         Button logout=activity.findViewById(R.id.Board_LogoutButton);
         logout.setOnClickListener((View v) -> {
+            stopSessionStatusService(context);
             //TODO Daten des Spiels speichern etc.
             Intent fromBoardToLogin=new Intent(activity, MainActivityLogin.class);
             context.startActivity(fromBoardToLogin);
         });
+    }
+
+    private static void stopSessionStatusService(Context context){
+        Intent sessionStatusServiceIntent=new Intent(context, SessionStatusService.class);
+        context.stopService(sessionStatusServiceIntent);
     }
 }
