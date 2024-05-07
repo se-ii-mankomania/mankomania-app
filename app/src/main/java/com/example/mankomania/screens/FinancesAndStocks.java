@@ -15,7 +15,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.mankomania.R;
 
 public class FinancesAndStocks extends AppCompatActivity {
-    PlayerViewModel playerViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +39,7 @@ public class FinancesAndStocks extends AppCompatActivity {
         TextView numberStocks=findViewById(R.id.Stocks_totalAnswer);
 
         //TODO mithilfe von ViewModel(?) ein Observable implemntieren,dass die Daten enthält
-        /*playerViewModel = new ViewModelProvider(this).get(PlayerViewModel.class);
-
-        playerViewModel.getCurrentPlayer().observe(this, new Observer<Player>(){
+        /*
             @Override
             public void onChanged(Player player) {
                 bills5k.setText(player.get5kbills());
@@ -56,8 +53,7 @@ public class FinancesAndStocks extends AppCompatActivity {
                 kurzschlussAG.setText(player.getKurzschlussAG());
                 numberStocks.setText(player.getStocksTotal());
 
-            }
-        });*/
+       */
 
 
         Button toBoard=findViewById(R.id.FinancesStocks_BackToBoard);

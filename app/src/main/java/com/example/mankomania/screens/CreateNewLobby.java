@@ -18,10 +18,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mankomania.R;
-import com.example.mankomania.api.Lobby;
+import com.example.mankomania.api.LobbyAPI;
 import com.example.mankomania.api.Status;
 
-public class CreateNewLobby extends AppCompatActivity implements Lobby.AddLobbyCallback{
+public class CreateNewLobby extends AppCompatActivity implements LobbyAPI.AddLobbyCallback{
 
     EditText nameInput;
     SwitchCompat privateLobbySwitch;
@@ -84,7 +84,7 @@ public class CreateNewLobby extends AppCompatActivity implements Lobby.AddLobbyC
             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
             String token = sharedPreferences.getString("token", null);
             // add lobby
-            Lobby.addLobby(token, lobbyName, lobbyPassword, isLobbyPrivate, maxPlayers, Status.OPEN, CreateNewLobby.this);
+            LobbyAPI.addLobby(token, lobbyName, lobbyPassword, isLobbyPrivate, maxPlayers, Status.open, CreateNewLobby.this);
         });
     }
 
@@ -93,8 +93,8 @@ public class CreateNewLobby extends AppCompatActivity implements Lobby.AddLobbyC
         runOnUiThread(() -> Toast.makeText(CreateNewLobby.this, "Lobby erfolgreich erstellt: " + message, Toast.LENGTH_SHORT).show());
 
         // go back to login page
-        Intent goToChooseYourCharacter = new Intent(CreateNewLobby.this, ChooseYourCharacter.class);
-        startActivity(goToChooseYourCharacter);
+        Intent goToGameScore = new Intent(CreateNewLobby.this, GameScore.class);
+        startActivity(goToGameScore);
     }
 
     @Override

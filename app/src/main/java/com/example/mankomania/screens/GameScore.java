@@ -17,10 +17,20 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mankomania.R;
 import com.example.mankomania.api.Lobby;
+import com.example.mankomania.api.LobbyAPI;
 
-public class GameScore extends AppCompatActivity implements Lobby.GetLobbiesCallback {
+import com.example.mankomania.api.SessionAPI;
+import com.example.mankomania.api.Status;
+
+import java.util.List;
+import java.util.UUID;
+
+
+public class GameScore extends AppCompatActivity implements SessionAPI.JoinSessionCallback,LobbyAPI.GetLobbiesCallback, LobbyAPI.GetLobbiesByStatusCallback {
 
     private ListView listOfGames;
+    private List<Lobby> allLobbies;
+    private UUID selectedLobbyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,16 +49,21 @@ public class GameScore extends AppCompatActivity implements Lobby.GetLobbiesCall
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String token = sharedPreferences.getString("token", null);
         // get Lobbies
-        Lobby.getLobbies(token, GameScore.this);
+        LobbyAPI.getLobbies(token, GameScore.this);
 
         Button resumeGame=findViewById(R.id.GameScore_ResumeGame);
         resumeGame.setOnClickListener(v -> {
+            selectedLobbyId=null;
             int checkedPosition=listOfGames.getCheckedItemPosition();
             if(checkedPosition!= AdapterView.INVALID_POSITION) {
                 String selectedGame=(String) listOfGames.getItemAtPosition(checkedPosition);
+                for(Lobby lobby:allLobbies){
+                    if(lobby.getName().equals(selectedGame.substring(10))){
+                        selectedLobbyId=lobby.getId();
+                    }
+                }
                 //TODO selctedGame starten
-                Intent chooseYourCharacterIntent = new Intent(GameScore.this, ChooseYourCharacter.class);
-                startActivity(chooseYourCharacterIntent);
+                SessionAPI.joinSession(token, selectedLobbyId,GameScore.this);
             }else{
                 Toast.makeText(GameScore.this, "Wähle ein Spiel aus.", Toast.LENGTH_SHORT).show();
             }
@@ -67,11 +82,52 @@ public class GameScore extends AppCompatActivity implements Lobby.GetLobbiesCall
     }
 
     @Override
-    public void onGetLobbiesSuccess(String[] lobbies) {
+    public void onGetLobbiesSuccess(String[] lobbies, List<Lobby> allLobbies) {
+        //store lobbies
+        this.allLobbies=allLobbies;
+        // will display the following rows:
+        // <P/O> | x/<m> | <name>
+        // P.. private lobby, O.. non-private lobby
+        // m.. max. players
         runOnUiThread(() -> {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(GameScore.this,
                     android.R.layout.simple_list_item_single_choice, lobbies);
             listOfGames.setAdapter(adapter);
         });
+    }
+
+    @Override
+    public void onGetLobbiesByStatusSuccess(String[] lobbies) {
+        // will display the following rows:
+        // <P/O> | x/<m> | <name>
+        // P.. private lobby, O.. non-private lobby
+        // m.. max. players
+        runOnUiThread(() -> {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(GameScore.this,
+                    android.R.layout.simple_list_item_single_choice, lobbies);
+            listOfGames.setAdapter(adapter);
+        });
+    }
+
+    @Override
+    public void onGetLobbiesByStatusFailure(String errorMessage) {
+        runOnUiThread(() -> Toast.makeText(GameScore.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show());
+    }
+
+    @Override
+    public void onJoinSessionSuccess(String successMessage) {
+        // store lobbyID
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("lobbyid", selectedLobbyId.toString());
+        editor.apply();
+
+        Intent chooseYourCharacterIntent = new Intent(GameScore.this, ChooseYourCharacter.class);
+        startActivity(chooseYourCharacterIntent);
+    }
+
+    @Override
+    public void onJoinSessionFailure(String errorMessage) {
+        runOnUiThread(() -> Toast.makeText(GameScore.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
 }
