@@ -1,6 +1,8 @@
 package com.example.mankomania.gameboardfields;
 
-public class GameboardField {
+import java.io.Serializable;
+
+public class GameboardField implements Serializable {
     private int x;
     private int y;
 

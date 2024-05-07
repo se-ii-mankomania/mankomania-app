@@ -44,4 +44,16 @@ public class Session {
                 ", isPlayersTurn=" + isPlayersTurn +
                 '}';
     }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public int getCurrentPosition() {
+        return currentPosition;
+    }
 }

@@ -7,7 +7,10 @@ import com.example.mankomania.gameboardfields.HotelField;
 import com.example.mankomania.gameboardfields.ProfitField;
 import com.example.mankomania.logik.Player;
 
-public class FieldsHandler {
+import java.io.Serializable;
+
+public class FieldsHandler implements Serializable {
+
     private GameboardField[] fields = new GameboardField[52];
     public GameboardField getField(int index) {
         if (index < 0 || index >= fields.length) {
