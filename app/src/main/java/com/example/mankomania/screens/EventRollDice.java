@@ -30,6 +30,7 @@ import com.example.mankomania.logik.Player;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -150,11 +151,19 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
                 Player player = new Player("", userSession.getColor());
                 GameboardField field = fieldshandler.getField(userSession.getCurrentPosition()-1);
                 player.setCurrentField(field);
-                fieldshandler.movePlayer(player, 23);
+                fieldshandler.movePlayer(player, randomNumber[0] + randomNumber[1]);
 
                 SessionAPI.updatePlayerPosition(token, userId, player.getCurrentField().getId(), lobbyId, new SessionAPI.UpdatePositionCallback() {
                     @Override
                     public void onUpdateSuccess(String message) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                int resource = getResId("field_" + player.getCurrentField().getId()+ "_description", R.string.class);
+                                Toast.makeText(getApplicationContext(), getString(resource), Toast.LENGTH_LONG).show();
+
+                            }
+                        });
 
                     }
 
@@ -163,7 +172,9 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
                         Toast.makeText(getApplicationContext(), "Error while updating positions", Toast.LENGTH_SHORT).show();
                     }
                 });
+
             }
+
 
             @Override
             public void onGetStatusByLobbyFailure(String errorMessage) {
@@ -182,7 +193,16 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
 
     }
 
+    public static int getResId(String resName, Class<?> c) {
 
+        try {
+            Field idField = c.getDeclaredField(resName);
+            return idField.getInt(idField);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
     /**
      * Diese Methode ordnet dem gewürfelten Ergenbnis das passende Image zu
      * @param result Ergebnis des Würfelwurfs
