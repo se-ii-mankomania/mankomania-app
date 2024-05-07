@@ -2,6 +2,7 @@ package com.example.mankomania.screens;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -17,13 +18,12 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mankomania.R;
 
-import com.example.mankomania.api.Auth;
-import com.example.mankomania.api.Movement;
+import com.example.mankomania.api.AuthAPI;
+import com.example.mankomania.api.SessionAPI;
 import com.example.mankomania.logik.Color;
 import com.example.mankomania.logik.Player;
 
 import android.animation.ObjectAnimator;
-import android.widget.ImageView;
 
 public class Board extends AppCompatActivity {
     Player[] players = new Player[4];
@@ -57,6 +57,7 @@ public class Board extends AppCompatActivity {
         Button rollDice=findViewById(R.id.Board_ButtonDice);
         rollDice.setOnClickListener(v -> {
            Intent toEventRollDice=new Intent(Board.this,EventRollDice.class);
+           toEventRollDice.putExtra("fieldsHandler", fieldsHandler);
            startActivity(toEventRollDice);
         });
 
@@ -146,7 +147,11 @@ public class Board extends AppCompatActivity {
     // Methode zum Senden der Spielerpositionen an den Server
     private void sendPositionUpdatesToServer() {
         //TODO just hardcoded for now -> change to actual userID
-            Movement.updatePlayerPosition(Auth.getToken(), "4dfb2ff3-9065-494c-be25-c47b935f8edb", 1, new Movement.UpdatePositionCallback() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String userId = sharedPreferences.getString("userId", null);
+        String token = sharedPreferences.getString("token", null);
+        String lobbyId = sharedPreferences.getString("lobbyid", null);
+            SessionAPI.updatePlayerPosition(token, userId, 24, lobbyId, new SessionAPI.UpdatePositionCallback() {
                 @Override
                 public void onUpdateSuccess(String message) {
                     // Erfolgsmeldung, evtl. Loggen oder Nutzer benachrichtigen
@@ -200,5 +205,6 @@ public class Board extends AppCompatActivity {
         animatorY.setDuration(500);
         animatorX.start();
         animatorY.start();
+       // Toast.makeText(getApplicationContext(), auf datenbank zugreifne??)
     }
 }
