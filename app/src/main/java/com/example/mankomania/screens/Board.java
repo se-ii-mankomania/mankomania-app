@@ -19,14 +19,20 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.mankomania.R;
 
 import com.example.mankomania.api.AuthAPI;
+import com.example.mankomania.api.Session;
 import com.example.mankomania.api.SessionAPI;
+import com.example.mankomania.gameboardfields.GameboardField;
 import com.example.mankomania.logik.Color;
 import com.example.mankomania.logik.Player;
 
 import android.animation.ObjectAnimator;
+import android.widget.Toast;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 public class Board extends AppCompatActivity {
-    Player[] players = new Player[4];
+
     FieldsHandler fieldsHandler = new FieldsHandler();
 
     Cellposition[][] cellPositions = new Cellposition[14][14];
@@ -80,46 +86,7 @@ public class Board extends AppCompatActivity {
 
         fieldsHandler.initFields(cellPositions);
 
-
-        Player playerBlue = new Player("BLUE", Color.BLUE );
-        playerBlue.setCurrentField(fieldsHandler.getField(44));
-        Player playerGreen = new Player("GREEN", Color.GREEN);
-        playerGreen.setCurrentField(fieldsHandler.getField(45));
-        Player playerRed = new Player("RED", Color.RED);
-        playerRed.setCurrentField(fieldsHandler.getField(46));
-        Player playerPurple = new Player("PURPLE", Color.PURPLE );
-        playerPurple.setCurrentField(fieldsHandler.getField(47));
-        players[0] = playerBlue;
-        players[1] = playerGreen;
-        players[2] = playerRed;
-        players[3] = playerPurple;
-
-        //Testing
-        fieldsHandler.movePlayer(playerBlue, 5);
-        fieldsHandler.movePlayer(playerGreen, 5);
-        fieldsHandler.movePlayer(playerRed, 5);
-        fieldsHandler.movePlayer(playerPurple, 5);
-
         updatePlayerPositions();
-
-
-        //TESTING -> Button just for testing
-        Button moveTest = findViewById(R.id.movetest);
-        moveTest.setOnClickListener(v -> {
-
-            fieldsHandler.movePlayer(playerBlue, 2);
-            fieldsHandler.movePlayer(playerGreen, 2);
-            fieldsHandler.movePlayer(playerRed, 2);
-            fieldsHandler.movePlayer(playerPurple, 2);
-
-
-            updatePlayerPositions();
-
-            sendPositionUpdatesToServer();
-        });
-
-
-
 
         ImageView playerBlueImage = findViewById(R.id.player_blue);
         playerBlueImage.getLayoutParams().height = cellHeight;
@@ -168,34 +135,62 @@ public class Board extends AppCompatActivity {
     }
 
    public void updatePlayerPositions(){
-       for (Player player: players
-            ) {
-           ImageView playerView = null;
-           int viewId = 0;
-           switch (player.getColor()) {
-               case BLUE:
-                   viewId = R.id.player_blue;
-                   break;
-               case RED:
-                   viewId = R.id.player_red;
-                   break;
-               case GREEN:
-                   viewId = R.id.player_green;
-                   break;
-               case PURPLE:
-                   viewId = R.id.player_purple;
-                   break;
+       SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+       String token = sharedPreferences.getString("token", null);
+       String lobbyId = sharedPreferences.getString("lobbyid", null);
+
+       SessionAPI.getStatusByLobby(token, UUID.fromString(lobbyId), new SessionAPI.GetStatusByLobbyCallback() {
+
+           @Override
+           public void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions) {
+               runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       (findViewById(R.id.player_blue)).setVisibility(View.INVISIBLE);
+                       (findViewById(R.id.player_purple)).setVisibility(View.INVISIBLE);
+
+                       (findViewById(R.id.player_red)).setVisibility(View.INVISIBLE);
+                       (findViewById(R.id.player_green)).setVisibility(View.INVISIBLE);
+
+                       for(Session session: sessions.values()){
+                           ImageView playerView = null;
+                           int viewId = 0;
+                           switch (session.getColor()) {
+                               case BLUE:
+                                   viewId = R.id.player_blue;
+                                   break;
+                               case RED:
+                                   viewId = R.id.player_red;
+                                   break;
+                               case GREEN:
+                                   viewId = R.id.player_green;
+                                   break;
+                               case PURPLE:
+                                   viewId = R.id.player_purple;
+                                   break;
+                           }
+                           if (viewId != 0) {
+                               playerView = findViewById(viewId);
+                               playerView.setVisibility(View.VISIBLE);
+
+                               if (playerView != null) {
+                                   GameboardField gameboardField = fieldsHandler.getField(session.getCurrentPosition()-1);
+                                   animateMove(playerView, playerView.getX(), playerView.getY(),
+                                           gameboardField.getX(), gameboardField.getY());
+                               }
+                           }
+
+                       }
+                   }
+               });
+
            }
-           if (viewId != 0) {
-               playerView = findViewById(viewId);
 
-               if (playerView != null) {
-                   animateMove(playerView, playerView.getX(), playerView.getY(), player.getCurrentField().getX(), player.getCurrentField().getY());
-               }
+           @Override
+           public void onGetStatusByLobbyFailure(String errorMessage) {
+               Toast.makeText(getApplicationContext(), "Could not get sessionLobbyStatus", Toast.LENGTH_SHORT).show();
            }
-
-
-       }
+       });
 
    }
     private void animateMove(ImageView imageView, float startX, float startY, float endX, float endY) {
