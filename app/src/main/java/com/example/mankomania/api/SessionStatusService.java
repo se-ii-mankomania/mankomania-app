@@ -8,7 +8,10 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.widget.Toast;
 
+import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
+
+import com.example.mankomania.logik.Color;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -101,7 +104,17 @@ public class SessionStatusService extends Service {
             notifyBalanceChanged(userId,newSession.getBalance());
         }
         if(fromerSession==null || Objects.equals(fromerSession.getIsPlayersTurn(), newSession.getIsPlayersTurn())){
-            notifyTurnChanged(userId,newSession.getIsPlayersTurn());
+            notifyTurnChanged(convertEnumToStringColor(newSession.getColor()),newSession.getIsPlayersTurn());
+        }
+    }
+
+    private String convertEnumToStringColor(Color color){
+        switch(color){
+            case BLUE: return "blau";
+            case RED: return "rot";
+            case PURPLE: return "lila";
+            case GREEN: return "grün";
+            default: return "";
         }
     }
     public interface PositionObserver {
@@ -111,7 +124,7 @@ public class SessionStatusService extends Service {
         void onBalanceChanged(UUID userId, int newBalance);
     }
     public interface PlayersTurnObserver{
-        void onTurnChanged(UUID userId, boolean newTurn);
+        void onTurnChanged(String color, boolean newTurn);
     }
 
     public void registerObserver(SessionStatusService.PositionObserver observer) {
@@ -148,9 +161,9 @@ public class SessionStatusService extends Service {
         }
     }
 
-    public void notifyTurnChanged(UUID userId,boolean newTurn) {
+    public void notifyTurnChanged(String color,boolean newTurn) {
         for (SessionStatusService.PlayersTurnObserver observer : playersTurnObservers) {
-            observer.onTurnChanged(userId, newTurn);
+            observer.onTurnChanged(color, newTurn);
         }
     }
 }

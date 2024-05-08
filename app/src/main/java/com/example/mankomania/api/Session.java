@@ -40,6 +40,7 @@ public class Session {
     public int getCurrentPosition() {
         return currentPosition;
     }
+    public Color getColor(){return color;}
 
     @NonNull
     @Override

@@ -106,8 +106,6 @@ public class Board extends AppCompatActivity {
 
         updatePlayerPositions();
 
-
-
         ImageView playerBlueImage = findViewById(R.id.player_blue);
         playerBlueImage.getLayoutParams().height = cellHeight;
         playerBlueImage.getLayoutParams().width = cellWidth;
