@@ -115,7 +115,6 @@ public class LobbyAPITests {
 
         // verify
         assertNotNull(jsonLobby);
-        assertNotNull(jsonLobby);
         assertEquals(name, jsonLobby.getString("name"));
         assertEquals(JSONObject.NULL, jsonLobby.get("password"));
         assertEquals(isPrivate, jsonLobby.getBoolean("isPrivate"));
