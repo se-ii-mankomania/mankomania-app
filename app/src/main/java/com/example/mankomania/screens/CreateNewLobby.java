@@ -93,8 +93,8 @@ public class CreateNewLobby extends AppCompatActivity implements LobbyAPI.AddLob
         runOnUiThread(() -> Toast.makeText(CreateNewLobby.this, "Lobby erfolgreich erstellt: " + message, Toast.LENGTH_SHORT).show());
 
         // go back to login page
-        Intent goToChooseYourCharacter = new Intent(CreateNewLobby.this, ChooseYourCharacter.class);
-        startActivity(goToChooseYourCharacter);
+        Intent goToGameScore = new Intent(CreateNewLobby.this, GameScore.class);
+        startActivity(goToGameScore);
     }
 
     @Override

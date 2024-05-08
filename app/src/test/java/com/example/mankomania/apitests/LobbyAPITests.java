@@ -216,7 +216,7 @@ public class LobbyAPITests {
         LobbyAPI.executeGetRequest(okHttpClient, request, callback);
 
         // verify callback
-        verify(callback, never()).onSuccess(any(String[].class));
+        verify(callback, never()).onSuccess(any(String[].class), anyList());
         verify(callback).onFailure("Keine Antwort!");
     }
 
@@ -248,7 +248,7 @@ public class LobbyAPITests {
         LobbyAPI.executeGetRequest(okHttpClient, request, callback);
 
         // verify callback
-        verify(callback, never()).onSuccess(any(String[].class));
+        verify(callback, never()).onSuccess(any(String[].class), anyList());
         verify(callback).onFailure(response.message());
     }
 
@@ -284,7 +284,7 @@ public class LobbyAPITests {
         LobbyAPI.executeGetRequest(okHttpClient, request, callback);
 
         // verify callback
-        verify(callback).onSuccess(any(String[].class));
+        verify(callback).onSuccess(any(String[].class), anyList());
         verify(callback, never()).onFailure(anyString());
     }
 

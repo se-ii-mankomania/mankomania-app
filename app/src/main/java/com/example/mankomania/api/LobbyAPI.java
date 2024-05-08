@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import okhttp3.Call;
@@ -26,7 +27,7 @@ public class LobbyAPI {
     private static final int PORT = HttpClient.getPort();
 
     public interface GetLobbiesCallback {
-        void onSuccess(String[] lobbies);
+        void onSuccess(String[] lobbiesStringArray, List<Lobby> lobbiesList);
         void onFailure(String errorMessage);
     }
 
@@ -189,7 +190,7 @@ public class LobbyAPI {
                         String[] lobbiesStringArray = new String[responseArray.length()];
                         lobbiesStringArray = generateStringArray(lobbies);
 
-                        callback.onSuccess(lobbiesStringArray);
+                        callback.onSuccess(lobbiesStringArray, lobbies);
                     } catch (JSONException e) {
                         callback.onFailure("Fehler beim Lesen der Response!");
                     }
