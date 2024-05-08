@@ -20,6 +20,7 @@ import com.example.mankomania.api.Lobby;
 import com.example.mankomania.api.LobbyAPI;
 
 import com.example.mankomania.api.SessionAPI;
+import com.example.mankomania.api.SessionStatusService;
 import com.example.mankomania.api.Status;
 
 import java.util.List;
@@ -121,6 +122,9 @@ public class GameScore extends AppCompatActivity implements SessionAPI.JoinSessi
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("lobbyid", selectedLobbyId.toString());
         editor.apply();
+
+        Intent sessionStatusServiceIntent=new Intent(this, SessionStatusService.class);
+        startService(sessionStatusServiceIntent);
 
         Intent chooseYourCharacterIntent = new Intent(GameScore.this, ChooseYourCharacter.class);
         startActivity(chooseYourCharacterIntent);
