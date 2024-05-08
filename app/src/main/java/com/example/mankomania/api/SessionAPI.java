@@ -18,6 +18,7 @@ import java.util.UUID;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -57,69 +58,15 @@ public class SessionAPI {
         // create request
         Request request = createPostRequest(jsonRequest, token, "/api/session/initialize");
 
-        HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onJoinSessionFailure("Keine Antwort!");
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if(response.isSuccessful()) {
-                    String responseBody = Objects.requireNonNull(response.body()).string();
-
-                    try {
-                        // create JSON object for response
-                        JSONObject jsonResponse = new JSONObject(responseBody);
-
-                        // return the message
-                        successMessage = jsonResponse.getString("message");
-                        callback.onJoinSessionSuccess(successMessage);
-                    } catch (JSONException e) {
-                        callback.onJoinSessionFailure("Fehler beim Lesen der Response!");
-                    }
-                } else {
-                    callback.onJoinSessionFailure(response.message());
-                }
-            }
-        });
+        // execute request
+        executeJoinSessionRequest(HttpClient.getHttpClient(), request, callback);
     }
     public static void getUnavailableColorsByLobby(String token, UUID lobbyid, final SessionAPI.GetUnavailableColorsByLobbyCallback callback) {
         // create request
         Request request = createGetRequest(token, "/api/session/unavailableColors/" + lobbyid.toString());
 
-        HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onGetUnavailableColorsByLobbyFailure("Keine Antwort!");
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    try (ResponseBody responseBody = response.body()) {
-                        if (responseBody != null) {
-                            String responseBodyString = responseBody.string();
-                            JSONArray responseArray = new JSONArray(responseBodyString);
-                            unavailableColors=new ArrayList<>();
-                            for(int i = 0; i < responseArray.length(); i++) {
-                                JSONObject jsonSession = responseArray.getJSONObject(i);
-                                String color = jsonSession.getString("color");
-                                Color enumValueOfColor=convertToEnums(color);
-                                unavailableColors.add(enumValueOfColor);
-                            }
-                            callback.onGetUnavailableColorsByLobbySuccess(unavailableColors);
-                        } else {
-                            callback.onGetUnavailableColorsByLobbyFailure("Response Body ist leer!");
-                        }
-                    } catch (JSONException e) {
-                        callback.onGetUnavailableColorsByLobbyFailure("Fehler beim Lesen der Response: " + e.getMessage());
-                    }
-                } else {
-                    callback.onGetUnavailableColorsByLobbyFailure(response.message());
-                }
-            }
-        });
+        // execute request
+        executeGetUnavailableColorsByLobbyRequest(HttpClient.getHttpClient(), request, callback);
     }
     private static Color convertToEnums(String color){
         switch (color){
@@ -134,39 +81,8 @@ public class SessionAPI {
         // create request
         Request request = createGetRequest(token, "/api/session/status/" + lobbyid.toString());
 
-        HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onGetStatusByLobbyFailure("Keine Antwort!");
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                try (ResponseBody responseBody = response.body()) {
-                    if (response.isSuccessful() && responseBody != null) {
-                        String responseString = responseBody.string();
-                        JSONArray responseArray = new JSONArray(responseString);
-                        sessions = new HashMap<>();
-                        for (int i = 0; i < responseArray.length(); i++) {
-                            JSONObject jsonSession = responseArray.getJSONObject(i);
-                            UUID userid = UUID.fromString(jsonSession.getString("userid"));
-                            String email = jsonSession.getString("email");
-                            Color color = convertToEnums(jsonSession.getString("color"));
-                            int currentPosition = jsonSession.getInt("currentposition");
-                            int balance = jsonSession.getInt("balance");
-                            boolean isPlayersTurn = jsonSession.getBoolean("isplayersturn");
-                            Session session = new Session(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
-                            sessions.put(userid, session);
-                        }
-                        callback.onGetStatusByLobbySuccess(sessions);
-                    } else {
-                        callback.onGetStatusByLobbyFailure(response.message());
-                    }
-                } catch (JSONException e) {
-                    callback.onGetStatusByLobbyFailure("Fehler beim Lesen der Response!");
-                }
-            }
-        });
+        // execute request
+        executeGetStatusByLobbyRequest(HttpClient.getHttpClient(), request, callback);
     }
     public static void setColor(String token, UUID lobbyid, String color,final SessionAPI.SetColorCallback callback) {
         // create JSONObject that holds color
@@ -175,32 +91,8 @@ public class SessionAPI {
         // create request
         Request request = createPostRequest(jsonRequest, token, "/api/session/setColor/"+ lobbyid.toString());
 
-        HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onSetColorFailure("Keine Antwort!");
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if(response.isSuccessful()) {
-                    String responseBody = Objects.requireNonNull(response.body()).string();
-
-                    try {
-                        // create JSON object for response
-                        JSONObject jsonResponse = new JSONObject(responseBody);
-
-                        // return the message
-                        successMessage = jsonResponse.getString("message");
-                        callback.onSetColorSuccess(successMessage);
-                    } catch (JSONException e) {
-                        callback.onSetColorFailure("Fehler beim Lesen der Response!");
-                    }
-                } else {
-                    callback.onSetColorFailure(response.message());
-                }
-            }
-        });
+        // execute request
+        executeSetColorRequest(HttpClient.getHttpClient(), request, callback);
     }
 
     public static JSONObject createJSONObject(UUID lobbyid) {
@@ -241,5 +133,134 @@ public class SessionAPI {
                 .header("Authorization", token)
                 .post(requestBody)
                 .build();
+    }
+
+    public static void executeJoinSessionRequest(OkHttpClient okHttpClient, Request request, final JoinSessionCallback callback) {
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                callback.onJoinSessionFailure("Keine Antwort!");
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if(response.isSuccessful()) {
+                    String responseBody = Objects.requireNonNull(response.body()).string();
+
+                    try {
+                        // create JSON object for response
+                        JSONObject jsonResponse = new JSONObject(responseBody);
+
+                        // return the message
+                        successMessage = jsonResponse.getString("message");
+                        callback.onJoinSessionSuccess(successMessage);
+                    } catch (JSONException e) {
+                        callback.onJoinSessionFailure("Fehler beim Lesen der Response!");
+                    }
+                } else {
+                    callback.onJoinSessionFailure(response.message());
+                }
+            }
+        });
+    }
+
+    public static void executeGetUnavailableColorsByLobbyRequest(OkHttpClient okHttpClient, Request request, final GetUnavailableColorsByLobbyCallback callback) {
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                callback.onGetUnavailableColorsByLobbyFailure("Keine Antwort!");
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try (ResponseBody responseBody = response.body()) {
+                        if (responseBody != null) {
+                            String responseBodyString = responseBody.string();
+                            JSONArray responseArray = new JSONArray(responseBodyString);
+                            unavailableColors=new ArrayList<>();
+                            for(int i = 0; i < responseArray.length(); i++) {
+                                JSONObject jsonSession = responseArray.getJSONObject(i);
+                                String color = jsonSession.getString("color");
+                                Color enumValueOfColor=convertToEnums(color);
+                                unavailableColors.add(enumValueOfColor);
+                            }
+                            callback.onGetUnavailableColorsByLobbySuccess(unavailableColors);
+                        } else {
+                            callback.onGetUnavailableColorsByLobbyFailure("Response Body ist leer!");
+                        }
+                    } catch (JSONException e) {
+                        callback.onGetUnavailableColorsByLobbyFailure("Fehler beim Lesen der Response: " + e.getMessage());
+                    }
+                } else {
+                    callback.onGetUnavailableColorsByLobbyFailure(response.message());
+                }
+            }
+        });
+    }
+
+    public static void executeGetStatusByLobbyRequest(OkHttpClient okHttpClient, Request request, GetStatusByLobbyCallback callback) {
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                callback.onGetStatusByLobbyFailure("Keine Antwort!");
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (response.isSuccessful() && responseBody != null) {
+                        String responseString = responseBody.string();
+                        JSONArray responseArray = new JSONArray(responseString);
+                        sessions = new HashMap<>();
+                        for (int i = 0; i < responseArray.length(); i++) {
+                            JSONObject jsonSession = responseArray.getJSONObject(i);
+                            UUID userid = UUID.fromString(jsonSession.getString("userid"));
+                            String email = jsonSession.getString("email");
+                            Color color = convertToEnums(jsonSession.getString("color"));
+                            int currentPosition = jsonSession.getInt("currentposition");
+                            int balance = jsonSession.getInt("balance");
+                            boolean isPlayersTurn = jsonSession.getBoolean("isplayersturn");
+                            Session session = new Session(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
+                            sessions.put(userid, session);
+                        }
+                        callback.onGetStatusByLobbySuccess(sessions);
+                    } else {
+                        callback.onGetStatusByLobbyFailure(response.message());
+                    }
+                } catch (JSONException e) {
+                    callback.onGetStatusByLobbyFailure("Fehler beim Lesen der Response!");
+                }
+            }
+        });
+    }
+
+    public static void executeSetColorRequest(OkHttpClient okHttpClient, Request request, SetColorCallback callback) {
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                callback.onSetColorFailure("Keine Antwort!");
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if(response.isSuccessful()) {
+                    String responseBody = Objects.requireNonNull(response.body()).string();
+
+                    try {
+                        // create JSON object for response
+                        JSONObject jsonResponse = new JSONObject(responseBody);
+
+                        // return the message
+                        successMessage = jsonResponse.getString("message");
+                        callback.onSetColorSuccess(successMessage);
+                    } catch (JSONException e) {
+                        callback.onSetColorFailure("Fehler beim Lesen der Response!");
+                    }
+                } else {
+                    callback.onSetColorFailure(response.message());
+                }
+            }
+        });
     }
 }
