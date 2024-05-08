@@ -28,10 +28,6 @@ public class SessionAPI {
     private static final String SERVER = HttpClient.getServer();
     private static final int PORT = HttpClient.getPort();
 
-    private static String successMessage;
-    private static List<Color> unavailableColors;
-    private static HashMap<UUID, Session> sessions;
-
     public interface JoinSessionCallback {
         void onJoinSessionSuccess(String successMessage);
         void onJoinSessionFailure(String errorMessage);
@@ -46,6 +42,7 @@ public class SessionAPI {
         void onGetStatusByLobbySuccess(HashMap<UUID,Session> sessions);
         void onGetStatusByLobbyFailure(String errorMessage);
     }
+
     public interface SetColorCallback {
         void onSetColorSuccess(String successMessage);
         void onSetColorFailure(String errorMessage);
@@ -152,7 +149,7 @@ public class SessionAPI {
                         JSONObject jsonResponse = new JSONObject(responseBody);
 
                         // return the message
-                        successMessage = jsonResponse.getString("message");
+                        String successMessage = jsonResponse.getString("message");
                         callback.onJoinSessionSuccess(successMessage);
                     } catch (JSONException e) {
                         callback.onJoinSessionFailure("Fehler beim Lesen der Response!");
@@ -178,7 +175,7 @@ public class SessionAPI {
                         if (responseBody != null) {
                             String responseBodyString = responseBody.string();
                             JSONArray responseArray = new JSONArray(responseBodyString);
-                            unavailableColors=new ArrayList<>();
+                            List<Color> unavailableColors=new ArrayList<>();
                             for(int i = 0; i < responseArray.length(); i++) {
                                 JSONObject jsonSession = responseArray.getJSONObject(i);
                                 String color = jsonSession.getString("color");
@@ -212,7 +209,7 @@ public class SessionAPI {
                     if (response.isSuccessful() && responseBody != null) {
                         String responseString = responseBody.string();
                         JSONArray responseArray = new JSONArray(responseString);
-                        sessions = new HashMap<>();
+                        HashMap<UUID, Session> sessions = new HashMap<>();
                         for (int i = 0; i < responseArray.length(); i++) {
                             JSONObject jsonSession = responseArray.getJSONObject(i);
                             UUID userid = UUID.fromString(jsonSession.getString("userid"));
@@ -252,7 +249,7 @@ public class SessionAPI {
                         JSONObject jsonResponse = new JSONObject(responseBody);
 
                         // return the message
-                        successMessage = jsonResponse.getString("message");
+                        String successMessage = jsonResponse.getString("message");
                         callback.onSetColorSuccess(successMessage);
                     } catch (JSONException e) {
                         callback.onSetColorFailure("Fehler beim Lesen der Response!");
