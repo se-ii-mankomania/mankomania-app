@@ -44,4 +44,40 @@ public class Session {
                 ", isPlayersTurn=" + isPlayersTurn +
                 '}';
     }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public int getCurrentPosition() {
+        return currentPosition;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public int getAmountKVShares() {
+        return amountKVShares;
+    }
+
+    public int getAmountTShares() {
+        return amountTShares;
+    }
+
+    public int getAmountBShares() {
+        return amountBShares;
+    }
+
+    public boolean isPlayersTurn() {
+        return isPlayersTurn;
+    }
 }
