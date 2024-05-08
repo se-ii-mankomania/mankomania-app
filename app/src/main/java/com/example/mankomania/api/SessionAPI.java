@@ -24,6 +24,9 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class SessionAPI {
+    private static final String SERVER = HttpClient.getServer();
+    private static final int PORT = HttpClient.getPort();
+
     private static String successMessage;
     private static List<Color> unavailableColors;
     private static HashMap<UUID, Session> sessions;
@@ -51,12 +54,8 @@ public class SessionAPI {
         // create JSONObject that holds lobbyID
         JSONObject jsonRequest = createJSONObject(lobbyid);
 
-        RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
-        Request request = new Request.Builder()
-                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/session/initialize")
-                .header("Authorization", token)
-                .post(requestBody)
-                .build();
+        // create request
+        Request request = createPostRequest(jsonRequest, token, "/api/session/initialize");
 
         HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
             @Override
@@ -86,10 +85,8 @@ public class SessionAPI {
         });
     }
     public static void getUnavailableColorsByLobby(String token, UUID lobbyid, final SessionAPI.GetUnavailableColorsByLobbyCallback callback) {
-        Request request = new Request.Builder()
-                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/session/unavailableColors/" + lobbyid.toString())
-                .header("Authorization", token)
-                .build();
+        // create request
+        Request request = createGetRequest(token, "/api/session/unavailableColors/" + lobbyid.toString());
 
         HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
             @Override
@@ -134,10 +131,8 @@ public class SessionAPI {
         }
     }
     public static void getStatusByLobby(String token, UUID lobbyid, final SessionAPI.GetStatusByLobbyCallback callback) {
-        Request request = new Request.Builder()
-                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/session/status/" + lobbyid.toString())
-                .header("Authorization", token)
-                .build();
+        // create request
+        Request request = createGetRequest(token, "/api/session/status/" + lobbyid.toString());
 
         HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
             @Override
@@ -177,12 +172,8 @@ public class SessionAPI {
         // create JSONObject that holds color
         JSONObject jsonRequest = createJSONObject(color);
 
-        RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
-        Request request = new Request.Builder()
-                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/session/setColor/"+ lobbyid.toString())
-                .header("Authorization", token)
-                .post(requestBody)
-                .build();
+        // create request
+        Request request = createPostRequest(jsonRequest, token, "/api/session/setColor/"+ lobbyid.toString());
 
         HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
             @Override
@@ -234,5 +225,21 @@ public class SessionAPI {
         }
 
         return jsonRequest;
+    }
+
+    public static Request createGetRequest(String token, String path) {
+        return new Request.Builder()
+                .url(SERVER + ":" + PORT + path)
+                .header("Authorization", token)
+                .build();
+    }
+
+    public static Request createPostRequest(JSONObject jsonRequest, String token, String path) {
+        RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
+        return new Request.Builder()
+                .url(SERVER + ":" + PORT + path)
+                .header("Authorization", token)
+                .post(requestBody)
+                .build();
     }
 }
