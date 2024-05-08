@@ -48,13 +48,9 @@ public class SessionAPI {
     }
 
     public static void joinSession(String token, UUID lobbyid,final SessionAPI.JoinSessionCallback callback) {
-        JSONObject jsonRequest = new JSONObject();
-        try {
-            jsonRequest.put("lobbyid", lobbyid);
+        // create JSONObject that holds lobbyID
+        JSONObject jsonRequest = createJSONObject(lobbyid);
 
-        } catch (JSONException e) {
-            callback.onJoinSessionFailure("Request konnte nicht erstellt werden!");
-        }
         RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
         Request request = new Request.Builder()
                 .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/session/initialize")
@@ -178,13 +174,9 @@ public class SessionAPI {
         });
     }
     public static void setColor(String token, UUID lobbyid, String color,final SessionAPI.SetColorCallback callback) {
-        JSONObject jsonRequest = new JSONObject();
-        try {
-            jsonRequest.put("color", color);
+        // create JSONObject that holds color
+        JSONObject jsonRequest = createJSONObject(color);
 
-        } catch (JSONException e) {
-            callback.onSetColorFailure("Request konnte nicht erstellt werden!");
-        }
         RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
         Request request = new Request.Builder()
                 .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/session/setColor/"+ lobbyid.toString())
@@ -218,5 +210,29 @@ public class SessionAPI {
                 }
             }
         });
+    }
+
+    public static JSONObject createJSONObject(UUID lobbyid) {
+        JSONObject jsonRequest = new JSONObject();
+        try {
+            jsonRequest.put("lobbyid", lobbyid);
+
+        } catch (JSONException e) {
+            // callback.onJoinSessionFailure("Request konnte nicht erstellt werden!");
+        }
+
+        return jsonRequest;
+    }
+
+    public static JSONObject createJSONObject(String color) {
+        JSONObject jsonRequest = new JSONObject();
+        try {
+            jsonRequest.put("color", color);
+
+        } catch (JSONException e) {
+            // callback.onSetColorFailure("Request konnte nicht erstellt werden!");
+        }
+
+        return jsonRequest;
     }
 }
