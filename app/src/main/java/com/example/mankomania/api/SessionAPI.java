@@ -65,7 +65,7 @@ public class SessionAPI {
         // execute request
         executeGetUnavailableColorsByLobbyRequest(HttpClient.getHttpClient(), request, callback);
     }
-    private static Color convertToEnums(String color){
+    public static Color convertToEnums(String color){
         switch (color){
             case "blue": return Color.BLUE;
             case "red": return Color.RED;
