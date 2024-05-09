@@ -18,6 +18,7 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class SessionAPITests {
     @Test
@@ -322,5 +323,41 @@ public class SessionAPITests {
         // verify callback
         verify(callback, never()).onSetColorSuccess(anyString());
         verify(callback).onSetColorFailure("Keine Antwort!");
+    }
+
+    @Test
+    void testExecuteJoinSessionRequest_SuccessfulResponse() throws IOException {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock Response
+        ResponseBody responseBody = mock(ResponseBody.class);
+        when(responseBody.string()).thenReturn("{\"message\":\"Joined lobby successfully\"}");
+
+        Response response = mock(Response.class);
+        when(response.isSuccessful()).thenReturn(true);
+        when(response.body()).thenReturn(responseBody);
+
+        // mock Call
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onResponse(call, response);
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock JoinSessionCallback
+        SessionAPI.JoinSessionCallback callback = mock(SessionAPI.JoinSessionCallback.class);
+
+        // execute request
+        SessionAPI.executeJoinSessionRequest(okHttpClient, request, callback);
+
+        // verify callback
+        verify(callback).onJoinSessionSuccess("Joined lobby successfully");
+        verify(callback, never()).onJoinSessionFailure(anyString());
     }
 }
