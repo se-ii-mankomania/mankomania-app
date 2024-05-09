@@ -1,5 +1,6 @@
 package com.example.mankomania.apitests;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import com.example.mankomania.api.SessionAPI;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import okhttp3.Call;
@@ -82,6 +84,41 @@ public class SessionAPITests {
 
         // assert
         assertEquals("http://10.0.2.2:3000/api/session/setColor/1234", request.url().toString());
+    }
+
+    @Test
+    void testGetColors() throws JSONException {
+        // mock JSONArray and JSONObjects
+        JSONArray responseArray = mock(JSONArray.class);
+        JSONObject jsonObject1 = mock(JSONObject.class);
+        JSONObject jsonObject2 = mock(JSONObject.class);
+        JSONObject jsonObject3 = mock(JSONObject.class);
+        JSONObject jsonObject4 = mock(JSONObject.class);
+
+        // mock JSONArray behavior
+        when(responseArray.length()).thenReturn(4);
+        when(responseArray.getJSONObject(0)).thenReturn(jsonObject1);
+        when(responseArray.getJSONObject(1)).thenReturn(jsonObject2);
+        when(responseArray.getJSONObject(2)).thenReturn(jsonObject3);
+        when(responseArray.getJSONObject(3)).thenReturn(jsonObject4);
+
+        // mock JSONObject behavior
+        when(jsonObject1.getString("color")).thenReturn("blue");
+        when(jsonObject2.getString("color")).thenReturn("red");
+        when(jsonObject3.getString("color")).thenReturn("green");
+        when(jsonObject4.getString("color")).thenReturn("lila");
+
+        String responseBodyString = "[{\"color\":\"blue\"},{\"color\":\"red\"},{\"color\":\"green\"},{\"color\":\"lila\"}]";
+
+        // call method
+        List<Color> colors = SessionAPI.getColors(responseBodyString);
+
+        // assert
+        assertEquals(4, colors.size());
+        assertEquals(Color.BLUE, colors.get(0));
+        assertEquals(Color.RED, colors.get(1));
+        assertEquals(Color.GREEN, colors.get(2));
+        assertEquals(Color.PURPLE, colors.get(3));
     }
 
     @Test
