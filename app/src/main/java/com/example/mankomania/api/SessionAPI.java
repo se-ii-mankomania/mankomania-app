@@ -173,15 +173,7 @@ public class SessionAPI {
                 if (response.isSuccessful()) {
                     try (ResponseBody responseBody = response.body()) {
                         if (responseBody != null) {
-                            String responseBodyString = responseBody.string();
-                            JSONArray responseArray = new JSONArray(responseBodyString);
-                            List<Color> unavailableColors=new ArrayList<>();
-                            for(int i = 0; i < responseArray.length(); i++) {
-                                JSONObject jsonSession = responseArray.getJSONObject(i);
-                                String color = jsonSession.getString("color");
-                                Color enumValueOfColor=convertToEnums(color);
-                                unavailableColors.add(enumValueOfColor);
-                            }
+                            List<Color> unavailableColors = getColors(responseBody.string());
                             callback.onGetUnavailableColorsByLobbySuccess(unavailableColors);
                         } else {
                             callback.onGetUnavailableColorsByLobbyFailure("Response Body ist leer!");
@@ -259,5 +251,18 @@ public class SessionAPI {
                 }
             }
         });
+    }
+
+    @NonNull
+    private static List<Color> getColors(String responseBodyString) throws JSONException {
+        JSONArray responseArray = new JSONArray(responseBodyString);
+        List<Color> unavailableColors=new ArrayList<>();
+        for(int i = 0; i < responseArray.length(); i++) {
+            JSONObject jsonSession = responseArray.getJSONObject(i);
+            String color = jsonSession.getString("color");
+            Color enumValueOfColor=convertToEnums(color);
+            unavailableColors.add(enumValueOfColor);
+        }
+        return unavailableColors;
     }
 }
