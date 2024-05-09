@@ -254,7 +254,7 @@ public class SessionAPI {
     }
 
     @NonNull
-    private static List<Color> getColors(String responseBodyString) throws JSONException {
+    public static List<Color> getColors(String responseBodyString) throws JSONException {
         JSONArray responseArray = new JSONArray(responseBodyString);
         List<Color> unavailableColors=new ArrayList<>();
         for(int i = 0; i < responseArray.length(); i++) {
