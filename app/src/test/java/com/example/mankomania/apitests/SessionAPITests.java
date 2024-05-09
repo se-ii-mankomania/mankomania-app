@@ -9,6 +9,7 @@ import static org.mockito.Mockito.*;
 import com.example.mankomania.logik.spieler.Color;
 import com.example.mankomania.api.SessionAPI;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -209,5 +210,117 @@ public class SessionAPITests {
         verify(callback, never()).onSetColorSuccess(anyString());
         verify(callback).onSetColorFailure(response.message());
 
+    }
+
+    @Test
+    void testExecuteJoinSessionRequest_ExceptionThrown() {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock call
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onFailure(call, new IOException());
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock JoinSessionCallback
+        SessionAPI.JoinSessionCallback callback = mock(SessionAPI.JoinSessionCallback.class);
+
+        // execute request
+        SessionAPI.executeJoinSessionRequest(okHttpClient, request, callback);
+
+        // verify callback
+        verify(callback, never()).onJoinSessionSuccess(anyString());
+        verify(callback).onJoinSessionFailure("Keine Antwort!");
+    }
+
+    @Test
+    void testExecuteGetUnavailableColorsByLobbyRequest_ExceptionThrown() {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock call
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onFailure(call, new IOException());
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock GetUnavailableColorsByLobbyCallback
+        SessionAPI.GetUnavailableColorsByLobbyCallback callback = mock(SessionAPI.GetUnavailableColorsByLobbyCallback.class);
+
+        // execute request
+        SessionAPI.executeGetUnavailableColorsByLobbyRequest(okHttpClient, request, callback);
+
+        // verify callback
+        verify(callback, never()).onGetUnavailableColorsByLobbySuccess(anyList());
+        verify(callback).onGetUnavailableColorsByLobbyFailure("Keine Antwort!");
+    }
+
+    @Test
+    void testExecuteGetStatusByLobbyRequest_ExceptionThrown() {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock call
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onFailure(call, new IOException());
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock GetStatusByLobbyCallback
+        SessionAPI.GetStatusByLobbyCallback callback = mock(SessionAPI.GetStatusByLobbyCallback.class);
+
+        // execute request
+        SessionAPI.executeGetStatusByLobbyRequest(okHttpClient, request, callback);
+
+        // verify callback
+        verify(callback, never()).onGetStatusByLobbySuccess(any(HashMap.class));
+        verify(callback).onGetStatusByLobbyFailure("Keine Antwort!");
+    }
+
+    @Test
+    void testExecuteSetColorRequest_ExceptionThrown() {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock call
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onFailure(call, new IOException());
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock SetColorCallback
+        SessionAPI.SetColorCallback callback = mock(SessionAPI.SetColorCallback.class);
+
+        // execute request
+        SessionAPI.executeSetColorRequest(okHttpClient, request, callback);
+
+        // verify callback
+        verify(callback, never()).onSetColorSuccess(anyString());
+        verify(callback).onSetColorFailure("Keine Antwort!");
     }
 }
