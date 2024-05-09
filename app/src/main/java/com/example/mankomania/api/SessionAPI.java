@@ -199,20 +199,8 @@ public class SessionAPI {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
                     if (response.isSuccessful() && responseBody != null) {
-                        String responseString = responseBody.string();
-                        JSONArray responseArray = new JSONArray(responseString);
-                        HashMap<UUID, Session> sessions = new HashMap<>();
-                        for (int i = 0; i < responseArray.length(); i++) {
-                            JSONObject jsonSession = responseArray.getJSONObject(i);
-                            UUID userid = UUID.fromString(jsonSession.getString("userid"));
-                            String email = jsonSession.getString("email");
-                            Color color = convertToEnums(jsonSession.getString("color"));
-                            int currentPosition = jsonSession.getInt("currentposition");
-                            int balance = jsonSession.getInt("balance");
-                            boolean isPlayersTurn = jsonSession.getBoolean("isplayersturn");
-                            Session session = new Session(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
-                            sessions.put(userid, session);
-                        }
+                        JSONArray responseArray = new JSONArray(responseBody.string());
+                        HashMap<UUID, Session> sessions = createSessions(responseArray);
                         callback.onGetStatusByLobbySuccess(sessions);
                     } else {
                         callback.onGetStatusByLobbyFailure(response.message());
@@ -264,5 +252,21 @@ public class SessionAPI {
             unavailableColors.add(enumValueOfColor);
         }
         return unavailableColors;
+    }
+
+    public static HashMap<UUID, Session> createSessions(JSONArray responseArray) throws JSONException {
+        HashMap<UUID, Session> sessions = new HashMap<>();
+        for (int i = 0; i < responseArray.length(); i++) {
+            JSONObject jsonSession = responseArray.getJSONObject(i);
+            UUID userid = UUID.fromString(jsonSession.getString("userid"));
+            String email = jsonSession.getString("email");
+            Color color = convertToEnums(jsonSession.getString("color"));
+            int currentPosition = jsonSession.getInt("currentposition");
+            int balance = jsonSession.getInt("balance");
+            boolean isPlayersTurn = jsonSession.getBoolean("isplayersturn");
+            Session session = new Session(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
+            sessions.put(userid, session);
+        }
+        return sessions;
     }
 }
