@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import org.mockito.ArgumentCaptor;
 
+import com.example.mankomania.api.Session;
 import com.example.mankomania.logik.spieler.Color;
 import com.example.mankomania.api.SessionAPI;
 
@@ -121,6 +122,53 @@ public class SessionAPITests {
         assertEquals(Color.RED, colors.get(1));
         assertEquals(Color.GREEN, colors.get(2));
         assertEquals(Color.PURPLE, colors.get(3));
+    }
+
+    @Test
+    void testCreateSessions() throws JSONException {
+        // create JSONObjetcs representing sessions
+        JSONObject session1 = new JSONObject();
+        session1.put("userid", "11f28510-4d63-4f8d-943a-12ecbc16caae");
+        session1.put("email", "abc@abc.com");
+        session1.put("color", "blue");
+        session1.put("currentposition", 5);
+        session1.put("balance", 100);
+        session1.put("isplayersturn", true);
+
+        JSONObject session2 = new JSONObject();
+        session2.put("userid", "224a27d5-96a3-433c-89a2-d9a2ae2b2041");
+        session2.put("email", "def@def.com");
+        session2.put("color", "red");
+        session2.put("currentposition", 8);
+        session2.put("balance", 150);
+        session2.put("isplayersturn", false);
+
+        // put them into array
+        JSONArray responseArray = new JSONArray();
+        responseArray.put(session1);
+        responseArray.put(session2);
+
+        // call method and store in HashMap
+        HashMap<UUID, Session> sessions = SessionAPI.createSessions(responseArray);
+
+        // get actual Session Objects for assertions
+        Session session1Result = sessions.get(UUID.fromString("11f28510-4d63-4f8d-943a-12ecbc16caae"));
+        Session session2Result = sessions.get(UUID.fromString("224a27d5-96a3-433c-89a2-d9a2ae2b2041"));
+
+        // assert
+        assertEquals(2, sessions.size());
+
+        assertEquals("abc@abc.com", session1Result.getEmail());
+        assertEquals(Color.BLUE, session1Result.getColor());
+        assertEquals(5, session1Result.getCurrentPosition());
+        assertEquals(100, session1Result.getBalance());
+        assertEquals(true, session1Result.isPlayersTurn());
+
+        assertEquals("def@def.com", session2Result.getEmail());
+        assertEquals(Color.RED, session2Result.getColor());
+        assertEquals(8, session2Result.getCurrentPosition());
+        assertEquals(150, session2Result.getBalance());
+        assertEquals(false, session2Result.isPlayersTurn());
     }
 
     @Test
