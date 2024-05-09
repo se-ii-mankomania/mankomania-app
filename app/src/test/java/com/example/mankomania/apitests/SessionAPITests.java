@@ -6,11 +6,13 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import org.mockito.ArgumentCaptor;
 
 import com.example.mankomania.logik.spieler.Color;
 import com.example.mankomania.api.SessionAPI;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -396,5 +398,52 @@ public class SessionAPITests {
         // verify callback
         verify(callback).onJoinSessionSuccess("Joined lobby successfully");
         verify(callback, never()).onJoinSessionFailure(anyString());
+    }
+
+    @Test
+    void testExecuteGetUnavailableColorsByLobbyRequest_SuccessfulResponse() throws IOException {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock Response
+        ResponseBody responseBody = mock(ResponseBody.class);
+        when(responseBody.string()).thenReturn("[{\"color\":\"blue\"},{\"color\":\"red\"}]");
+
+        Response response = mock(Response.class);
+        when(response.isSuccessful()).thenReturn(true);
+        when(response.body()).thenReturn(responseBody);
+
+        // mock Call
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onResponse(call, response);
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock GetUnavailableColorsByLobbyCallback
+        SessionAPI.GetUnavailableColorsByLobbyCallback callback = mock(SessionAPI.GetUnavailableColorsByLobbyCallback.class);
+
+        // execute request
+        SessionAPI.executeGetUnavailableColorsByLobbyRequest(okHttpClient, request, callback);
+
+        // set up ArgumentCaptor
+        ArgumentCaptor<List<Color>> captor = ArgumentCaptor.forClass(List.class);
+
+        // set up List
+        List<Color> colors = new ArrayList<>();
+        colors.add(Color.BLUE);
+        colors.add(Color.RED);
+
+        // verify callback
+        verify(callback).onGetUnavailableColorsByLobbySuccess(captor.capture());
+        verify(callback, never()).onGetUnavailableColorsByLobbyFailure(anyString());
+
+        // assert
+        assertEquals(colors, captor.getValue());
     }
 }
