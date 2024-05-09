@@ -1,14 +1,12 @@
 package com.example.mankomania.api;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
 import android.widget.Toast;
 
-import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
 import com.example.mankomania.logik.Color;
@@ -37,6 +35,13 @@ public class SessionStatusService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        SharedPreferences sharedPreferencesToken = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        token = sharedPreferencesToken.getString("token", null);
+        SharedPreferences sharedPreferencesLobbyId = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        lobbyId = UUID.fromString(sharedPreferencesLobbyId.getString("lobbyid", null));
+
+
         handler = new Handler();
         runnable = new Runnable() {
             @Override
@@ -49,12 +54,6 @@ public class SessionStatusService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        token = sharedPreferences.getString("token", null);
-        String lobbyIdString = sharedPreferences.getString("lobbyId", null);
-        if (lobbyIdString != null) {
-            lobbyId = UUID.fromString(lobbyIdString);
-        }
         startRepeatingTask();
         return START_STICKY;
     }
@@ -80,17 +79,21 @@ public class SessionStatusService extends Service {
     }
 
     private void sendStatusRequest() {
-        SessionAPI.getStatusByLobby(token, lobbyId, new SessionAPI.GetStatusByLobbyCallback() {
-            @Override
-            public void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions) {
-                // Brauche ich no was?
-            }
+        if (lobbyId != null) {
+            SessionAPI.getStatusByLobby(token, lobbyId, new SessionAPI.GetStatusByLobbyCallback() {
+                @Override
+                public void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions) {
+                    // brauchi no was?
+                }
 
-            @Override
-            public void onGetStatusByLobbyFailure(String errorMessage) {
-                Toast.makeText(getApplicationContext(), "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onGetStatusByLobbyFailure(String errorMessage) {
+                    Toast.makeText(getApplicationContext(), "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(getApplicationContext(), "Lobby-ID ist null", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void notifyUpdatesInSession(Session newSession, UUID userId){

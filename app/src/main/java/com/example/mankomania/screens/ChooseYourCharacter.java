@@ -14,7 +14,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -23,7 +22,6 @@ import android.widget.Toast;
 
 import com.example.mankomania.R;
 import com.example.mankomania.api.SessionAPI;
-import com.example.mankomania.api.SessionStatusService;
 import com.example.mankomania.logik.Color;
 
 import java.util.List;
@@ -78,7 +76,6 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
         @Override
         public void run() {
             restoreRadioButtons();
-            Log.wtf("WTF",lobbyid.toString());
             SessionAPI.getUnavailableColorsByLobby(token,lobbyid,ChooseYourCharacter.this);
             handler.postDelayed(this, INTERVAL_MS);
         }
