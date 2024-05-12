@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
@@ -34,6 +35,17 @@ public class Board extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_board);
+
+        Intent sessionStatusServiceIntent=new Intent(this, SessionStatusService.class);
+        startService(sessionStatusServiceIntent);
+
+        TextView currentPlayer=findViewById(R.id.textView);
+        SessionStatusService sessionStatusService = SessionStatusService.getInstance();
+        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn) -> {
+            runOnUiThread(() -> {
+                currentPlayer.setText(color);
+            });
+        });
 
 
         ZoomLayout zoomLayout = findViewById(R.id.zoom_linear_layout);

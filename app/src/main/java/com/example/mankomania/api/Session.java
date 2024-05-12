@@ -9,7 +9,7 @@ import java.util.UUID;
 public class Session {
     private final UUID userId;
     private final String email;
-    private final Color color;
+    private Color color;
     private final int currentPosition;
     private final int balance;
     private final int amountKVShares;
@@ -40,7 +40,7 @@ public class Session {
     public int getCurrentPosition() {
         return currentPosition;
     }
-    public Color getColor(){return color;}
+    public Color getColor(){return this.color;}
 
     @NonNull
     @Override

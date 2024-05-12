@@ -1,5 +1,7 @@
 package com.example.mankomania.api;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.mankomania.logik.Color;
@@ -163,13 +165,15 @@ public class SessionAPI {
                                 UUID userid = UUID.fromString(jsonSession.getString("userid"));
                                 String email = jsonSession.getString("email");
                                 String colorString=jsonSession.getString("color");
+                                Log.wtf("HAAALLLOOOOO",colorString);
                                 Color color = convertToEnums(colorString);
+                                Log.wtf("HAAALLLOOOOOOOENUM", Objects.requireNonNull(color).toString());
                                 int currentPosition = jsonSession.getInt("currentposition");
                                 int balance = jsonSession.getInt("balance");
                                 boolean isPlayersTurn = jsonSession.getBoolean("isplayersturn");
 
                                 Session session = new Session(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
-                                SessionStatusService sessionStatusService = new SessionStatusService();
+                                SessionStatusService sessionStatusService = SessionStatusService.getInstance();
                                 sessionStatusService.notifyUpdatesInSession(session, userid);
                                 sessions.put(userid, session);
 

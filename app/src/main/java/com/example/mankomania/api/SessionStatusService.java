@@ -30,7 +30,14 @@ public class SessionStatusService extends Service {
     private String token;
     private UUID lobbyId;
 
-    public SessionStatusService() {}
+    private static SessionStatusService instance;
+
+    public static SessionStatusService getInstance() {
+        if (instance == null) {
+            instance = new SessionStatusService();
+        }
+        return instance;
+    }
 
     @Override
     public void onCreate() {

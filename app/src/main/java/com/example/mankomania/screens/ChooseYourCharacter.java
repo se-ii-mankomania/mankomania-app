@@ -177,6 +177,7 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
     public void onSetColorSuccess(String successMessage) {
         //Session beitreten
         stopRepeatingTask();
+
         Intent startGameWithChosenCharacter=new Intent(ChooseYourCharacter.this, Board.class);
         startActivity(startGameWithChosenCharacter);
     }
