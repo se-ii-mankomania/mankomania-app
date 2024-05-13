@@ -4,14 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.example.mankomania.logik.NoteTypes;
-import com.example.mankomania.logik.Wallet;
+import com.example.mankomania.logik.geldboerse.NoteTypes;
+import com.example.mankomania.logik.geldboerse.Wallet;
 
 import org.junit.jupiter.api.Test;
 
 
 
-public class WalletTest {
+class WalletTest {
     private Wallet wallet = new Wallet();
 
     //Stellt sicher, dass das hinzufügen funktioniert und der Gesamtbetrag aktualisiert wird

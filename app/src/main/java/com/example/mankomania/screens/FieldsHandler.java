@@ -5,7 +5,7 @@ import com.example.mankomania.gameboardfields.GameboardField;
 import com.example.mankomania.gameboardfields.GoToField;
 import com.example.mankomania.gameboardfields.HotelField;
 import com.example.mankomania.gameboardfields.ProfitField;
-import com.example.mankomania.logik.Player;
+import com.example.mankomania.logik.spieler.Player;
 
 import java.io.Serializable;
 

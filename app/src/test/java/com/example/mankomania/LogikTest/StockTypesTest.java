@@ -2,12 +2,12 @@ package com.example.mankomania.LogikTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.example.mankomania.logik.StockTypes;
+import com.example.mankomania.logik.aktien.StockTypes;
 
 import org.junit.jupiter.api.Test;
 
 
-public class StockTypesTest {
+class StockTypesTest {
     //Testet ob die richtigen Namen zurückgegeben werden
     @Test
     void testNameOfBRUCHSTAHL_AG(){

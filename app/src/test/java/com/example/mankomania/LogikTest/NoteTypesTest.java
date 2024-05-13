@@ -1,11 +1,11 @@
 package com.example.mankomania.LogikTest;
 
-import com.example.mankomania.logik.NoteTypes;
+import com.example.mankomania.logik.geldboerse.NoteTypes;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 
-public class NoteTypesTest {
+class NoteTypesTest {
 
     //Prüft ob FIVETHOUSAND den richtigen Wert hat
     @Test
