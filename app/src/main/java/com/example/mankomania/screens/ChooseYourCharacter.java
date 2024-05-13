@@ -62,14 +62,9 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
 
             token = sharedPreferences.getString("token", null);
             lobbyid = UUID.fromString(sharedPreferences.getString("lobbyid", null));
-        } catch (GeneralSecurityException | IOException e) {
-            // e.printStackTrace();
-        }
+        } catch (GeneralSecurityException | IOException ignored) {
 
-//        SharedPreferences sharedPreferencesToken = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-//        token = sharedPreferencesToken.getString("token", null);
-//        SharedPreferences sharedPreferencesLobbyId = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-//        lobbyid = UUID.fromString(sharedPreferencesLobbyId.getString("lobbyid", null));
+        }
 
         handler = new Handler(Looper.getMainLooper());
         startRepeatingTask();
