@@ -30,25 +30,35 @@ public class SessionAPI {
 
     public interface JoinSessionCallback {
         void onJoinSessionSuccess(String successMessage);
+
         void onJoinSessionFailure(String errorMessage);
     }
 
     public interface GetUnavailableColorsByLobbyCallback {
         void onGetUnavailableColorsByLobbySuccess(List<Color> colors);
+
         void onGetUnavailableColorsByLobbyFailure(String errorMessage);
     }
 
     public interface GetStatusByLobbyCallback {
-        void onGetStatusByLobbySuccess(HashMap<UUID,Session> sessions);
+        void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions);
+
         void onGetStatusByLobbyFailure(String errorMessage);
     }
 
     public interface SetColorCallback {
         void onSetColorSuccess(String successMessage);
+
         void onSetColorFailure(String errorMessage);
     }
 
-    public static void joinSession(String token, UUID lobbyid,final SessionAPI.JoinSessionCallback callback) {
+    /**
+     * call this method to join a session
+     * @param token: authentication token (generated at login)
+     * @param lobbyid: ID of selected lobby from screen
+     * @param callback: use JoinSessionCallback
+     */
+    public static void joinSession(String token, UUID lobbyid, final SessionAPI.JoinSessionCallback callback) {
         // create JSONObject that holds lobbyID
         JSONObject jsonRequest = createJSONObject(lobbyid);
 
@@ -58,6 +68,13 @@ public class SessionAPI {
         // execute request
         executeJoinSessionRequest(HttpClient.getHttpClient(), request, callback);
     }
+
+    /**
+     * call this method to see which colors are unavailable
+     * @param token: authentication token (generated at login)
+     * @param lobbyid: ID of selected lobby from shared preferences
+     * @param callback: use GetUnavailableColorsByLobbyCallback
+     */
     public static void getUnavailableColorsByLobby(String token, UUID lobbyid, final SessionAPI.GetUnavailableColorsByLobbyCallback callback) {
         // create request
         Request request = createGetRequest(token, "/api/session/unavailableColors/" + lobbyid.toString());
@@ -65,15 +82,13 @@ public class SessionAPI {
         // execute request
         executeGetUnavailableColorsByLobbyRequest(HttpClient.getHttpClient(), request, callback);
     }
-    public static Color convertToEnums(String color){
-        switch (color){
-            case "blue": return Color.BLUE;
-            case "red": return Color.RED;
-            case "green": return Color.GREEN;
-            case "lila":  return Color.PURPLE;
-            default: return null;
-        }
-    }
+
+    /**
+     * call this method to get the current game status of the game
+     * @param token: authentication token (generated at login)
+     * @param lobbyid: ID of selected lobby from shared preferences
+     * @param callback: use GetStatusByLobbyCallback
+     */
     public static void getStatusByLobby(String token, UUID lobbyid, final SessionAPI.GetStatusByLobbyCallback callback) {
         // create request
         Request request = createGetRequest(token, "/api/session/status/" + lobbyid.toString());
@@ -81,17 +96,91 @@ public class SessionAPI {
         // execute request
         executeGetStatusByLobbyRequest(HttpClient.getHttpClient(), request, callback);
     }
-    public static void setColor(String token, UUID lobbyid, String color,final SessionAPI.SetColorCallback callback) {
+
+    /**
+     * call this method to choose a color
+     * @param token: authentication token (generated at login)
+     * @param lobbyid: ID of selected lobby from shared preferences
+     * @param color: Color Object
+     * @param callback: use SetColorCallback
+     */
+    public static void setColor(String token, UUID lobbyid, String color, final SessionAPI.SetColorCallback callback) {
         // create JSONObject that holds color
         JSONObject jsonRequest = createJSONObject(color);
 
         // create request
-        Request request = createPostRequest(jsonRequest, token, "/api/session/setColor/"+ lobbyid.toString());
+        Request request = createPostRequest(jsonRequest, token, "/api/session/setColor/" + lobbyid.toString());
 
         // execute request
         executeSetColorRequest(HttpClient.getHttpClient(), request, callback);
     }
 
+    /**
+     * converts a string to Color object
+     * @param color: String ("blue", "red", "green", "lila")
+     * @return accoring Color object
+     */
+    public static Color convertToEnums(String color) {
+        switch (color) {
+            case "blue":
+                return Color.BLUE;
+            case "red":
+                return Color.RED;
+            case "green":
+                return Color.GREEN;
+            case "lila":
+                return Color.PURPLE;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * get a list of colors from a String (generated off a ResponseBody Object)
+     * @param responseBodyString: ResponseBody.string()
+     * @return list of Color objects
+     * @throws JSONException when JSONObject handling goes wrong
+     */
+    @NonNull
+    public static List<Color> getColors(String responseBodyString) throws JSONException {
+        JSONArray responseArray = new JSONArray(responseBodyString);
+        List<Color> unavailableColors = new ArrayList<>();
+        for (int i = 0; i < responseArray.length(); i++) {
+            JSONObject jsonSession = responseArray.getJSONObject(i);
+            String color = jsonSession.getString("color");
+            Color enumValueOfColor = convertToEnums(color);
+            unavailableColors.add(enumValueOfColor);
+        }
+        return unavailableColors;
+    }
+
+    /**
+     * puts session represented by a JSONArray into a HashMap
+     * @param responseArray: JSONArray containing sessions
+     * @return HashMap containing sessions, mapped by userID
+     * @throws JSONException when JSONObject handling goes wrong
+     */
+    public static HashMap<UUID, Session> createSessions(JSONArray responseArray) throws JSONException {
+        HashMap<UUID, Session> sessions = new HashMap<>();
+        for (int i = 0; i < responseArray.length(); i++) {
+            JSONObject jsonSession = responseArray.getJSONObject(i);
+            UUID userid = UUID.fromString(jsonSession.getString("userid"));
+            String email = jsonSession.getString("email");
+            Color color = convertToEnums(jsonSession.getString("color"));
+            int currentPosition = jsonSession.getInt("currentposition");
+            int balance = jsonSession.getInt("balance");
+            boolean isPlayersTurn = jsonSession.getBoolean("isplayersturn");
+            Session session = new Session(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
+            sessions.put(userid, session);
+        }
+        return sessions;
+    }
+
+    /**
+     * creates a JSONObject representing a lobby ID
+     * @param lobbyid: UUID of a lobby
+     * @return JSONObject representing a lobby ID
+     */
     public static JSONObject createJSONObject(UUID lobbyid) {
         JSONObject jsonRequest = new JSONObject();
         try {
@@ -104,6 +193,11 @@ public class SessionAPI {
         return jsonRequest;
     }
 
+    /**
+     * creates a JSONObject representing a color
+     * @param color: String representation of a Color object
+     * @return JSONObject representing a color
+     */
     public static JSONObject createJSONObject(String color) {
         JSONObject jsonRequest = new JSONObject();
         try {
@@ -116,6 +210,12 @@ public class SessionAPI {
         return jsonRequest;
     }
 
+    /**
+     * builds a GET request with authorisation header
+     * @param token: authentication token (generated at login)
+     * @param path: path to server endpoint
+     * @return Request to be executed by execute[..](..)
+     */
     public static Request createGetRequest(String token, String path) {
         return new Request.Builder()
                 .url(SERVER + ":" + PORT + path)
@@ -123,6 +223,13 @@ public class SessionAPI {
                 .build();
     }
 
+    /**
+     * builds a POST request
+     * @param jsonRequest: data to be posted
+     * @param token: authentication token (generated at login)
+     * @param path: path to server endpoint
+     * @return Request to be executed by execute[..](..)
+     */
     public static Request createPostRequest(JSONObject jsonRequest, String token, String path) {
         RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
         return new Request.Builder()
@@ -132,6 +239,12 @@ public class SessionAPI {
                 .build();
     }
 
+    /**
+     * executes Request for joining sessions
+     * @param okHttpClient: use HttpClient.getHttpClient() to get singleton instance
+     * @param request: POST request with lobbyid
+     * @param callback: JoinSessionCallback
+     */
     public static void executeJoinSessionRequest(OkHttpClient okHttpClient, Request request, final JoinSessionCallback callback) {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
@@ -141,7 +254,7 @@ public class SessionAPI {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     String responseBody = Objects.requireNonNull(response.body()).string();
 
                     try {
@@ -161,6 +274,12 @@ public class SessionAPI {
         });
     }
 
+    /**
+     * executes Request for getting unavailable colors
+     * @param okHttpClient: use HttpClient.getHttpClient() to get singleton instance
+     * @param request: GET Request
+     * @param callback: GetUnavailableColorsByLobbyCallback
+     */
     public static void executeGetUnavailableColorsByLobbyRequest(OkHttpClient okHttpClient, Request request, final GetUnavailableColorsByLobbyCallback callback) {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
@@ -188,6 +307,12 @@ public class SessionAPI {
         });
     }
 
+    /**
+     * executes Request for getting game status of a game
+     * @param okHttpClient: use HttpClient.getHttpClient() to get singleton instance
+     * @param request: GET Request
+     * @param callback: GetStatusByLobbyCallback
+     */
     public static void executeGetStatusByLobbyRequest(OkHttpClient okHttpClient, Request request, GetStatusByLobbyCallback callback) {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
@@ -212,6 +337,12 @@ public class SessionAPI {
         });
     }
 
+    /**
+     * executes a request for choosing a color
+     * @param okHttpClient: use HttpClient.getHttpClient() to get singleton instance
+     * @param request: POST Request with color
+     * @param callback: SetColorCallback
+     */
     public static void executeSetColorRequest(OkHttpClient okHttpClient, Request request, SetColorCallback callback) {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
@@ -221,7 +352,7 @@ public class SessionAPI {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     String responseBody = Objects.requireNonNull(response.body()).string();
 
                     try {
@@ -239,34 +370,5 @@ public class SessionAPI {
                 }
             }
         });
-    }
-
-    @NonNull
-    public static List<Color> getColors(String responseBodyString) throws JSONException {
-        JSONArray responseArray = new JSONArray(responseBodyString);
-        List<Color> unavailableColors=new ArrayList<>();
-        for(int i = 0; i < responseArray.length(); i++) {
-            JSONObject jsonSession = responseArray.getJSONObject(i);
-            String color = jsonSession.getString("color");
-            Color enumValueOfColor=convertToEnums(color);
-            unavailableColors.add(enumValueOfColor);
-        }
-        return unavailableColors;
-    }
-
-    public static HashMap<UUID, Session> createSessions(JSONArray responseArray) throws JSONException {
-        HashMap<UUID, Session> sessions = new HashMap<>();
-        for (int i = 0; i < responseArray.length(); i++) {
-            JSONObject jsonSession = responseArray.getJSONObject(i);
-            UUID userid = UUID.fromString(jsonSession.getString("userid"));
-            String email = jsonSession.getString("email");
-            Color color = convertToEnums(jsonSession.getString("color"));
-            int currentPosition = jsonSession.getInt("currentposition");
-            int balance = jsonSession.getInt("balance");
-            boolean isPlayersTurn = jsonSession.getBoolean("isplayersturn");
-            Session session = new Session(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
-            sessions.put(userid, session);
-        }
-        return sessions;
     }
 }
