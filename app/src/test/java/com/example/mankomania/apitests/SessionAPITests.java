@@ -556,4 +556,40 @@ public class SessionAPITests {
         assertEquals(100, session.getBalance());
         assertEquals(true, session.isPlayersTurn());
     }
+
+    @Test
+    void testExecuteSetColorRequest_SuccessfulResponse() throws IOException {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock Response
+        ResponseBody responseBody = mock(ResponseBody.class);
+        when(responseBody.string()).thenReturn("{\"message\":\"Color set successfully\"}");
+
+        Response response = mock(Response.class);
+        when(response.isSuccessful()).thenReturn(true);
+        when(response.body()).thenReturn(responseBody);
+
+        // mock Call
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onResponse(call, response);
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock SetColorCallback
+        SessionAPI.SetColorCallback callback = mock(SessionAPI.SetColorCallback.class);
+
+        // execute request
+        SessionAPI.executeSetColorRequest(okHttpClient, request, callback);
+
+        // verify callback
+        verify(callback).onSetColorSuccess("Color set successfully");
+        verify(callback, never()).onSetColorFailure(anyString());
+    }
 }
