@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
-public class AuthAPITests {
+class AuthAPITests {
 
     @ParameterizedTest
     @ValueSource(strings = {"test@test.at, my_password", ", my_password", "test@test.at, ", ","})

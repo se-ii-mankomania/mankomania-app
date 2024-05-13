@@ -27,7 +27,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class LobbyAPITests {
+class LobbyAPITests {
 
     @Test
     void testGenerateStringArray() {

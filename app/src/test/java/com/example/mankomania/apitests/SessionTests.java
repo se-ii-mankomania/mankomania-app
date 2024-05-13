@@ -8,7 +8,7 @@ import com.example.mankomania.logik.spieler.Color;
 
 import java.util.UUID;
 
-public class SessionTests {
+class SessionTests {
 
     @Test
     void testToString() {
