@@ -25,8 +25,8 @@ import com.example.mankomania.R;
 import com.example.mankomania.api.Session;
 import com.example.mankomania.api.SessionAPI;
 import com.example.mankomania.gameboardfields.GameboardField;
-import com.example.mankomania.logik.Dice;
-import com.example.mankomania.logik.Player;
+import com.example.mankomania.logik.spieler.Dice;
+import com.example.mankomania.logik.spieler.Player;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

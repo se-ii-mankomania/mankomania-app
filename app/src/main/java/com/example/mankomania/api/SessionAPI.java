@@ -4,7 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.mankomania.logik.Color;
+import com.example.mankomania.logik.spieler.Color;
 
 import org.json.JSONArray;
 import org.json.JSONException;

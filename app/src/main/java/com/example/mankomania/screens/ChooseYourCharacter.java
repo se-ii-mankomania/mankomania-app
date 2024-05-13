@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.example.mankomania.R;
 import com.example.mankomania.api.SessionAPI;
-import com.example.mankomania.logik.Color;
+import com.example.mankomania.logik.spieler.Color;
 
 import java.util.List;
 import java.util.UUID;

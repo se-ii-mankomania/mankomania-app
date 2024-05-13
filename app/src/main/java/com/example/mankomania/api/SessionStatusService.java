@@ -10,7 +10,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.example.mankomania.logik.Color;
+
+import com.example.mankomania.logik.spieler.Color;
 
 import java.util.HashMap;
 import java.util.HashSet;

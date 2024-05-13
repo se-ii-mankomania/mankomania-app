@@ -2,7 +2,7 @@ package com.example.mankomania.api;
 
 import androidx.annotation.NonNull;
 
-import com.example.mankomania.logik.Color;
+import com.example.mankomania.logik.spieler.Color;
 
 import java.util.UUID;
 
