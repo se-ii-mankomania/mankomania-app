@@ -35,17 +35,26 @@ public class Board extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_board);
+        //zuerst Button enablen, zur Sicherheit
+        Button rollDice=findViewById(R.id.Board_ButtonDice);
+        rollDice.setEnabled(false);
 
         Intent sessionStatusServiceIntent=new Intent(this, SessionStatusService.class);
         startService(sessionStatusServiceIntent);
 
-        TextView currentPlayer=findViewById(R.id.textView);
         SessionStatusService sessionStatusService = SessionStatusService.getInstance();
-        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn) -> {
-            runOnUiThread(() -> {
-                currentPlayer.setText(color);
-            });
+
+        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn) -> runOnUiThread(() -> rollDice.setEnabled(newTurn)));
+
+        rollDice.setOnClickListener(v -> {
+            Intent toEventRollDice=new Intent(Board.this,EventRollDice.class);
+            startActivity(toEventRollDice);
         });
+        //derweil zu Überprüfungszwecken
+        TextView currentPlayer=findViewById(R.id.textView);
+        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn1) -> runOnUiThread(() -> {
+            if(newTurn1){currentPlayer.setText(color);}
+        }));
 
 
         ZoomLayout zoomLayout = findViewById(R.id.zoom_linear_layout);
@@ -74,10 +83,14 @@ public class Board extends AppCompatActivity {
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
 
-        Button rollDice=findViewById(R.id.Board_ButtonDice);
-        rollDice.setOnClickListener(v -> {
-           Intent toEventRollDice=new Intent(Board.this,EventRollDice.class);
-           startActivity(toEventRollDice);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SessionStatusService sessionStatusService = SessionStatusService.getInstance();
+        sessionStatusService.removeObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn) -> {
+            //Könnte Ausgabe enthalten, ist aber nicht nötig
         });
     }
 

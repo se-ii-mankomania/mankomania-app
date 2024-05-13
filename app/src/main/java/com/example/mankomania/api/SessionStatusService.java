@@ -18,8 +18,6 @@ import java.util.Set;
 import java.util.UUID;
 
 public class SessionStatusService extends Service {
-
-    private static final String TAG = "StatusUpdateService";
     private static final long INTERVAL_MS = 5000; // 5 Sekunden
     private final Set<PositionObserver> positionObservers = new HashSet<>();
     private final Set<BalanceObserver> balanceObservers = new HashSet<>();
@@ -103,18 +101,18 @@ public class SessionStatusService extends Service {
         }
     }
 
-    public void notifyUpdatesInSession(Session newSession, UUID userId){
-        HashMap<UUID,Session> sessions=SessionAPI.getSessions();
-        Session fromerSession=sessions.get(userId);
+    public void notifyUpdatesInSession(Session formerSession, Session newSession,UUID userId){
 
-        if(fromerSession==null || Objects.equals(fromerSession.getCurrentPosition(), newSession.getCurrentPosition())){
+        if(formerSession==null || Objects.equals(formerSession.getCurrentPosition(), newSession.getCurrentPosition())){
             notifyPositionChanged(userId,newSession.getCurrentPosition());
         }
-        if(fromerSession==null || Objects.equals(fromerSession.getBalance(), newSession.getBalance())){
+        if(formerSession==null || Objects.equals(formerSession.getBalance(), newSession.getBalance())){
             notifyBalanceChanged(userId,newSession.getBalance());
         }
-        if(fromerSession==null || Objects.equals(fromerSession.getIsPlayersTurn(), newSession.getIsPlayersTurn())){
-            notifyTurnChanged(convertEnumToStringColor(newSession.getColor()),newSession.getIsPlayersTurn());
+        if(formerSession!=null){
+            if(Objects.equals(formerSession.getIsPlayersTurn(), newSession.getIsPlayersTurn())) {
+                notifyTurnChanged(convertEnumToStringColor(newSession.getColor()), newSession.getIsPlayersTurn());
+            }
         }
     }
 

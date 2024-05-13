@@ -173,11 +173,12 @@ public class SessionAPI {
                                 boolean isPlayersTurn = jsonSession.getBoolean("isplayersturn");
 
                                 Session session = new Session(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
-                                SessionStatusService sessionStatusService = SessionStatusService.getInstance();
-                                sessionStatusService.notifyUpdatesInSession(session, userid);
+                                Session formerSession=sessions.get(userid);
                                 sessions.put(userid, session);
-
+                                SessionStatusService sessionStatusService = SessionStatusService.getInstance();
+                                sessionStatusService.notifyUpdatesInSession(formerSession, session,userid);
                             }
+
                             callback.onGetStatusByLobbySuccess(sessions);
                         } else {
                             callback.onGetStatusByLobbyFailure(response.message());
@@ -230,8 +231,5 @@ public class SessionAPI {
                 }
             }
         });
-    }
-    public static HashMap<UUID, Session> getSessions() {
-        return sessions;
     }
 }
