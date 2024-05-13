@@ -28,10 +28,9 @@ import com.example.mankomania.gameboardfields.GameboardField;
 import com.example.mankomania.logik.Dice;
 import com.example.mankomania.logik.Player;
 
-import org.json.JSONObject;
-
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 public class EventRollDice extends AppCompatActivity implements SensorEventListener{
@@ -148,21 +147,18 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
                         break;
                     }
                 }
-                Player player = new Player("", userSession.getColor());
-                GameboardField field = fieldshandler.getField(userSession.getCurrentPosition()-1);
+                Player player = new Player("", Objects.requireNonNull(userSession).getColor());
+                GameboardField field = Objects.requireNonNull(fieldshandler).getField(userSession.getCurrentPosition()-1);
                 player.setCurrentField(field);
                 fieldshandler.movePlayer(player, randomNumber[0] + randomNumber[1]);
 
                 SessionAPI.updatePlayerPosition(token, userId, player.getCurrentField().getId(), lobbyId, new SessionAPI.UpdatePositionCallback() {
                     @Override
                     public void onUpdateSuccess(String message) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                int resource = getResId("field_" + player.getCurrentField().getId()+ "_description", R.string.class);
-                                Toast.makeText(getApplicationContext(), getString(resource), Toast.LENGTH_LONG).show();
+                        runOnUiThread(() -> {
+                            int resource = getResId("field_" + player.getCurrentField().getId()+ "_description", R.string.class);
+                            Toast.makeText(getApplicationContext(), getString(resource), Toast.LENGTH_LONG).show();
 
-                            }
                         });
 
                     }
