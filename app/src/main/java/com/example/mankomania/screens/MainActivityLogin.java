@@ -79,8 +79,8 @@ public class MainActivityLogin extends AppCompatActivity implements AuthAPI.Auth
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("token", token);
             editor.apply();
-        } catch (GeneralSecurityException | IOException e) {
-            // e.printStackTrace();
+        } catch (GeneralSecurityException | IOException ignored) {
+
         }
 
         // go to next page

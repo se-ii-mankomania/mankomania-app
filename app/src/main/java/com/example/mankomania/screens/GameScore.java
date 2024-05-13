@@ -22,7 +22,6 @@ import com.example.mankomania.api.Lobby;
 import com.example.mankomania.api.LobbyAPI;
 
 import com.example.mankomania.api.SessionAPI;
-import com.example.mankomania.api.Status;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -66,8 +65,8 @@ public class GameScore extends AppCompatActivity implements SessionAPI.JoinSessi
             );
 
             token = sharedPreferences.getString("token", null);
-        } catch (GeneralSecurityException | IOException e) {
-            // e.printStackTrace();
+        } catch (GeneralSecurityException | IOException ignored) {
+
         }
 
         // get Lobbies
@@ -137,14 +136,9 @@ public class GameScore extends AppCompatActivity implements SessionAPI.JoinSessi
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("lobbyid", selectedLobbyId.toString());
             editor.apply();
-        } catch (GeneralSecurityException | IOException e) {
-            // e.printStackTrace();
-        }
+        } catch (GeneralSecurityException | IOException ignored) {
 
-//        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putString("lobbyid", selectedLobbyId.toString());
-//        editor.apply();
+        }
 
         Intent chooseYourCharacterIntent = new Intent(GameScore.this, ChooseYourCharacter.class);
         startActivity(chooseYourCharacterIntent);
