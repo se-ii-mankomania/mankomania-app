@@ -3,6 +3,7 @@ package com.example.mankomania.screens;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -62,6 +63,7 @@ public class Board extends AppCompatActivity {
         TextView currentPlayer = findViewById(R.id.textView);
         sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn1) -> runOnUiThread(() -> {
             if (newTurn1) {
+                Log.wtf("HAAAALLLLOOOOOOOO","Ich werde aufgerufen");
                 currentPlayer.setText(color);
             }
         }));

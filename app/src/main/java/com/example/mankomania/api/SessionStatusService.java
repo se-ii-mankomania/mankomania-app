@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -103,14 +104,24 @@ public class SessionStatusService extends Service {
 
     public void notifyUpdatesInSession(Session formerSession, Session newSession,UUID userId){
 
-        if(formerSession==null || Objects.equals(formerSession.getCurrentPosition(), newSession.getCurrentPosition())){
+        if(formerSession==null || !Objects.equals(formerSession.getCurrentPosition(), newSession.getCurrentPosition())){
             notifyPositionChanged(userId,newSession.getCurrentPosition());
         }
-        if(formerSession==null || Objects.equals(formerSession.getBalance(), newSession.getBalance())){
+        if(formerSession==null || !Objects.equals(formerSession.getBalance(), newSession.getBalance())){
             notifyBalanceChanged(userId,newSession.getBalance());
         }
+        /*if(newSession.getIsPlayersTurn()){
+            notifyTurnChanged(convertEnumToStringColor(newSession.getColor()));
+        }*/
         if(formerSession!=null){
-            if(Objects.equals(formerSession.getIsPlayersTurn(), newSession.getIsPlayersTurn())) {
+            Log.wtf("HALLLOOOO","!=NULL WIRD AUFGERUFEN"+newSession.getColor());
+            if(newSession.getIsPlayersTurn()) {
+                Log.wtf("HALLLOOOO","!=NULL WIRD AUFGERUFEN"+newSession.getColor());
+                notifyTurnChanged(convertEnumToStringColor(newSession.getColor()), newSession.getIsPlayersTurn());
+            }
+        }else{
+            if(newSession.getIsPlayersTurn()) {
+                Log.wtf("HALLLOOOO", "ELSE WIRD AUFGERUFEN" + newSession.getColor());
                 notifyTurnChanged(convertEnumToStringColor(newSession.getColor()), newSession.getIsPlayersTurn());
             }
         }

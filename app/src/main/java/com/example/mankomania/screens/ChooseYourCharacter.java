@@ -94,7 +94,6 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
 
     private void updateAvailableRadioButtons(){
         RadioGroup colorSelection=findViewById(R.id.ChooseYourCharacter_ColorSelectionRadioGroup);
-        //TODO add sharedPrefrences
         for(int i=0;i<colorSelection.getChildCount();i++){
             RadioButton currentButton= (RadioButton) colorSelection.getChildAt(i);
             String colorString= String.valueOf(currentButton.getText());
@@ -103,7 +102,7 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
                  currentButton.setEnabled(false);
                  currentButton.setTextColor(ContextCompat.getColor(this,R.color.disabled_grey));
                  currentButton.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.disabled_grey)));
-             }
+            }
          }
     }
 

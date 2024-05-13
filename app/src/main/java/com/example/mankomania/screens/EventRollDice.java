@@ -170,8 +170,6 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
                 });
 
             }
-
-
             @Override
             public void onGetStatusByLobbyFailure(String errorMessage) {
                 Toast.makeText(getApplicationContext(), "could not get lobbyStatus", Toast.LENGTH_SHORT).show();
