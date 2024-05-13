@@ -184,7 +184,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
             startActivity(backToBoard);
             //BackButton kann wieder freigegeben werden
             unblockBackButton();
-        }, 1500);
+        }, 2000);
         Toast.makeText(getApplicationContext(), "Deine Spielfigur zieht " + resultOfRollingDice + " Felder weiter.", Toast.LENGTH_SHORT).show();
 
     }
