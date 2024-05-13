@@ -2,6 +2,7 @@ package com.example.mankomania.screens;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -21,9 +22,19 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mankomania.R;
+import com.example.mankomania.api.Session;
+import com.example.mankomania.api.SessionAPI;
+import com.example.mankomania.gameboardfields.GameboardField;
 import com.example.mankomania.logik.Dice;
+import com.example.mankomania.logik.Player;
 
-public class EventRollDice extends AppCompatActivity implements SensorEventListener {
+import org.json.JSONObject;
+
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.UUID;
+
+public class EventRollDice extends AppCompatActivity implements SensorEventListener{
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
@@ -104,6 +115,8 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
     }
 
     private void rollDice() {
+        FieldsHandler  fieldshandler = (FieldsHandler) getIntent().getSerializableExtra("fieldsHandler");
+
         sensorManager.unregisterListener(this);
 
         Dice dice=new Dice();
@@ -120,6 +133,55 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
 
         diceOne.setImageResource(sourceDiceOne);
         diceTwo.setImageResource(sourceDiceTwo);
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String userId = sharedPreferences.getString("userId", null);
+        String token = sharedPreferences.getString("token", null);
+        String lobbyId = sharedPreferences.getString("lobbyid", null);
+        SessionAPI.getStatusByLobby(token, UUID.fromString(lobbyId), new SessionAPI.GetStatusByLobbyCallback() {
+
+            @Override
+            public void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions) {
+                Session userSession = null;
+                for(Session session: sessions.values()){
+                    if(session.getUserId().equals(UUID.fromString(userId))){
+                        userSession = session;
+                        break;
+                    }
+                }
+                Player player = new Player("", userSession.getColor());
+                GameboardField field = fieldshandler.getField(userSession.getCurrentPosition()-1);
+                player.setCurrentField(field);
+                fieldshandler.movePlayer(player, randomNumber[0] + randomNumber[1]);
+
+                SessionAPI.updatePlayerPosition(token, userId, player.getCurrentField().getId(), lobbyId, new SessionAPI.UpdatePositionCallback() {
+                    @Override
+                    public void onUpdateSuccess(String message) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                int resource = getResId("field_" + player.getCurrentField().getId()+ "_description", R.string.class);
+                                Toast.makeText(getApplicationContext(), getString(resource), Toast.LENGTH_LONG).show();
+
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onUpdateFailure(String errorMessage) {
+                        Toast.makeText(getApplicationContext(), "Error while updating positions", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+
+
+            @Override
+            public void onGetStatusByLobbyFailure(String errorMessage) {
+                Toast.makeText(getApplicationContext(), "could not get lobbyStatus", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent backToBoard = new Intent(EventRollDice.this, Board.class);
@@ -128,9 +190,19 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
             unblockBackButton();
         }, 1500);
         Toast.makeText(getApplicationContext(), "Deine Spielfigur zieht " + resultOfRollingDice + " Felder weiter.", Toast.LENGTH_SHORT).show();
+
     }
 
+    public static int getResId(String resName, Class<?> c) {
 
+        try {
+            Field idField = c.getDeclaredField(resName);
+            return idField.getInt(idField);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
     /**
      * Diese Methode ordnet dem gewürfelten Ergenbnis das passende Image zu
      * @param result Ergebnis des Würfelwurfs

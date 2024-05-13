@@ -2,7 +2,9 @@ package com.example.mankomania.screens;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -19,11 +21,21 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.mankomania.R;
 
 import com.example.mankomania.api.SessionStatusService;
+import com.example.mankomania.api.AuthAPI;
+import com.example.mankomania.api.Session;
+import com.example.mankomania.api.SessionAPI;
+import com.example.mankomania.gameboardfields.GameboardField;
 import com.example.mankomania.logik.Color;
 import com.example.mankomania.logik.Player;
 
+import android.animation.ObjectAnimator;
+import android.widget.Toast;
+
+import java.util.HashMap;
+import java.util.UUID;
+
 public class Board extends AppCompatActivity {
-    Player[] players = new Player[4];
+
     FieldsHandler fieldsHandler = new FieldsHandler();
 
     Cellposition[][] cellPositions = new Cellposition[14][14];
@@ -71,6 +83,11 @@ public class Board extends AppCompatActivity {
 
         ToolbarFunctionalities.setUpToolbar(this);
 
+        Button rollDice=findViewById(R.id.Board_ButtonDice);
+        rollDice.setOnClickListener(v -> {
+           Intent toEventRollDice=new Intent(Board.this,EventRollDice.class);
+           toEventRollDice.putExtra("fieldsHandler", fieldsHandler);
+           startActivity(toEventRollDice);
         //Wenn der Back-Button betätigt wird, wird der Polling-Service für den Status gestoppt
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
@@ -92,7 +109,10 @@ public class Board extends AppCompatActivity {
         sessionStatusService.removeObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn) -> {
             //Könnte Ausgabe enthalten, ist aber nicht nötig
         });
+
     }
+
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -108,26 +128,6 @@ public class Board extends AppCompatActivity {
         }
 
         fieldsHandler.initFields(cellPositions);
-
-
-        Player playerBlue = new Player("BLUE", Color.BLUE );
-        playerBlue.setCurrentField(fieldsHandler.getField(44));
-        Player playerGreen = new Player("GREEN", Color.GREEN);
-        playerGreen.setCurrentField(fieldsHandler.getField(45));
-        Player playerRed = new Player("RED", Color.RED);
-        playerRed.setCurrentField(fieldsHandler.getField(46));
-        Player playerPurple = new Player("PURPLE", Color.PURPLE );
-        playerPurple.setCurrentField(fieldsHandler.getField(47));
-        players[0] = playerBlue;
-        players[1] = playerGreen;
-        players[2] = playerRed;
-        players[3] = playerPurple;
-
-        //Testing
-        fieldsHandler.movePlayer(playerBlue, 5);
-        fieldsHandler.movePlayer(playerGreen, 5);
-        fieldsHandler.movePlayer(playerRed, 5);
-        fieldsHandler.movePlayer(playerPurple, 5);
 
         updatePlayerPositions();
 
@@ -153,35 +153,100 @@ public class Board extends AppCompatActivity {
 
 
     }
-   public void updatePlayerPositions() {
-       for (Player player : players
-       ) {
-           if (player.getColor() == Color.BLUE) {
-               ImageView playerBlue = findViewById(R.id.player_blue);
-               playerBlue.setX(player.getCurrentField().getX());
-               playerBlue.setY(player.getCurrentField().getY());
+
+    // Methode zum Senden der Spielerpositionen an den Server
+    private void sendPositionUpdatesToServer() {
+        //TODO just hardcoded for now -> change to actual userID
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String userId = sharedPreferences.getString("userId", null);
+        String token = sharedPreferences.getString("token", null);
+        String lobbyId = sharedPreferences.getString("lobbyid", null);
+            SessionAPI.updatePlayerPosition(token, userId, 24, lobbyId, new SessionAPI.UpdatePositionCallback() {
+                @Override
+                public void onUpdateSuccess(String message) {
+                    // Erfolgsmeldung, evtl. Loggen oder Nutzer benachrichtigen
+                    Log.d("UpdatePosition", "Position erfolgreich aktualisiert: " + message);
+                }
+
+                @Override
+                public void onUpdateFailure(String errorMessage) {
+                    // Fehlerbehandlung, evtl. Fehler dem Nutzer anzeigen
+                    Log.e("UpdatePosition", "Fehler beim Aktualisieren der Position: " + errorMessage);
+                }
+            });
+
+    }
+
+   public void updatePlayerPositions(){
+       SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+       String token = sharedPreferences.getString("token", null);
+       String lobbyId = sharedPreferences.getString("lobbyid", null);
+
+       SessionAPI.getStatusByLobby(token, UUID.fromString(lobbyId), new SessionAPI.GetStatusByLobbyCallback() {
+
+           @Override
+           public void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions) {
+               runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       (findViewById(R.id.player_blue)).setVisibility(View.INVISIBLE);
+                       (findViewById(R.id.player_purple)).setVisibility(View.INVISIBLE);
+
+                       (findViewById(R.id.player_red)).setVisibility(View.INVISIBLE);
+                       (findViewById(R.id.player_green)).setVisibility(View.INVISIBLE);
+
+                       for(Session session: sessions.values()){
+                           ImageView playerView = null;
+                           int viewId = 0;
+                           switch (session.getColor()) {
+                               case BLUE:
+                                   viewId = R.id.player_blue;
+                                   break;
+                               case RED:
+                                   viewId = R.id.player_red;
+                                   break;
+                               case GREEN:
+                                   viewId = R.id.player_green;
+                                   break;
+                               case PURPLE:
+                                   viewId = R.id.player_purple;
+                                   break;
+                           }
+                           if (viewId != 0) {
+                               playerView = findViewById(viewId);
+                               playerView.setVisibility(View.VISIBLE);
+
+                               if (playerView != null) {
+                                   GameboardField gameboardField = fieldsHandler.getField(session.getCurrentPosition()-1);
+                                   animateMove(playerView, playerView.getX(), playerView.getY(),
+                                           gameboardField.getX(), gameboardField.getY());
+                               }
+                           }
+
+                       }
+                   }
+               });
+
            }
-           if (player.getColor() == Color.RED) {
-               ImageView playerRed = findViewById(R.id.player_red);
-               playerRed.setX(player.getCurrentField().getX());
-               playerRed.setY(player.getCurrentField().getY());
+
+           @Override
+           public void onGetStatusByLobbyFailure(String errorMessage) {
+               Toast.makeText(getApplicationContext(), "Could not get sessionLobbyStatus", Toast.LENGTH_SHORT).show();
            }
-           if (player.getColor() == Color.GREEN) {
-               ImageView playerGreen = findViewById(R.id.player_green);
-               playerGreen.setX(player.getCurrentField().getX());
-               playerGreen.setY(player.getCurrentField().getY());
-           }
-           if (player.getColor() == Color.PURPLE) {
-               ImageView playerPurple = findViewById(R.id.player_purple);
-               playerPurple.setX(player.getCurrentField().getX());
-               playerPurple.setY(player.getCurrentField().getY());
-           }
-       }
-   }
+       });
 
    private void stopSessionStatusService() {
         Intent sessionStatusServiceIntent=new Intent(this, SessionStatusService.class);
         stopService(sessionStatusServiceIntent);
    }
+    private void animateMove(ImageView imageView, float startX, float startY, float endX, float endY) {
+        ObjectAnimator animatorX = ObjectAnimator.ofFloat(imageView, "x", startX, endX);
+        ObjectAnimator animatorY = ObjectAnimator.ofFloat(imageView, "y", startY, endY);
+        animatorX.setDuration(500); // 500ms
+        animatorY.setDuration(500);
+        animatorX.start();
+        animatorY.start();
+       // Toast.makeText(getApplicationContext(), auf datenbank zugreifne??)
+    }
 
 }

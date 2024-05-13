@@ -57,10 +57,11 @@ public class MainActivityLogin extends AppCompatActivity implements AuthAPI.Logi
     }
 
     @Override
-    public void onLoginSuccess(String token) {
+    public void onLoginSuccess(String token, String userId) {
         // store token
         SharedPreferences.Editor editor = getSharedPreferences("MyPrefs", MODE_PRIVATE).edit();
         editor.putString("token", token);
+        editor.putString("userId", userId);
         editor.apply();
 
         // go to next page

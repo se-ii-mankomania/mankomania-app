@@ -30,6 +30,11 @@ public class SessionAPI {
     private static List<Color> unavailableColors;
     private static HashMap<UUID, Session> sessions;
 
+    public interface UpdatePositionCallback {
+        void onUpdateSuccess(String message);
+        void onUpdateFailure(String errorMessage);
+    }
+
     public interface JoinSessionCallback {
         void onJoinSessionSuccess(String successMessage);
         void onJoinSessionFailure(String errorMessage);
@@ -48,6 +53,55 @@ public class SessionAPI {
         void onSetColorSuccess(String successMessage);
         void onSetColorFailure(String errorMessage);
     }
+
+    public static void updatePlayerPosition(String token, String userID, int currentposition, String lobbyID, final UpdatePositionCallback callback) {
+        // create JSON object for request
+        JSONObject jsonRequest = new JSONObject();
+        try {
+            jsonRequest.put("userId", userID);
+            jsonRequest.put("currentposition", currentposition);
+        } catch (JSONException e) {
+            callback.onUpdateFailure("Request konnte nicht erstellt werden!");
+            return;
+        }
+
+        // create Request
+        RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
+        Request request = new Request.Builder()
+                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/session/setPosition/" + lobbyID)
+                .header("Authorization", token)
+                .post(requestBody)
+                .build();
+
+        // execute request
+        HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                callback.onUpdateFailure("Keine Antwort vom Server!");
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseBody = response.body().string();
+
+                    try {
+                        // create JSON object for response
+                        JSONObject jsonResponse = new JSONObject(responseBody);
+
+                        // extract message from response
+                        String message = jsonResponse.getString("message");
+                        callback.onUpdateSuccess(message);
+                    } catch (JSONException e) {
+                        callback.onUpdateFailure("Fehler beim Lesen der Response!");
+                    }
+                } else {
+                    callback.onUpdateFailure("Aktualisierung fehlgeschlagen, Antwortcode: " + response.code());
+                }
+            }
+        });
+    }
+
 
     public static void joinSession(String token, UUID lobbyid,final SessionAPI.JoinSessionCallback callback) {
         JSONObject jsonRequest = new JSONObject();

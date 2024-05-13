@@ -92,6 +92,13 @@
     <string name="createNewLobby_passwordEditText_hint">Passwort</string>
     <string name="createNewLobby_maxSpielerTextView_text">Max. Spieler:</string>
     <string name="createNewLobby_createLobbyButton_text">Lobby erstellen</string>
+
+    <string name="spielFigurBlau_farbcode">#5b85fc</string>
+    <string name="spielFigurGruen_farbcode">#7eff5b</string>
+    <string name="spielFigurRot_farbcode">#ff4416</string>
+    <string name="spielFigurLila_farbcode">#dd3cf5</string>
+
+
     <string name="RollDice">Würfeln</string>
     <string name="RollDice_Explanation">Schütteln um zu Würfeln</string>
     <string name="dice">dice</string>

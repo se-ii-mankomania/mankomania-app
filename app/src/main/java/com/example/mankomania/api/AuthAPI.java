@@ -16,12 +16,17 @@ import okhttp3.Response;
 
 public class AuthAPI {
     private static String token;
+    private static String userId;
 
     private static String message;
 
+    public static String getToken(){
+        return token;
+    }
+
     // interface to notify whether login is successful or not
     public interface LoginCallback {
-        void onLoginSuccess(String token);
+        void onLoginSuccess(String token, String userId);
         void onLoginFailure(String errorMessage);
     }
 
@@ -70,7 +75,9 @@ public class AuthAPI {
 
                         // return the token
                         token = jsonResponse.getString("token");
-                        callback.onLoginSuccess(token);
+                        userId = jsonResponse.getString("userId");
+                        callback.onLoginSuccess(token, userId);
+
                     } catch (JSONException e) {
                         callback.onLoginFailure("Fehler beim Lesen der Response!");
                     }
