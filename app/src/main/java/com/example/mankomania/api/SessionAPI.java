@@ -28,7 +28,7 @@ import okhttp3.ResponseBody;
 public class SessionAPI {
     private static String successMessage;
     private static List<Color> unavailableColors;
-    private static HashMap<UUID, Session> sessions;
+    private static final HashMap<UUID, Session> sessions=new HashMap<>();
 
     public interface UpdatePositionCallback {
         void onUpdateSuccess(String message);
@@ -133,8 +133,6 @@ public class SessionAPI {
                         // create JSON object for response
                         JSONObject jsonResponse = new JSONObject(responseBody);
 
-                        sessions = new HashMap<>();
-
                         // return the message
                         successMessage = jsonResponse.getString("message");
                         callback.onJoinSessionSuccess(successMessage);
@@ -227,10 +225,10 @@ public class SessionAPI {
                                 boolean isPlayersTurn = jsonSession.getBoolean("isplayersturn");
 
                                 Session session = new Session(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
-                                Session formerSession=sessions.get(userid);
+                                //Session formerSession=sessions.get(userid);
                                 sessions.put(userid, session);
                                 SessionStatusService sessionStatusService = SessionStatusService.getInstance();
-                                sessionStatusService.notifyUpdatesInSession(formerSession, session,userid);
+                                sessionStatusService.notifyUpdatesInSession(session,userid);
                             }
 
                             callback.onGetStatusByLobbySuccess(sessions);

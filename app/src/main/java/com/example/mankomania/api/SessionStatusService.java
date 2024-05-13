@@ -103,18 +103,18 @@ public class SessionStatusService extends Service {
         }
     }
 
-    public void notifyUpdatesInSession(Session formerSession, Session newSession,UUID userId){
+    public void notifyUpdatesInSession(Session newSession,UUID userId){
 
-        if(formerSession==null || !Objects.equals(formerSession.getCurrentPosition(), newSession.getCurrentPosition())){
+        /*if(formerSession==null || !Objects.equals(formerSession.getCurrentPosition(), newSession.getCurrentPosition())){
             notifyPositionChanged(userId,newSession.getCurrentPosition());
         }
         if(formerSession==null || !Objects.equals(formerSession.getBalance(), newSession.getBalance())){
             notifyBalanceChanged(userId,newSession.getBalance());
-        }
-        /*if(newSession.getIsPlayersTurn()){
-            notifyTurnChanged(convertEnumToStringColor(newSession.getColor()));
         }*/
-        if(formerSession!=null){
+        if(newSession.getIsPlayersTurn()){
+            notifyTurnChanged(convertEnumToStringColor(newSession.getColor()),newSession.getIsPlayersTurn());
+        }
+        /*if(formerSession!=null){
             Log.wtf("HALLLOOOO","!=NULL WIRD AUFGERUFEN"+newSession.getColor());
             if(newSession.getIsPlayersTurn()) {
                 Log.wtf("HALLLOOOO","!=NULL WIRD AUFGERUFEN"+newSession.getColor());
@@ -125,7 +125,7 @@ public class SessionStatusService extends Service {
                 Log.wtf("HALLLOOOO", "ELSE WIRD AUFGERUFEN" + newSession.getColor());
                 notifyTurnChanged(convertEnumToStringColor(newSession.getColor()), newSession.getIsPlayersTurn());
             }
-        }
+        }*/
     }
 
     private String convertEnumToStringColor(Color color){
