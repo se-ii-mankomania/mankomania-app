@@ -494,4 +494,66 @@ public class SessionAPITests {
         // assert
         assertEquals(colors, captor.getValue());
     }
+
+    @Test
+    void testExecuteGetStatusByLobbyRequest_SuccessfulResponse() throws IOException, JSONException {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // set up response object
+        JSONArray sessionsJsonArray = new JSONArray();
+        JSONObject sessionJsonObject = new JSONObject();
+        sessionJsonObject.put("userid", "11f28510-4d63-4f8d-943a-12ecbc16caae");
+        sessionJsonObject.put("email", "abc@abc.com");
+        sessionJsonObject.put("color", "blue");
+        sessionJsonObject.put("currentposition", 5);
+        sessionJsonObject.put("balance", 100);
+        sessionJsonObject.put("isplayersturn", true);
+        sessionsJsonArray.put(sessionJsonObject);
+
+        // mock Response
+        ResponseBody responseBody = mock(ResponseBody.class);
+        Response response = mock(Response.class);
+
+        when(response.isSuccessful()).thenReturn(true);
+        when(response.body()).thenReturn(responseBody);
+        when(responseBody.string()).thenReturn(sessionsJsonArray.toString());
+
+        // mock Call
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onResponse(call, response);
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock GetStatusByLobbyCallback
+        SessionAPI.GetStatusByLobbyCallback callback = mock(SessionAPI.GetStatusByLobbyCallback.class);
+
+        // execute request
+        SessionAPI.executeGetStatusByLobbyRequest(okHttpClient, request, callback);
+
+        // set up ArgumentCaptor
+        ArgumentCaptor<HashMap<UUID, Session>> captor = ArgumentCaptor.forClass(HashMap.class);
+
+        // set up HashMap
+        HashMap<UUID, Session> sessions = SessionAPI.createSessions(sessionsJsonArray);
+
+        // verify callbacks
+        verify(callback).onGetStatusByLobbySuccess(captor.capture());
+        verify(callback, never()).onGetStatusByLobbyFailure(anyString());
+
+        // assert
+        assertEquals(1, sessions.size());
+        Session session = sessions.values().iterator().next();
+        assertEquals("abc@abc.com", session.getEmail());
+        assertEquals(Color.BLUE, session.getColor());
+        assertEquals(5, session.getCurrentPosition());
+        assertEquals(100, session.getBalance());
+        assertEquals(true, session.isPlayersTurn());
+    }
 }
