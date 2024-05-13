@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
 
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +20,8 @@ import android.widget.Toast;
 import com.example.mankomania.R;
 import com.example.mankomania.api.AuthAPI;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.regex.Pattern;
 
 public class MainActivityLogin extends AppCompatActivity implements AuthAPI.AuthCallback{
@@ -59,9 +63,25 @@ public class MainActivityLogin extends AppCompatActivity implements AuthAPI.Auth
     @Override
     public void onSuccess(String token) {
         // store token
-        SharedPreferences.Editor editor = getSharedPreferences("MyPrefs", MODE_PRIVATE).edit();
-        editor.putString("token", token);
-        editor.apply();
+        try {
+            MasterKey masterKey = new MasterKey.Builder(this)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
+
+            SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
+                    this,
+                    "MyPrefs",
+                    masterKey,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("token", token);
+            editor.apply();
+        } catch (GeneralSecurityException | IOException e) {
+            // e.printStackTrace();
+        }
 
         // go to next page
         Intent loginIntent = new Intent(MainActivityLogin.this, GameScore.class);

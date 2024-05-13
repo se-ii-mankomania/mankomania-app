@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
 
 import com.example.mankomania.R;
 import com.example.mankomania.api.Lobby;
@@ -22,6 +24,8 @@ import com.example.mankomania.api.LobbyAPI;
 import com.example.mankomania.api.SessionAPI;
 import com.example.mankomania.api.Status;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,6 +35,8 @@ public class GameScore extends AppCompatActivity implements SessionAPI.JoinSessi
     private ListView listOfGames;
     private List<Lobby> allLobbies;
     private UUID selectedLobbyId;
+
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +52,24 @@ public class GameScore extends AppCompatActivity implements SessionAPI.JoinSessi
         listOfGames = findViewById(R.id.GameScore_ListOfGames);
 
         // get token from shared preferences
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String token = sharedPreferences.getString("token", null);
+        try {
+            MasterKey masterKey = new MasterKey.Builder(this)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
+
+            SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
+                    this,
+                    "MyPrefs",
+                    masterKey,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+
+            token = sharedPreferences.getString("token", null);
+        } catch (GeneralSecurityException | IOException e) {
+            // e.printStackTrace();
+        }
+
         // get Lobbies
         LobbyAPI.getLobbies(token, GameScore.this);
 
@@ -99,10 +121,30 @@ public class GameScore extends AppCompatActivity implements SessionAPI.JoinSessi
     @Override
     public void onJoinSessionSuccess(String successMessage) {
         // store lobbyID
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("lobbyid", selectedLobbyId.toString());
-        editor.apply();
+        try {
+            MasterKey masterKey = new MasterKey.Builder(this)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
+
+            SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
+                    this,
+                    "MyPrefs",
+                    masterKey,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("lobbyid", selectedLobbyId.toString());
+            editor.apply();
+        } catch (GeneralSecurityException | IOException e) {
+            // e.printStackTrace();
+        }
+
+//        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putString("lobbyid", selectedLobbyId.toString());
+//        editor.apply();
 
         Intent chooseYourCharacterIntent = new Intent(GameScore.this, ChooseYourCharacter.class);
         startActivity(chooseYourCharacterIntent);
