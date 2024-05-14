@@ -186,8 +186,7 @@ public class LobbyAPI {
                         }
 
                         // generate String array for displaying lobbies
-                        String[] lobbiesStringArray = new String[responseArray.length()];
-                        lobbiesStringArray = generateStringArray(lobbies);
+                        String[] lobbiesStringArray = generateStringArray(lobbies);
 
                         callback.onSuccess(lobbiesStringArray, lobbies);
                     } catch (JSONException e) {
