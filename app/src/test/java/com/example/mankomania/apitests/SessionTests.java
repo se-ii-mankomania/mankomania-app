@@ -68,6 +68,6 @@ class SessionTests {
         assertEquals(amountKVShares, session.getAmountKVShares());
         assertEquals(amountTShares, session.getAmountTShares());
         assertEquals(amountBShares, session.getAmountBShares());
-        assertEquals(isPlayersTurn, session.isPlayersTurn());
+        assertEquals(isPlayersTurn, session.getIsPlayersTurn());
     }
 }

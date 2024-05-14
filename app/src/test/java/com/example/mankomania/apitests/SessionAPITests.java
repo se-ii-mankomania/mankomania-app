@@ -162,13 +162,13 @@ class SessionAPITests {
         assertEquals(Color.BLUE, session1Result.getColor());
         assertEquals(5, session1Result.getCurrentPosition());
         assertEquals(100, session1Result.getBalance());
-        assertEquals(true, session1Result.isPlayersTurn());
+        assertEquals(true, session1Result.getIsPlayersTurn());
 
         assertEquals("def@def.com", session2Result.getEmail());
         assertEquals(Color.RED, session2Result.getColor());
         assertEquals(8, session2Result.getCurrentPosition());
         assertEquals(150, session2Result.getBalance());
-        assertEquals(false, session2Result.isPlayersTurn());
+        assertEquals(false, session2Result.getIsPlayersTurn());
     }
 
     @Test
@@ -554,7 +554,7 @@ class SessionAPITests {
         assertEquals(Color.BLUE, session.getColor());
         assertEquals(5, session.getCurrentPosition());
         assertEquals(100, session.getBalance());
-        assertEquals(true, session.isPlayersTurn());
+        assertEquals(true, session.getIsPlayersTurn());
     }
 
     @Test
