@@ -51,7 +51,7 @@ public class Register extends AppCompatActivity implements AuthAPI.AuthCallback 
     }
 
     @Override
-    public void onSuccess(String message) {
+    public void onSuccess(String message, String userid) {
         runOnUiThread(() -> Toast.makeText(Register.this, "Registrierung erfolgreich: " + message, Toast.LENGTH_SHORT).show());
 
         // go back to login page

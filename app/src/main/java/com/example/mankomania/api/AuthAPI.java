@@ -21,7 +21,7 @@ public class AuthAPI {
 
     // interface to notify whether auth operation was successful or not
     public interface AuthCallback {
-        void onSuccess(String message);
+        void onSuccess(String message,String userid);
         void onFailure(String errorMessage);
     }
 
@@ -118,7 +118,9 @@ public class AuthAPI {
 
                         // return the token (login) or message (register)
                         String message = jsonResponse.getString(responseParameter);
-                        callback.onSuccess(message);
+                        //TODO bei Tests integrieren
+                        String userid= jsonResponse.getString("userid");
+                        callback.onSuccess(message,userid);
                     } catch (JSONException e) {
                         callback.onFailure("Fehler beim Lesen der Response!");
                     }
