@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -31,5 +32,15 @@ public class End_Winner extends AppCompatActivity {
         String winnerColor=fromBoard.getStringExtra("Winner");
 
         winner.setText(String.format("%s%s", getString(R.string.gewonnen_hat), winnerColor));
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true){
+
+            @Override
+            public void handleOnBackPressed() {
+                Intent backToLogin=new Intent(End_Winner.this, MainActivityLogin.class);
+                startActivity(backToLogin);
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
     }
 }
