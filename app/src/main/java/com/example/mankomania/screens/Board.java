@@ -47,12 +47,21 @@ public class Board extends AppCompatActivity {
         Button rollDice = findViewById(R.id.Board_ButtonDice);
         rollDice.setEnabled(false);
 
+        SharedPreferences sharedPreferencesLobbyId = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        UUID userId = UUID.fromString(sharedPreferencesLobbyId.getString("userId", null));
+
+
         Intent sessionStatusServiceIntent = new Intent(this, SessionStatusService.class);
         startService(sessionStatusServiceIntent);
 
         SessionStatusService sessionStatusService = SessionStatusService.getInstance();
-
-        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn) -> runOnUiThread(() -> rollDice.setEnabled(newTurn)));
+        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> runOnUiThread(() -> {
+            if(newTurn && userid.equals(userId)){
+                rollDice.setEnabled(true);
+            }else{
+                rollDice.setEnabled(false);
+            }
+        }));
 
         rollDice.setOnClickListener(v -> {
             Intent toEventRollDice = new Intent(Board.this, EventRollDice.class);
@@ -61,8 +70,8 @@ public class Board extends AppCompatActivity {
         });
         //derweil zu Überprüfungszwecken
         TextView currentPlayer = findViewById(R.id.textView);
-        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn1) -> runOnUiThread(() -> {
-            if (newTurn1) {
+        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn1,userid) -> runOnUiThread(() -> {
+            if (newTurn1 && userid.equals(userId)) {
                 Log.wtf("HAAAALLLLOOOOOOOO","Ich werde aufgerufen");
                 currentPlayer.setText(color);
             }
@@ -101,7 +110,7 @@ public class Board extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         SessionStatusService sessionStatusService = SessionStatusService.getInstance();
-        sessionStatusService.removeObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn) -> {
+        sessionStatusService.removeObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> {
             //Könnte Ausgabe enthalten, ist aber nicht nötig
         });
 

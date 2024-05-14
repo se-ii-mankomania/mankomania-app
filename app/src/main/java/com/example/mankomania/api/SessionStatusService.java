@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -15,7 +14,6 @@ import com.example.mankomania.logik.spieler.Color;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -24,6 +22,7 @@ public class SessionStatusService extends Service {
     private final Set<PositionObserver> positionObservers = new HashSet<>();
     private final Set<BalanceObserver> balanceObservers = new HashSet<>();
     private final Set<PlayersTurnObserver> playersTurnObservers = new HashSet<>();
+    private final Set<BalanceBelowThresholdObserver> balanceBelowThresholdObservers = new HashSet<>();
 
     private Handler handler;
     private Runnable runnable;
@@ -112,7 +111,7 @@ public class SessionStatusService extends Service {
             notifyBalanceChanged(userId,newSession.getBalance());
         }*/
         if(newSession.getIsPlayersTurn()){
-            notifyTurnChanged(convertEnumToStringColor(newSession.getColor()),newSession.getIsPlayersTurn());
+            notifyTurnChanged(convertEnumToStringColor(newSession.getColor()),newSession.getIsPlayersTurn(),userId);
         }
         /*if(formerSession!=null){
             Log.wtf("HALLLOOOO","!=NULL WIRD AUFGERUFEN"+newSession.getColor());
@@ -137,6 +136,9 @@ public class SessionStatusService extends Service {
             default: return "";
         }
     }
+    public interface BalanceBelowThresholdObserver {
+        void onBalanceBelowThreshold(UUID userId,String color);
+    }
     public interface PositionObserver {
         void onPositionChanged(UUID userId, int newPosition);
     }
@@ -144,7 +146,7 @@ public class SessionStatusService extends Service {
         void onBalanceChanged(UUID userId, int newBalance);
     }
     public interface PlayersTurnObserver{
-        void onTurnChanged(String color, boolean newTurn);
+        void onTurnChanged(String color, boolean newTurn,UUID userid);
     }
 
     public void registerObserver(SessionStatusService.PositionObserver observer) {
@@ -181,9 +183,22 @@ public class SessionStatusService extends Service {
         }
     }
 
-    public void notifyTurnChanged(String color,boolean newTurn) {
+    public void notifyTurnChanged(String color, boolean newTurn, UUID userId) {
         for (SessionStatusService.PlayersTurnObserver observer : playersTurnObservers) {
-            observer.onTurnChanged(color, newTurn);
+            observer.onTurnChanged(color, newTurn,userId);
+        }
+    }
+    public void registerObserver(BalanceBelowThresholdObserver observer) {
+        balanceBelowThresholdObservers.add(observer);
+    }
+
+    public void unregisterObserver(BalanceBelowThresholdObserver observer) {
+        balanceBelowThresholdObservers.remove(observer);
+    }
+
+    public void notifyBalanceBelowThreshold(UUID userId, String color) {
+        for (BalanceBelowThresholdObserver observer : balanceBelowThresholdObservers) {
+            observer.onBalanceBelowThreshold(userId,color);
         }
     }
 }

@@ -30,7 +30,7 @@ public class ToolbarFunctionalities {
         //Current Player displayen
         TextView currentPlayer=toolbar.findViewById(R.id.CurrentPlayer);
         SessionStatusService sessionStatusService=new SessionStatusService();
-        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn) -> activity.runOnUiThread(() -> {
+        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> activity.runOnUiThread(() -> {
             currentPlayer.setText(color);
         }));
 
