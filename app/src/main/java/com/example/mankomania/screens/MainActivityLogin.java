@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
 
 import android.view.View;
 import android.widget.Button;
@@ -18,9 +20,11 @@ import android.widget.Toast;
 import com.example.mankomania.R;
 import com.example.mankomania.api.AuthAPI;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.regex.Pattern;
 
-public class MainActivityLogin extends AppCompatActivity implements AuthAPI.LoginCallback{
+public class MainActivityLogin extends AppCompatActivity implements AuthAPI.AuthCallback{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +61,28 @@ public class MainActivityLogin extends AppCompatActivity implements AuthAPI.Logi
     }
 
     @Override
-    public void onLoginSuccess(String token, String userId) {
+    public void onSuccess(String token, String userId) {
         // store token
-        SharedPreferences.Editor editor = getSharedPreferences("MyPrefs", MODE_PRIVATE).edit();
-        editor.putString("token", token);
-        editor.putString("userId", userId);
-        editor.apply();
+        try {
+            MasterKey masterKey = new MasterKey.Builder(this)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
+
+            SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
+                    this,
+                    "MyPrefs",
+                    masterKey,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("token", token);
+            editor.putString("userId",userId);
+            editor.apply();
+        } catch (GeneralSecurityException | IOException ignored) {
+            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+        }
 
         // go to next page
         Intent loginIntent = new Intent(MainActivityLogin.this, GameScore.class);
@@ -70,7 +90,7 @@ public class MainActivityLogin extends AppCompatActivity implements AuthAPI.Logi
     }
 
     @Override
-    public void onLoginFailure(String errorMessage) {
+    public void onFailure(String errorMessage) {
         // handle login failure
         runOnUiThread(() -> Toast.makeText(MainActivityLogin.this, "Login fehlgeschlagen: " + errorMessage, Toast.LENGTH_SHORT).show());
     }

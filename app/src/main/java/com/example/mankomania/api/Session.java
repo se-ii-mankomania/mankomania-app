@@ -29,22 +29,6 @@ public class Session {
         this.isPlayersTurn = isPlayersTurn;
     }
 
-    public boolean getIsPlayersTurn() {
-        return isPlayersTurn;
-    }
-
-    public int getBalance() {
-        return balance;
-    }
-
-    public int getCurrentPosition() {
-        return currentPosition;
-    }
-    public Color getColor(){return this.color;}
-    public UUID getUserId(){
-        return this.userId;
-    }
-
     @NonNull
     @Override
     public String toString() {
@@ -61,4 +45,40 @@ public class Session {
                 '}';
     }
 
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public int getCurrentPosition() {
+        return currentPosition;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public int getAmountKVShares() {
+        return amountKVShares;
+    }
+
+    public int getAmountTShares() {
+        return amountTShares;
+    }
+
+    public int getAmountBShares() {
+        return amountBShares;
+    }
+
+    public boolean getIsPlayersTurn() {
+        return isPlayersTurn;
+    }
 }

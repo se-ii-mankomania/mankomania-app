@@ -16,7 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.mankomania.R;
 import com.example.mankomania.api.AuthAPI;
 
-public class Register extends AppCompatActivity implements AuthAPI.RegisterCallback {
+public class Register extends AppCompatActivity implements AuthAPI.AuthCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class Register extends AppCompatActivity implements AuthAPI.RegisterCallb
     }
 
     @Override
-    public void onRegisterSuccess(String message) {
+    public void onSuccess(String message) {
         runOnUiThread(() -> Toast.makeText(Register.this, "Registrierung erfolgreich: " + message, Toast.LENGTH_SHORT).show());
 
         // go back to login page
@@ -60,7 +60,7 @@ public class Register extends AppCompatActivity implements AuthAPI.RegisterCallb
     }
 
     @Override
-    public void onRegisterFailure(String errorMessage) {
+    public void onFailure(String errorMessage) {
         runOnUiThread(() -> Toast.makeText(Register.this, "Registrierung fehlgeschlagen: " + errorMessage, Toast.LENGTH_SHORT).show());
     }
 }

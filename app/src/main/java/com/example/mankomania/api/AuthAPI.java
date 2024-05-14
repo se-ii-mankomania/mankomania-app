@@ -10,82 +10,34 @@ import java.io.IOException;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class AuthAPI {
-    private static String token;
-    private static String userId;
+    private static final String SERVER = HttpClient.getServer();
+    private static final int PORT = HttpClient.getPort();
 
-    private static String message;
-
-    public static String getToken(){
-        return token;
-    }
-
-    // interface to notify whether login is successful or not
-    public interface LoginCallback {
-        void onLoginSuccess(String token, String userId);
-        void onLoginFailure(String errorMessage);
-    }
-
-    // interface to notify whether register is successful or not
-    public interface RegisterCallback {
-        void onRegisterSuccess(String message);
-        void onRegisterFailure(String errorMessage);
+    // interface to notify whether auth operation was successful or not
+    public interface AuthCallback {
+        void onSuccess(String message);
+        void onFailure(String errorMessage);
     }
 
     /**
      * this method sends the user credentials to the server
      * on success, the server responds with a token, which is needed later for more requests
      */
-    public static void login(String email, String password, final LoginCallback callback) {
-        // create JSON object for request
-        JSONObject jsonRequest = new JSONObject();
-        try {
-            jsonRequest.put("email", email);
-            jsonRequest.put("password", password);
-        } catch (JSONException e) {
-            callback.onLoginFailure("Request konnte nicht erstellt werden!");
-        }
+    public static void login(String email, String password, final AuthCallback callback) {
+        // create JSON Object that holds email and password
+        JSONObject jsonRequest = createJSONRequest(email, password);
 
         // create Request
-        RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
-        Request request = new Request.Builder()
-                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/auth/login")
-                .post(requestBody)
-                .build();
+        Request request = createRequest(jsonRequest, "/api/auth/login");
 
         // execute request (at some point)
-        HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onLoginFailure("Keine Antwort!");
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseBody = response.body().string();
-
-                    try {
-                        // create JSON object for response
-                        JSONObject jsonResponse = new JSONObject(responseBody);
-
-                        // return the token
-                        token = jsonResponse.getString("token");
-                        userId = jsonResponse.getString("userId");
-                        callback.onLoginSuccess(token, userId);
-
-                    } catch (JSONException e) {
-                        callback.onLoginFailure("Fehler beim Lesen der Response!");
-                    }
-                } else {
-                    callback.onLoginFailure("Email oder Passwort falsch!");
-                }
-            }
-        });
+        executeRequest(HttpClient.getHttpClient(), request, "token", "Falsche Credentials!", callback);
     }
 
     /**
@@ -93,28 +45,66 @@ public class AuthAPI {
      * on success, the new user gets added into the db
      * the server will provide a feedback
      */
-    public static void register(String email, String password, final RegisterCallback callback) {
-        // create JSON object for request
+    public static void register(String email, String password, final AuthCallback callback) {
+        // create JSON Object that holds email and password
+        JSONObject jsonRequest = createJSONRequest(email, password);
+
+        // create Request
+        Request request = createRequest(jsonRequest, "/api/auth/register");
+
+        // execute request (at some point)
+        executeRequest(HttpClient.getHttpClient(), request, "message", "User bereits registriert!", callback);
+    }
+
+
+    /**
+     * Hier wird für Login/Registrierung ein JSONObject erstellt, das die benötigten Parameter enthält.
+     * Für Auth werden email und password benötigt.
+     * @param email: Benutzer-E-Mail (String)
+     * @param password: Benutzer-Passwort (String)
+     * @return jsonRequest (JSONObject)
+     */
+    @NonNull
+    public static JSONObject createJSONRequest(String email, String password) {
         JSONObject jsonRequest = new JSONObject();
         try {
             jsonRequest.put("email", email);
             jsonRequest.put("password", password);
-        } catch (JSONException e) {
-            callback.onRegisterFailure("Request konnte nicht erstellt werden!");
-        }
+        } catch (JSONException ignored) {
 
-        // create Request
+        }
+        return jsonRequest;
+    }
+
+    /**
+     * Hier wird ein Request-Object erzeugt, das die benötigten Informationen (Parameter email und
+     * password im Body, Methode = POST, Pfad zur jeweiligen Schnittstelle) enthält.
+     * Später wird diese Request über den HTTPClient ausgeführt.
+     * @param jsonRequest: in createJSONRequest generiertes JSONObject mit email und password
+     * @param path: Path für API
+     * @return Request
+     */
+    public static Request createRequest(JSONObject jsonRequest, String path) {
         RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
-        Request request = new Request.Builder()
-                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/auth/register")
+
+        return new Request.Builder()
+                .url(SERVER + ":" + PORT + path)
                 .post(requestBody)
                 .build();
+    }
 
-        // execute request (at some point)
-        HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
+    /**
+     * executes the request for login or register
+     * @param request: prepared Request object
+     * @param responseParameter: token or message (from server)
+     * @param errorMessage: errorMessage for callback
+     * @param callback: AuthCallback
+     */
+    public static void executeRequest(OkHttpClient okHttpClient, Request request, String responseParameter, String errorMessage, final AuthCallback callback) {
+        okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onRegisterFailure("Keine Antwort!");
+                callback.onFailure("Keine Antwort!");
             }
 
             @Override
@@ -126,14 +116,14 @@ public class AuthAPI {
                         // create JSON object for response
                         JSONObject jsonResponse = new JSONObject(responseBody);
 
-                        // return the message
-                        message = jsonResponse.getString("message");
-                        callback.onRegisterSuccess(message);
+                        // return the token (login) or message (register)
+                        String message = jsonResponse.getString(responseParameter);
+                        callback.onSuccess(message);
                     } catch (JSONException e) {
-                        callback.onRegisterFailure("Fehler beim Lesen der Response!");
+                        callback.onFailure("Fehler beim Lesen der Response!");
                     }
                 } else {
-                    callback.onRegisterFailure("User bereits registriert!");
+                    callback.onFailure(errorMessage);
                 }
             }
         });

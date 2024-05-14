@@ -79,4 +79,8 @@ dependencies {
     implementation libs.okhttp
     testImplementation libs.junit.jupiter.api
     testRuntimeOnly libs.jupiter.junit.jupiter.engine
+    testImplementation libs.json
+    testImplementation libs.junit.jupiter.params
+    testImplementation libs.mockito.core
+    implementation libs.security.crypto
 }

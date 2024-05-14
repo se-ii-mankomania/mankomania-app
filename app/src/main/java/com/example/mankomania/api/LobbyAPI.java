@@ -11,54 +11,157 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class LobbyAPI {
-    private static List<Lobby> allLobbies;
-    private static List<Lobby> startedLobbies;
-    private static String[] allLobbiesDisplayStrings;
-    private static String[] startingLobbiesDisplayStrings;
-    private static String message;
+    private static final String SERVER = HttpClient.getServer();
+    private static final int PORT = HttpClient.getPort();
 
-    // interface to notify whether login is successful or not
     public interface GetLobbiesCallback {
-        void onGetLobbiesSuccess(String[] lobbies, List<Lobby> allLobbies);
-        void onGetLobbiesFailure(String errorMessage);
-    }
-
-    public interface GetLobbiesByStatusCallback {
-        void onGetLobbiesByStatusSuccess(String[] lobbies);
-        void onGetLobbiesByStatusFailure(String errorMessage);
+        void onSuccess(String[] lobbiesStringArray, List<Lobby> lobbiesList);
+        void onFailure(String errorMessage);
     }
 
     public interface AddLobbyCallback {
-        void onAddLobbySuccess(String message);
-        void onAddLobbyFailure(String errorMessage);
+        void onSuccess(String message);
+        void onFailure(String errorMessage);
     }
 
     /**
-     * this method gets all lobbies from the db
-     * and stores the names of the lobby into lobbyNames
-     * TODO: other properties
+     * call this method to get all lobbies from the database
+     * @param token: authentication token (generated at login)
+     * @param callback: use GetLobbiesCallback
      */
     public static void getLobbies(String token, final GetLobbiesCallback callback) {
-        Request request = new Request.Builder()
-                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/lobby/getAll")
+        // create request
+        Request request = createGetRequest(token, "/api/lobby/getAll", null);
+
+        // execute request
+        executeGetRequest(HttpClient.getHttpClient(), request, callback);
+    }
+
+    /**
+     * call this method to get all lobbies with a specific status
+     * @param token: authentication token (generated at login)
+     * @param status: specify the status of the lobbies that should be displayed
+     * @param callback: use GetLobbiesCallback
+     */
+    public static void getLobbiesByStatus(String token, Status status, final GetLobbiesCallback callback) {
+        // create request
+        Request request = createGetRequest(token, "/api/lobby/getByStatus/", status);
+
+        // execute request
+        executeGetRequest(HttpClient.getHttpClient(), request, callback);
+    }
+
+    /**
+     * call this method to create a new lobby and insert it into the database
+     * @param token: authentication token (generated at login)
+     * @param name: name of the lobby (get it from UI)
+     * @param password: password of a private lobby (public lobbies don't have a password)
+     * @param isPrivate: boolean that states whether lobby is private or public
+     * @param maxPlayer: integer that represents how many players may enter a lobby (2-4)
+     * @param status: status of the lobby
+     * @param callback: use AddLobbyCallback
+     */
+    public static void addLobby(String token, String name, String password, boolean isPrivate, int maxPlayer, Status status, final AddLobbyCallback callback) {
+        // create JSONObject for Lobby that should be added
+        JSONObject jsonRequest = createJSONLobby(name, password, isPrivate, maxPlayer, status);
+
+        // create request
+        Request request = createPostRequest(jsonRequest, token, "/api/lobby/create");
+
+        // execute request (at some point)
+        executePostRequest(HttpClient.getHttpClient(), request, callback);
+    }
+
+    /**
+     * creates a JSONObject that represents a lobby (used for adding a new lobby)
+     * @param name: name of the lobby
+     * @param password: password of a private lobby (public lobbies don't have a password)
+     * @param isPrivate: boolean that states whether lobby is private or public
+     * @param maxPlayer: integer that represents how many players may enter a lobby (2-4)
+     * @param status: status of the lobby
+     * @return JSONObject that represents a lobby to be added into the database
+     */
+    public static JSONObject createJSONLobby(String name, String password, boolean isPrivate, int maxPlayer, Status status) {
+        JSONObject jsonLobby = new JSONObject();
+        try {
+            jsonLobby.put("name", name);
+
+            // JSONObjects need special NULL Value from library instead of standard null value
+            // this if-else is needed to pass null value into DB for no-password-lobbies
+            if(password == null) {
+                jsonLobby.put("password", NULL);
+            } else {
+                jsonLobby.put("password", password);
+            }
+
+            jsonLobby.put("isPrivate", isPrivate);
+            jsonLobby.put("maxPlayers", maxPlayer);
+            jsonLobby.put("status", status);
+        } catch (JSONException ignored) {
+
+        }
+        return jsonLobby;
+    }
+
+    /**
+     * creates a Request for GET methods
+     * @param token: authentication token (generated at login)
+     * @param path: path to server endpoint
+     * @param status: null to get all lobbies, status to get lobbies with a specific status
+     * @return Request to be executed by executeGetRequest(..)
+     */
+    public static Request createGetRequest(String token, String path, Status status) {
+        // set up url depending on status
+        String url = SERVER + ":" + PORT + path;
+        if (status != null) {
+            url += status.toString();
+        }
+
+        return new Request.Builder()
+                .url(url)
                 .header("Authorization", token)
                 .build();
+    }
 
-        HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
+    /**
+     * creates a Request for POST methods
+     * @param jsonRequest: JSONObject that represents a lobby
+     * @param token: authentication token (generated at login)
+     * @param path: path to server endpoint
+     * @return Request to be executed by executePostRequest(..)
+     */
+    public static Request createPostRequest(JSONObject jsonRequest, String token, String path) {
+        RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
+
+        return new Request.Builder()
+                .url(SERVER + ":" + PORT + path)
+                .header("Authorization", token)
+                .post(requestBody)
+                .build();
+    }
+
+    /**
+     * executes a GET request
+     * @param okHttpClient: use HttpClient.getHttpClient() to get singleton instance
+     * @param request: GET Request
+     * @param callback: GetLobbiesCallback
+     */
+    public static void executeGetRequest(OkHttpClient okHttpClient, Request request, final GetLobbiesCallback callback) {
+        okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onGetLobbiesFailure("Keine Antwort!");
+                callback.onFailure("Keine Antwort!");
             }
 
             @Override
@@ -67,118 +170,47 @@ public class LobbyAPI {
                     String responseBody = response.body().string();
 
                     try {
+                        // get JSONArray with lobbies
                         JSONArray responseArray = new JSONArray(responseBody);
-                        allLobbies = new ArrayList<>();
-                        allLobbiesDisplayStrings = new String[responseArray.length()];
-                        UUID lobbyid = null;
-                        for(int i = 0; i < responseArray.length(); i++) {
-                            JSONObject jsonLobby = responseArray.getJSONObject(i);
-                            addLobbyToList(jsonLobby, allLobbies);
 
-                            // TODO: replace x with actual value of players in lobby
-                            // TODO: find a better way to make it actually look pretty (sprint 3?)
-                            // generate string as display for GameScore.java
-                            boolean isPrivate = jsonLobby.getBoolean("isprivate");
-                            int maxPlayers = jsonLobby.getInt("maxplayers");
-                            String name = jsonLobby.getString("name");
-                            allLobbiesDisplayStrings[i] = generateString(isPrivate, maxPlayers, name);
+                        // create list for storing them
+                        List<Lobby> lobbies = new ArrayList<>();
+
+                        // go through array
+                        for (int i = 0; i < responseArray.length(); i++) {
+                            // get JSONObject that represents single lobby
+                            JSONObject jsonLobby = responseArray.getJSONObject(i);
+
+                            // add to list
+                            addLobbyToList(jsonLobby, lobbies);
                         }
 
-                        callback.onGetLobbiesSuccess(allLobbiesDisplayStrings,allLobbies);
+                        // generate String array for displaying lobbies
+                        String[] lobbiesStringArray = generateStringArray(lobbies);
+
+                        callback.onSuccess(lobbiesStringArray, lobbies);
                     } catch (JSONException e) {
-                        callback.onGetLobbiesFailure("Fehler beim Lesen der Response!");
+                        callback.onFailure("Fehler beim Lesen der Response!");
                     }
                 } else {
-                    callback.onGetLobbiesFailure(response.message());
+                    callback.onFailure(response.message());
                 }
             }
         });
     }
 
-    public static void getLobbiesByStatus(String token, Status status, final GetLobbiesByStatusCallback callback) {
-        Request request = new Request.Builder()
-                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/lobby/getByStatus/" + status.toString())
-                .header("Authorization", token)
-                .build();
-
-        HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onGetLobbiesByStatusFailure("Keine Antwort!");
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if(response.isSuccessful()) {
-                    String responseBody = Objects.requireNonNull(response.body()).string();
-
-                    try {
-                        JSONArray responseArray = new JSONArray(responseBody);
-                        startedLobbies = new ArrayList<>();
-                        startingLobbiesDisplayStrings = new String[responseArray.length()];
-
-                        for(int i = 0; i < responseArray.length(); i++) {
-                            JSONObject jsonLobby = responseArray.getJSONObject(i);
-                            if(status == Status.starting) {
-                                addLobbyToList(jsonLobby, startedLobbies);
-
-                                // TODO: replace x with actual value of players in lobby
-                                // TODO: find a better way to make it actually look pretty (sprint 3?)
-                                // generate string as display for GameScore.java
-                                boolean isPrivate = jsonLobby.getBoolean("isprivate");
-                                int maxPlayers = jsonLobby.getInt("maxplayers");
-                                String name = jsonLobby.getString("name");
-                                startingLobbiesDisplayStrings[i] = generateString(isPrivate, maxPlayers, name);
-                            }
-                        }
-
-                        callback.onGetLobbiesByStatusSuccess(startingLobbiesDisplayStrings);
-                    } catch (JSONException e) {
-                        callback.onGetLobbiesByStatusFailure("Fehler beim Lesen der Response!");
-                    }
-                } else {
-                    callback.onGetLobbiesByStatusFailure(response.message());
-                }
-            }
-        });
-    }
 
     /**
-     * this method tries to add a lobby to the db
+     * executes a POST request
+     * @param okHttpClient: use HttpClient.getHttpClient() to get singleton instance
+     * @param request: POST Request
+     * @param callback: AddLobbyCallback
      */
-    public static void addLobby(String token, String name, String password, boolean isPrivate, int maxPlayer, Status status, final AddLobbyCallback callback) {
-        JSONObject jsonRequest = new JSONObject();
-        try {
-            jsonRequest.put("name", name);
-
-            // JSONObjects need special NULL Value from library instead of standard null value
-            // this if-else is needed to pass null value into DB for no-password-lobbies
-            if(password == null) {
-                jsonRequest.put("password", NULL);
-            } else {
-                jsonRequest.put("password", password);
-            }
-
-            jsonRequest.put("isPrivate", isPrivate);
-            jsonRequest.put("maxPlayers", maxPlayer);
-            jsonRequest.put("status", status);
-        } catch (JSONException e) {
-            callback.onAddLobbyFailure("Request konnte nicht erstellt werden!");
-        }
-
-        // create request
-        RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
-        Request request = new Request.Builder()
-                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/lobby/create")
-                .header("Authorization", token)
-                .post(requestBody)
-                .build();
-
-        // execute request (at some point)
-        HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
+    public static void executePostRequest(OkHttpClient okHttpClient, Request request, final AddLobbyCallback callback) {
+        okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onAddLobbyFailure("Keine Antwort!");
+                callback.onFailure("Keine Antwort!");
             }
 
             @Override
@@ -191,23 +223,26 @@ public class LobbyAPI {
                         JSONObject jsonResponse = new JSONObject(responseBody);
 
                         // return the message
-                        message = jsonResponse.getString("message");
-                        callback.onAddLobbySuccess(message);
+                        String message = jsonResponse.getString("message");
+                        callback.onSuccess(message);
                     } catch (JSONException e) {
-                        callback.onAddLobbyFailure("Fehler beim Lesen der Response!");
+                        callback.onFailure("Fehler beim Lesen der Response!");
                     }
                 } else {
-                    callback.onAddLobbyFailure(response.message());
+                    callback.onFailure(response.message());
                 }
             }
         });
     }
 
     /**
-     * this method takes a JSONObject that represents a lobby, creates an equivalent Lobby object
-     * and adds it to the lobbies list
+     * takes an JSONObject representing a lobby, then "converts" it to a Lobby Object and
+     * adds it to a list
+     * @param jsonLobby: JSONObject representing a lobby
+     * @param list: list that holds objects of class Lobby
+     * @throws JSONException because a JSONObject is parsed
      */
-    private static void addLobbyToList(JSONObject jsonLobby, List<Lobby> list) throws JSONException {
+    public static void addLobbyToList(JSONObject jsonLobby, List<Lobby> list) throws JSONException {
         UUID id = UUID.fromString(jsonLobby.getString("id"));
         String name = jsonLobby.getString("name");
         String password = jsonLobby.getString("password");
@@ -244,20 +279,33 @@ public class LobbyAPI {
         list.add(lobby);
     }
 
-    private static String generateString(boolean isPrivate, int maxPlayers, String name) {
-        String string = "";
+    /**
+     * gets a list of lobbies and generates a String array that represents these lobbies, so they
+     * can be displayed in GameScore.java
+     * @param lobbies: list of Lobby objects
+     * @return lobbiesStringArray, which contains said Strings for displaying lobbies
+     */
+    public static String[] generateStringArray(List<Lobby> lobbies) {
+        String[] lobbiesStringArray = new String[lobbies.size()];
 
-        if(isPrivate) {
-            string += "P";
-        } else {
-            string += "O";
+        for (int i = 0; i < lobbies.size(); i++) {
+            Lobby lobby = lobbies.get(i);
+            String string = "";
+
+            if(lobby.isPrivate()) {
+                string += "P";
+            } else {
+                string += "O";
+            }
+            string += " | ";
+            string += "x/" + lobby.getMaxPlayers();
+            string += " | ";
+            string += lobby.getName();
+
+            lobbiesStringArray[i] = string;
         }
-        string += " | ";
-        string += "x/" + maxPlayers;
-        string += " | ";
-        string += name;
 
-        return string;
+        return lobbiesStringArray;
     }
 
 }

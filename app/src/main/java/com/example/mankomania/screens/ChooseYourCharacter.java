@@ -11,6 +11,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -24,6 +26,8 @@ import com.example.mankomania.R;
 import com.example.mankomania.api.SessionAPI;
 import com.example.mankomania.logik.spieler.Color;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,10 +45,25 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_choose_your_character);
 
-        SharedPreferences sharedPreferencesToken = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        token = sharedPreferencesToken.getString("token", null);
-        SharedPreferences sharedPreferencesLobbyId = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        lobbyid = UUID.fromString(sharedPreferencesLobbyId.getString("lobbyid", null));
+        // get token and lobbyid from SharedPreferences
+        try {
+            MasterKey masterKey = new MasterKey.Builder(this)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
+
+            SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
+                    this,
+                    "MyPrefs",
+                    masterKey,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+
+            token = sharedPreferences.getString("token", null);
+            lobbyid = UUID.fromString(sharedPreferences.getString("lobbyid", null));
+        } catch (GeneralSecurityException | IOException ignored) {
+            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+        }
 
         handler = new Handler(Looper.getMainLooper());
         startRepeatingTask();
