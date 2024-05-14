@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 public class Player {
 
     private GameboardField currentField;
-    Logger logger = Logger.getLogger(getClass().getName());
     private int id;
     private String username;
     private Color color;
@@ -87,5 +86,12 @@ public class Player {
 
     public int getPosition() {
         return position;
+    }
+
+    public Wallet getWallet() {
+        return wallet;
+    }
+    public int getStockCount(StockTypes stockTypes){
+        return stocks.getOrDefault(stockTypes.toString(), 0);
     }
 }

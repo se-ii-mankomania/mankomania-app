@@ -21,9 +21,8 @@ public class StockInitializer {
                 int index = random.nextInt(stockTypes.length);
                 StockTypes selectedStockType = stockTypes[index];
                 //Bifunktion welche Prüft ob der Schlüssel vorhanden ist (in diesem Fall unsere Aktie) und fügt 1 hinzu
-                stocks.merge(String.valueOf(selectedStockType), 1, Integer::sum);
+                stocks.merge(selectedStockType.toString(), 1, Integer::sum);
             }
-
             return stocks;
         }
 }
