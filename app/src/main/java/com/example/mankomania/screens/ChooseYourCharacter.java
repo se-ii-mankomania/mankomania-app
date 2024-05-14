@@ -63,7 +63,7 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
             token = sharedPreferences.getString("token", null);
             lobbyid = UUID.fromString(sharedPreferences.getString("lobbyid", null));
         } catch (GeneralSecurityException | IOException ignored) {
-
+            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
         }
 
         handler = new Handler(Looper.getMainLooper());

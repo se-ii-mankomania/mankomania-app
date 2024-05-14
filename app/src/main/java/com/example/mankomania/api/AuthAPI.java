@@ -70,8 +70,8 @@ public class AuthAPI {
         try {
             jsonRequest.put("email", email);
             jsonRequest.put("password", password);
-        } catch (JSONException e) {
-            // TODO: display error in some way
+        } catch (JSONException ignored) {
+
         }
         return jsonRequest;
     }

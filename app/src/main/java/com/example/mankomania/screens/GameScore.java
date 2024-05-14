@@ -66,7 +66,7 @@ public class GameScore extends AppCompatActivity implements SessionAPI.JoinSessi
 
             token = sharedPreferences.getString("token", null);
         } catch (GeneralSecurityException | IOException ignored) {
-
+            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
         }
 
         // get Lobbies
@@ -137,7 +137,7 @@ public class GameScore extends AppCompatActivity implements SessionAPI.JoinSessi
             editor.putString("lobbyid", selectedLobbyId.toString());
             editor.apply();
         } catch (GeneralSecurityException | IOException ignored) {
-
+            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
         }
 
         Intent chooseYourCharacterIntent = new Intent(GameScore.this, ChooseYourCharacter.class);

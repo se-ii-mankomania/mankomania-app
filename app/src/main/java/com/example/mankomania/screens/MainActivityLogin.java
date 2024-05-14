@@ -80,7 +80,7 @@ public class MainActivityLogin extends AppCompatActivity implements AuthAPI.Auth
             editor.putString("token", token);
             editor.apply();
         } catch (GeneralSecurityException | IOException ignored) {
-
+            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
         }
 
         // go to next page

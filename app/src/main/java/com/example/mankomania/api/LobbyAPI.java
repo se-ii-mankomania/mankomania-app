@@ -11,7 +11,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import okhttp3.Call;
@@ -109,8 +108,8 @@ public class LobbyAPI {
             jsonLobby.put("isPrivate", isPrivate);
             jsonLobby.put("maxPlayers", maxPlayer);
             jsonLobby.put("status", status);
-        } catch (JSONException e) {
-            // TODO: display error in some way
+        } catch (JSONException ignored) {
+
         }
         return jsonLobby;
     }

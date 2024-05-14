@@ -186,8 +186,8 @@ public class SessionAPI {
         try {
             jsonRequest.put("lobbyid", lobbyid);
 
-        } catch (JSONException e) {
-            // callback.onJoinSessionFailure("Request konnte nicht erstellt werden!");
+        } catch (JSONException ignored) {
+
         }
 
         return jsonRequest;
@@ -203,8 +203,8 @@ public class SessionAPI {
         try {
             jsonRequest.put("color", color);
 
-        } catch (JSONException e) {
-            // callback.onSetColorFailure("Request konnte nicht erstellt werden!");
+        } catch (JSONException ignored) {
+
         }
 
         return jsonRequest;
