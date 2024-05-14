@@ -113,6 +113,9 @@ public class SessionStatusService extends Service {
         if(newSession.getIsPlayersTurn()){
             notifyTurnChanged(convertEnumToStringColor(newSession.getColor()),newSession.getIsPlayersTurn(),userId);
         }
+        if(newSession.getBalance()<=0){
+            notifyBalanceBelowThreshold(userId,convertEnumToStringColor(newSession.getColor()));
+        }
         /*if(formerSession!=null){
             Log.wtf("HALLLOOOO","!=NULL WIRD AUFGERUFEN"+newSession.getColor());
             if(newSession.getIsPlayersTurn()) {

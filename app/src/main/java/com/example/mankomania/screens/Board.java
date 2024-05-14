@@ -92,6 +92,14 @@ public class Board extends AppCompatActivity {
 
         ToolbarFunctionalities.setUpToolbar(this);
 
+        sessionStatusService.registerObserver((SessionStatusService.BalanceBelowThresholdObserver) (userIdWinner, colorWinner) -> runOnUiThread(() -> {
+            Intent toEndWinner = new Intent(Board.this,End_Winner.class);
+            toEndWinner.putExtra("Winner",colorWinner);
+            startActivity(toEndWinner);
+            finish();
+        }));
+
+
         //Wenn der Back-Button betätigt wird, wird der Polling-Service für den Status gestoppt
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override

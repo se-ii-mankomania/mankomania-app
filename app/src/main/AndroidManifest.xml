@@ -16,10 +16,14 @@
         android:theme="@style/Theme.Mankomania"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".screens.End_Winner"
+            android:exported="false" />
+
         <service
             android:name=".api.SessionStatusService"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
 
         <activity
             android:name=".screens.EventRollDice"
