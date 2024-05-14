@@ -16,10 +16,15 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
 
 import com.example.mankomania.R;
 import com.example.mankomania.api.LobbyAPI;
 import com.example.mankomania.api.Status;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 public class CreateNewLobby extends AppCompatActivity implements LobbyAPI.AddLobbyCallback{
 
@@ -80,11 +85,26 @@ public class CreateNewLobby extends AppCompatActivity implements LobbyAPI.AddLob
                 lobbyPassword = null;
             }
 
-            // get token from shared preferences
-            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-            String token = sharedPreferences.getString("token", null);
-            // add lobby
-            LobbyAPI.addLobby(token, lobbyName, lobbyPassword, isLobbyPrivate, maxPlayers, Status.open, CreateNewLobby.this);
+            try {
+                MasterKey masterKey = new MasterKey.Builder(this)
+                        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                        .build();
+
+                SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
+                        this,
+                        "MyPrefs",
+                        masterKey,
+                        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+                );
+
+                String token = sharedPreferences.getString("token", null);
+                LobbyAPI.addLobby(token, lobbyName, lobbyPassword, isLobbyPrivate, maxPlayers, Status.open, CreateNewLobby.this);
+
+
+            } catch (GeneralSecurityException | IOException ignored) {
+                Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 

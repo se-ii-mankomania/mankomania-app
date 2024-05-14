@@ -8,10 +8,13 @@ import android.os.IBinder;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
 
 import com.example.mankomania.logik.spieler.Color;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,11 +45,25 @@ public class SessionStatusService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        SharedPreferences sharedPreferencesToken = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        token = sharedPreferencesToken.getString("token", null);
-        SharedPreferences sharedPreferencesLobbyId = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        lobbyId = UUID.fromString(sharedPreferencesLobbyId.getString("lobbyid", null));
+        try {
+            MasterKey masterKey = new MasterKey.Builder(this)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
 
+            SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
+                    this,
+                    "MyPrefs",
+                    masterKey,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+
+            token = sharedPreferences.getString("token", null);
+            String lobbyid=sharedPreferences.getString("lobbyid",null);
+            lobbyId= UUID.fromString(lobbyid);
+        } catch (GeneralSecurityException | IOException ignored) {
+            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+        }
 
         handler = new Handler();
         runnable = new Runnable() {
@@ -116,18 +133,6 @@ public class SessionStatusService extends Service {
         if(newSession.getBalance()<=0){
             notifyBalanceBelowThreshold(userId,convertEnumToStringColor(newSession.getColor()));
         }
-        /*if(formerSession!=null){
-            Log.wtf("HALLLOOOO","!=NULL WIRD AUFGERUFEN"+newSession.getColor());
-            if(newSession.getIsPlayersTurn()) {
-                Log.wtf("HALLLOOOO","!=NULL WIRD AUFGERUFEN"+newSession.getColor());
-                notifyTurnChanged(convertEnumToStringColor(newSession.getColor()), newSession.getIsPlayersTurn());
-            }
-        }else{
-            if(newSession.getIsPlayersTurn()) {
-                Log.wtf("HALLLOOOO", "ELSE WIRD AUFGERUFEN" + newSession.getColor());
-                notifyTurnChanged(convertEnumToStringColor(newSession.getColor()), newSession.getIsPlayersTurn());
-            }
-        }*/
     }
 
     private String convertEnumToStringColor(Color color){

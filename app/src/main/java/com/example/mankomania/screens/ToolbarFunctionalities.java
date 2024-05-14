@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.example.mankomania.R;
 import com.example.mankomania.api.SessionStatusService;
@@ -27,17 +26,9 @@ public class ToolbarFunctionalities {
             context.startActivity(switchToFinancesAndStocks);
         });
 
-        //Current Player displayen
-        TextView currentPlayer=toolbar.findViewById(R.id.CurrentPlayer);
-        SessionStatusService sessionStatusService=new SessionStatusService();
-        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> activity.runOnUiThread(() -> {
-            currentPlayer.setText(color);
-        }));
-
         Button logout=activity.findViewById(R.id.Board_LogoutButton);
         logout.setOnClickListener((View v) -> {
             stopSessionStatusService(context);
-            //TODO Daten des Spiels speichern etc.
             Intent fromBoardToLogin=new Intent(activity, MainActivityLogin.class);
             context.startActivity(fromBoardToLogin);
         });

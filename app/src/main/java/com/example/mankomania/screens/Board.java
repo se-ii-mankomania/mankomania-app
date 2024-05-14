@@ -3,7 +3,6 @@ package com.example.mankomania.screens;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
 
 import com.example.mankomania.R;
 
@@ -27,6 +28,8 @@ import com.example.mankomania.gameboardfields.GameboardField;
 import android.animation.ObjectAnimator;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -35,6 +38,8 @@ public class Board extends AppCompatActivity {
     FieldsHandler fieldsHandler = new FieldsHandler();
 
     Cellposition[][] cellPositions = new Cellposition[14][14];
+
+    UUID userid;
 
 
     @Override
@@ -47,35 +52,46 @@ public class Board extends AppCompatActivity {
         Button rollDice = findViewById(R.id.Board_ButtonDice);
         rollDice.setEnabled(false);
 
-        SharedPreferences sharedPreferencesLobbyId = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        UUID userId = UUID.fromString(sharedPreferencesLobbyId.getString("userId", null));
-
-
         Intent sessionStatusServiceIntent = new Intent(this, SessionStatusService.class);
         startService(sessionStatusServiceIntent);
 
+        UUID userId;
         SessionStatusService sessionStatusService = SessionStatusService.getInstance();
-        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> runOnUiThread(() -> {
-            if(newTurn && userid.equals(userId)){
-                rollDice.setEnabled(true);
-            }else{
-                rollDice.setEnabled(false);
-            }
-        }));
+        //derweil zu Überprüfungszwecken
+        TextView currentPlayer = findViewById(R.id.textView);
+
+        try {
+            MasterKey masterKey = new MasterKey.Builder(this)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
+
+            SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
+                    this,
+                    "MyPrefs",
+                    masterKey,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+
+            String useridString = sharedPreferences.getString("token", null);
+            userId=UUID.fromString(useridString);
+
+
+            sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn1,userid) -> runOnUiThread(() -> {
+                if (newTurn1 && userid.equals(userId)) {
+                    currentPlayer.setText(color);
+                }
+            }));
+
+        } catch (GeneralSecurityException | IOException ignored) {
+            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+        }
 
         rollDice.setOnClickListener(v -> {
             Intent toEventRollDice = new Intent(Board.this, EventRollDice.class);
             toEventRollDice.putExtra("fieldsHandler", fieldsHandler);
             startActivity(toEventRollDice);
         });
-        //derweil zu Überprüfungszwecken
-        TextView currentPlayer = findViewById(R.id.textView);
-        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn1,userid) -> runOnUiThread(() -> {
-            if (newTurn1 && userid.equals(userId)) {
-                Log.wtf("HAAAALLLLOOOOOOOO","Ich werde aufgerufen");
-                currentPlayer.setText(color);
-            }
-        }));
 
 
         ZoomLayout zoomLayout = findViewById(R.id.zoom_linear_layout);

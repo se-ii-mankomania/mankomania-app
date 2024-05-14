@@ -83,7 +83,6 @@ public class GameScore extends AppCompatActivity implements SessionAPI.JoinSessi
                         selectedLobbyId=lobby.getId();
                     }
                 }
-                //TODO selctedGame starten
                 SessionAPI.joinSession(token, selectedLobbyId,GameScore.this);
             }else{
                 Toast.makeText(GameScore.this, "Wähle ein Spiel aus.", Toast.LENGTH_SHORT).show();

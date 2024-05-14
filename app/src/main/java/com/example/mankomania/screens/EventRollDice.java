@@ -20,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
 
 import com.example.mankomania.R;
 import com.example.mankomania.api.Session;
@@ -28,7 +30,9 @@ import com.example.mankomania.gameboardfields.GameboardField;
 import com.example.mankomania.logik.spieler.Dice;
 import com.example.mankomania.logik.spieler.Player;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
@@ -120,7 +124,6 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
 
         Dice dice=new Dice();
         int[] randomNumber=dice.throwDice();
-        //TODO entsprechende Anzahl am Spielfeld weiterrücken
         String resultOfRollingDice = String.valueOf(randomNumber[0] + randomNumber[1]);
 
         //Ergebnis auf Würfel displayen
@@ -132,49 +135,68 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
 
         diceOne.setImageResource(sourceDiceOne);
         diceTwo.setImageResource(sourceDiceTwo);
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String userId = sharedPreferences.getString("userId", null);
-        String token = sharedPreferences.getString("token", null);
-        String lobbyId = sharedPreferences.getString("lobbyid", null);
-        SessionAPI.getStatusByLobby(token, UUID.fromString(lobbyId), new SessionAPI.GetStatusByLobbyCallback() {
 
-            @Override
-            public void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions) {
-                Session userSession = null;
-                for(Session session: sessions.values()){
-                    if(session.getUserId().equals(UUID.fromString(userId))){
-                        userSession = session;
-                        break;
+        try {
+            MasterKey masterKey = new MasterKey.Builder(this)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
+
+            SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
+                    this,
+                    "MyPrefs",
+                    masterKey,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+
+            String userId = sharedPreferences.getString("userId", null);
+            String token = sharedPreferences.getString("token", null);
+            String lobbyId = sharedPreferences.getString("lobbyid", null);
+
+            SessionAPI.getStatusByLobby(token, UUID.fromString(lobbyId), new SessionAPI.GetStatusByLobbyCallback() {
+
+                @Override
+                public void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions) {
+                    Session userSession = null;
+                    for(Session session: sessions.values()){
+                        if(session.getUserId().equals(UUID.fromString(userId))){
+                            userSession = session;
+                            break;
+                        }
                     }
+                    Player player = new Player("", Objects.requireNonNull(userSession).getColor());
+                    GameboardField field = Objects.requireNonNull(fieldshandler).getField(userSession.getCurrentPosition()-1);
+                    player.setCurrentField(field);
+                    fieldshandler.movePlayer(player, randomNumber[0] + randomNumber[1]);
+
+                    SessionAPI.updatePlayerPosition(token, userId, player.getCurrentField().getId(), lobbyId, new SessionAPI.UpdatePositionCallback() {
+                        @Override
+                        public void onUpdateSuccess(String message) {
+                            runOnUiThread(() -> {
+                                int resource = getResId("field_" + player.getCurrentField().getId()+ "_description", R.string.class);
+                                Toast.makeText(getApplicationContext(), getString(resource), Toast.LENGTH_LONG).show();
+
+                            });
+
+                        }
+
+                        @Override
+                        public void onUpdateFailure(String errorMessage) {
+                            Toast.makeText(getApplicationContext(), "Error while updating positions", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 }
-                Player player = new Player("", Objects.requireNonNull(userSession).getColor());
-                GameboardField field = Objects.requireNonNull(fieldshandler).getField(userSession.getCurrentPosition()-1);
-                player.setCurrentField(field);
-                fieldshandler.movePlayer(player, randomNumber[0] + randomNumber[1]);
+                @Override
+                public void onGetStatusByLobbyFailure(String errorMessage) {
+                    Toast.makeText(getApplicationContext(), "could not get lobbyStatus", Toast.LENGTH_SHORT).show();
+                }
+            });
 
-                SessionAPI.updatePlayerPosition(token, userId, player.getCurrentField().getId(), lobbyId, new SessionAPI.UpdatePositionCallback() {
-                    @Override
-                    public void onUpdateSuccess(String message) {
-                        runOnUiThread(() -> {
-                            int resource = getResId("field_" + player.getCurrentField().getId()+ "_description", R.string.class);
-                            Toast.makeText(getApplicationContext(), getString(resource), Toast.LENGTH_LONG).show();
 
-                        });
-
-                    }
-
-                    @Override
-                    public void onUpdateFailure(String errorMessage) {
-                        Toast.makeText(getApplicationContext(), "Error while updating positions", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-            @Override
-            public void onGetStatusByLobbyFailure(String errorMessage) {
-                Toast.makeText(getApplicationContext(), "could not get lobbyStatus", Toast.LENGTH_SHORT).show();
-            }
-        });
+        } catch (GeneralSecurityException | IOException ignored) {
+            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+        }
 
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {

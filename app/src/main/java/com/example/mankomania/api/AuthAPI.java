@@ -119,7 +119,7 @@ public class AuthAPI {
                         // return the token (login) or message (register)
                         String message = jsonResponse.getString(responseParameter);
                         //TODO bei Tests integrieren
-                        String userid= jsonResponse.getString("userid");
+                        String userid= jsonResponse.getString("userId");
                         callback.onSuccess(message,userid);
                     } catch (JSONException e) {
                         callback.onFailure("Fehler beim Lesen der Response!");
