@@ -217,18 +217,20 @@ public class SessionAPI {
                                 UUID userid = UUID.fromString(jsonSession.getString("userid"));
                                 String email = jsonSession.getString("email");
                                 String colorString=jsonSession.getString("color");
-                                Log.wtf("HAAALLLOOOOO",colorString);
+                                //Log.wtf("HAAALLLOOOOO",colorString);
                                 Color color = convertToEnums(colorString);
-                                Log.wtf("HAAALLLOOOOOOOENUM", Objects.requireNonNull(color).toString());
+                                //Log.wtf("HAAALLLOOOOOOOENUM", Objects.requireNonNull(color).toString());
                                 int currentPosition = jsonSession.getInt("currentposition");
                                 int balance = jsonSession.getInt("balance");
                                 boolean isPlayersTurn = jsonSession.getBoolean("isplayersturn");
 
-                                Session session = new Session(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
-                                //Session formerSession=sessions.get(userid);
-                                sessions.put(userid, session);
-                                SessionStatusService sessionStatusService = SessionStatusService.getInstance();
-                                sessionStatusService.notifyUpdatesInSession(session,userid);
+                                if(color!=null) {
+                                    Session session = new Session(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
+                                    //Session formerSession=sessions.get(userid);
+                                    sessions.put(userid, session);
+                                    SessionStatusService sessionStatusService = SessionStatusService.getInstance();
+                                    sessionStatusService.notifyUpdatesInSession(session, userid);
+                                }
                             }
 
                             callback.onGetStatusByLobbySuccess(sessions);
