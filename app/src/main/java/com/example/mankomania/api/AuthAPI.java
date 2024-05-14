@@ -94,11 +94,11 @@ public class AuthAPI {
     }
 
     /**
-     *
-     * @param request
-     * @param responseParameter
-     * @param errorMessage
-     * @param callback
+     * executes the request for login or register
+     * @param request: prepared Request object
+     * @param responseParameter: token or message (from server)
+     * @param errorMessage: errorMessage for callback
+     * @param callback: AuthCallback
      */
     public static void executeRequest(OkHttpClient okHttpClient, Request request, String responseParameter, String errorMessage, final AuthCallback callback) {
         okHttpClient.newCall(request).enqueue(new Callback() {
