@@ -17,7 +17,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".screens.End_Winner"
+            android:name=".screens.EndWinner"
             android:exported="false" />
 
         <service

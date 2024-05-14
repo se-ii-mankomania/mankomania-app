@@ -13,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mankomania.R;
 
-public class End_Winner extends AppCompatActivity {
+public class EndWinner extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class End_Winner extends AppCompatActivity {
 
             @Override
             public void handleOnBackPressed() {
-                Intent backToLogin=new Intent(End_Winner.this, MainActivityLogin.class);
+                Intent backToLogin=new Intent(EndWinner.this, MainActivityLogin.class);
                 startActivity(backToLogin);
             }
         };
