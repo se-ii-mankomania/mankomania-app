@@ -81,6 +81,14 @@ public class Board extends AppCompatActivity {
                 }
             }));
 
+            sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> runOnUiThread(() -> {
+                if(newTurn && userid.equals(userId)){
+                    rollDice.setEnabled(true);
+                }else{
+                    rollDice.setEnabled(false);
+                }
+            }));
+
         } catch (GeneralSecurityException | IOException ignored) {
             Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
         }
