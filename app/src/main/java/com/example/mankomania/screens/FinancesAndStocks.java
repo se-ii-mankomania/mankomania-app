@@ -11,16 +11,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.mankomania.R;
+import com.example.mankomania.logik.aktien.StockTypes;
+import com.example.mankomania.logik.geldboerse.NoteTypes;
 
 public class FinancesAndStocks extends AppCompatActivity {
+
+    private PlayerViewModel playerViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_finances_and_stocks);
+
+        playerViewModel = new ViewModelProvider(this).get(PlayerViewModel.class);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -39,34 +47,31 @@ public class FinancesAndStocks extends AppCompatActivity {
         TextView numberStocks=findViewById(R.id.Stocks_totalAnswer);
 
         //TODO mithilfe von ViewModel(?) ein Observable implemntieren,dass die Daten enthält
-        /*
-            @Override
-            public void onChanged(Player player) {
-                bills5k.setText(player.get5kbills());
-                bills10k.setText(player.get10kbills());
-                bills50k.setText(player.get50kbills());
-                bills100k.setText(player.get100kbills());
-                balance.setText(player.getbalance());
+        playerViewModel.getPlayer().observe(this, player -> {
+            // UI mit Daten aus dem Player-Objekt aktualisieren
+            bills5k.setText(String.valueOf(player.getWallet().getNoteCount(NoteTypes.FIVETHOUSAND)));
+            bills10k.setText(String.valueOf(player.getWallet().getNoteCount(NoteTypes.TENTHOUSAND)));
+            bills50k.setText(String.valueOf(player.getWallet().getNoteCount(NoteTypes.FIFTYTHOUSAND)));
+            bills100k.setText(String.valueOf(player.getWallet().getNoteCount(NoteTypes.HUNDREDTHOUSAND)));
+            balance.setText(String.valueOf(player.getWalletBalance()));
 
-                bruchstahlAG.setText(player.getBruchstahlAG());
-                trockenoelAG.setText(player.getTrockenoelAG());
-                kurzschlussAG.setText(player.getKurzschlussAG());
-                numberStocks.setText(player.getStocksTotal());
-
-       */
-
-
-        Button toBoard=findViewById(R.id.FinancesStocks_BackToBoard);
-        toBoard.setOnClickListener((View v) -> {
-            Intent switchToBoard=new Intent(FinancesAndStocks.this, Board.class);
-            startActivity(switchToBoard);
+            bruchstahlAG.setText(String.valueOf(player.getStockCount(StockTypes.BRUCHSTAHL_AG)));
+            trockenoelAG.setText(String.valueOf(player.getStockCount(StockTypes.TROCKENOEL_AG)));
+            kurzschlussAG.setText(String.valueOf(player.getStockCount(StockTypes.KURZSCHLUSS_VERSORGUNGS_AG)));
+            numberStocks.setText(String.valueOf(player.getAmountOfStock().values().stream().mapToInt(Integer::intValue).sum()));
         });
 
-        Button logout=findViewById(R.id.FinancesStocks_LogoutButton);
-        logout.setOnClickListener((View v) -> {
-            //TODO Daten des Spiels speichern etc.
-            Intent fromFinancesAndStocksToLogin=new Intent(FinancesAndStocks.this, MainActivityLogin.class);
-            startActivity(fromFinancesAndStocksToLogin);
-        });
+            Button toBoard = findViewById(R.id.FinancesStocks_BackToBoard);
+            toBoard.setOnClickListener((View v) -> {
+                Intent switchToBoard = new Intent(FinancesAndStocks.this, Board.class);
+                startActivity(switchToBoard);
+            });
+
+            Button logout = findViewById(R.id.FinancesStocks_LogoutButton);
+            logout.setOnClickListener((View v) -> {
+                //TODO Daten des Spiels speichern etc.
+                Intent fromFinancesAndStocksToLogin = new Intent(FinancesAndStocks.this, MainActivityLogin.class);
+                startActivity(fromFinancesAndStocksToLogin);
+            });
     }
 }
