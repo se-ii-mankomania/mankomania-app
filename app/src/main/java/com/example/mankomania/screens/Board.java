@@ -89,6 +89,10 @@ public class Board extends AppCompatActivity {
                 }
             }));
 
+            sessionStatusService.registerObserver((SessionStatusService.PositionObserver) (session) -> runOnUiThread(() -> {
+                updatePlayerPosition(session);
+            }));
+
         } catch (GeneralSecurityException | IOException ignored) {
             Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
         }
@@ -163,8 +167,6 @@ public class Board extends AppCompatActivity {
 
         fieldsHandler.initFields(cellPositions);
 
-        updatePlayerPositions();
-
         ImageView playerBlueImage = findViewById(R.id.player_blue);
         playerBlueImage.getLayoutParams().height = cellHeight;
         playerBlueImage.getLayoutParams().width = cellWidth;
@@ -200,79 +202,31 @@ public class Board extends AppCompatActivity {
         animatorY.setDuration(500);
         animatorX.start();
         animatorY.start();
-        // Toast.makeText(getApplicationContext(), auf datenbank zugreifne??)
     }
 
-    public void updatePlayerPositions() {
-        try {
-            MasterKey masterKey = new MasterKey.Builder(this)
-                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-                    .build();
-
-            SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
-                    this,
-                    "MyPrefs",
-                    masterKey,
-                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-            );
-
-            String token = sharedPreferences.getString("token", null);
-            String lobbyId = sharedPreferences.getString("lobbyid", null);
-
-            SessionAPI.getStatusByLobby(token, UUID.fromString(lobbyId), new SessionAPI.GetStatusByLobbyCallback() {
-
-                @Override
-                public void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions) {
-                    runOnUiThread(() -> {
-                        (findViewById(R.id.player_blue)).setVisibility(View.INVISIBLE);
-                        (findViewById(R.id.player_purple)).setVisibility(View.INVISIBLE);
-
-                        (findViewById(R.id.player_red)).setVisibility(View.INVISIBLE);
-                        (findViewById(R.id.player_green)).setVisibility(View.INVISIBLE);
-
-                        for (Session session : sessions.values()) {
-                            ImageView playerView = null;
-                            int viewId = 0;
-                            switch (session.getColor()) {
-                                case BLUE:
-                                    viewId = R.id.player_blue;
-                                    break;
-                                case RED:
-                                    viewId = R.id.player_red;
-                                    break;
-                                case GREEN:
-                                    viewId = R.id.player_green;
-                                    break;
-                                case PURPLE:
-                                    viewId = R.id.player_purple;
-                                    break;
-                            }
-                            if (viewId != 0) {
-                                playerView = findViewById(viewId);
-                                playerView.setVisibility(View.VISIBLE);
-
-                                if (playerView != null) {
-                                    GameboardField gameboardField = fieldsHandler.getField(session.getCurrentPosition() - 1);
-                                    animateMove(playerView, playerView.getX(), playerView.getY(),
-                                            gameboardField.getX(), gameboardField.getY());
-                                }
-                            }
-
-                        }
-                    });
-
-                }
-
-                @Override
-                public void onGetStatusByLobbyFailure(String errorMessage) {
-                    Toast.makeText(getApplicationContext(), "Could not get sessionLobbyStatus", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-        } catch (GeneralSecurityException | IOException ignored) {
-            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+    private void updatePlayerPosition(Session session) {
+        int viewId = 0;
+        switch (session.getColor()) {
+            case BLUE:
+                viewId = R.id.player_blue;
+                break;
+            case RED:
+                viewId = R.id.player_red;
+                break;
+            case GREEN:
+                viewId = R.id.player_green;
+                break;
+            case PURPLE:
+                viewId = R.id.player_purple;
+                break;
         }
+        if (viewId != 0) {
+            ImageView playerView = findViewById(viewId);
+            playerView.setVisibility(View.VISIBLE);
 
+            GameboardField gameboardField = fieldsHandler.getField(session.getCurrentPosition() - 1);
+            animateMove(playerView, playerView.getX(), playerView.getY(),
+                    gameboardField.getX(), gameboardField.getY());
+        }
     }
 }
