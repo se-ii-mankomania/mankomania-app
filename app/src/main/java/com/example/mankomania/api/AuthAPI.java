@@ -131,7 +131,7 @@ public class AuthAPI {
                         callback.onLoginFailure("Fehler beim Lesen der Response!");
                     }
                 } else {
-                    callback.onLoginFailure("User bereits registriert!");
+                    callback.onLoginFailure("Falsche Credentials!");
                 }
             }
         });
