@@ -115,6 +115,7 @@ public class Board extends AppCompatActivity {
         ToolbarFunctionalities.setUpToolbar(this);
 
         sessionStatusService.registerObserver((SessionStatusService.BalanceBelowThresholdObserver) (userIdWinner, colorWinner) -> runOnUiThread(() -> {
+            stopSessionStatusService();
             Intent toEndWinner = new Intent(Board.this, EndWinner.class);
             toEndWinner.putExtra("Winner",colorWinner);
             startActivity(toEndWinner);
