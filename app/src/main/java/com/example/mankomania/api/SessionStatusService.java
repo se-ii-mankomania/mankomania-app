@@ -121,6 +121,7 @@ public class SessionStatusService extends Service {
 
     public void notifyUpdatesInSession(Session newSession,UUID userId){
 
+        notifyPositionChanged(newSession);
         /*if(formerSession==null || !Objects.equals(formerSession.getCurrentPosition(), newSession.getCurrentPosition())){
             notifyPositionChanged(userId,newSession.getCurrentPosition());
         }
@@ -148,7 +149,7 @@ public class SessionStatusService extends Service {
         void onBalanceBelowThreshold(UUID userId,String color);
     }
     public interface PositionObserver {
-        void onPositionChanged(UUID userId, int newPosition);
+        void onPositionChanged(Session session);
     }
     public interface BalanceObserver{
         void onBalanceChanged(UUID userId, int newBalance);
@@ -179,9 +180,9 @@ public class SessionStatusService extends Service {
         playersTurnObservers.remove(observer);
     }
 
-    public void notifyPositionChanged(UUID userId,int newPosition) {
+    public void notifyPositionChanged(Session session) {
         for (SessionStatusService.PositionObserver observer : positionObservers) {
-            observer.onPositionChanged(userId, newPosition);
+            observer.onPositionChanged(session);
         }
     }
 

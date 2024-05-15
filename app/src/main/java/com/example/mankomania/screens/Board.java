@@ -22,7 +22,6 @@ import com.example.mankomania.R;
 
 import com.example.mankomania.api.SessionStatusService;
 import com.example.mankomania.api.Session;
-import com.example.mankomania.api.SessionAPI;
 import com.example.mankomania.gameboardfields.GameboardField;
 
 import android.animation.ObjectAnimator;
@@ -30,7 +29,6 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.HashMap;
 import java.util.UUID;
 
 public class Board extends AppCompatActivity {
@@ -87,6 +85,10 @@ public class Board extends AppCompatActivity {
                 }else{
                     rollDice.setEnabled(false);
                 }
+            }));
+
+            sessionStatusService.registerObserver((SessionStatusService.PositionObserver) (session) -> runOnUiThread(() -> {
+                updatePlayerPosition(session);
             }));
 
         } catch (GeneralSecurityException | IOException ignored) {
@@ -163,29 +165,29 @@ public class Board extends AppCompatActivity {
 
         fieldsHandler.initFields(cellPositions);
 
-        updatePlayerPositions();
-
         ImageView playerBlueImage = findViewById(R.id.player_blue);
         playerBlueImage.getLayoutParams().height = cellHeight;
         playerBlueImage.getLayoutParams().width = cellWidth;
+        playerBlueImage.setVisibility(View.INVISIBLE);
         playerBlueImage.requestLayout();
 
         ImageView playerGreenImage = findViewById(R.id.player_green);
         playerGreenImage.getLayoutParams().height = cellHeight;
         playerGreenImage.getLayoutParams().width = cellWidth;
+        playerGreenImage.setVisibility(View.INVISIBLE);
         playerGreenImage.requestLayout();
 
         ImageView playerPurpleImage = findViewById(R.id.player_purple);
         playerPurpleImage.getLayoutParams().height = cellHeight;
         playerPurpleImage.getLayoutParams().width = cellWidth;
+        playerPurpleImage.setVisibility(View.INVISIBLE);
         playerPurpleImage.requestLayout();
 
         ImageView playerRedImage = findViewById(R.id.player_red);
         playerRedImage.getLayoutParams().height = cellHeight;
         playerRedImage.getLayoutParams().width = cellWidth;
+        playerRedImage.setVisibility(View.INVISIBLE);
         playerRedImage.requestLayout();
-
-
     }
 
     private void stopSessionStatusService() {
@@ -200,79 +202,35 @@ public class Board extends AppCompatActivity {
         animatorY.setDuration(500);
         animatorX.start();
         animatorY.start();
-        // Toast.makeText(getApplicationContext(), auf datenbank zugreifne??)
     }
 
-    public void updatePlayerPositions() {
-        try {
-            MasterKey masterKey = new MasterKey.Builder(this)
-                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-                    .build();
-
-            SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
-                    this,
-                    "MyPrefs",
-                    masterKey,
-                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-            );
-
-            String token = sharedPreferences.getString("token", null);
-            String lobbyId = sharedPreferences.getString("lobbyid", null);
-
-            SessionAPI.getStatusByLobby(token, UUID.fromString(lobbyId), new SessionAPI.GetStatusByLobbyCallback() {
-
-                @Override
-                public void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions) {
-                    runOnUiThread(() -> {
-                        (findViewById(R.id.player_blue)).setVisibility(View.INVISIBLE);
-                        (findViewById(R.id.player_purple)).setVisibility(View.INVISIBLE);
-
-                        (findViewById(R.id.player_red)).setVisibility(View.INVISIBLE);
-                        (findViewById(R.id.player_green)).setVisibility(View.INVISIBLE);
-
-                        for (Session session : sessions.values()) {
-                            ImageView playerView = null;
-                            int viewId = 0;
-                            switch (session.getColor()) {
-                                case BLUE:
-                                    viewId = R.id.player_blue;
-                                    break;
-                                case RED:
-                                    viewId = R.id.player_red;
-                                    break;
-                                case GREEN:
-                                    viewId = R.id.player_green;
-                                    break;
-                                case PURPLE:
-                                    viewId = R.id.player_purple;
-                                    break;
-                            }
-                            if (viewId != 0) {
-                                playerView = findViewById(viewId);
-                                playerView.setVisibility(View.VISIBLE);
-
-                                if (playerView != null) {
-                                    GameboardField gameboardField = fieldsHandler.getField(session.getCurrentPosition() - 1);
-                                    animateMove(playerView, playerView.getX(), playerView.getY(),
-                                            gameboardField.getX(), gameboardField.getY());
-                                }
-                            }
-
-                        }
-                    });
-
-                }
-
-                @Override
-                public void onGetStatusByLobbyFailure(String errorMessage) {
-                    Toast.makeText(getApplicationContext(), "Could not get sessionLobbyStatus", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-        } catch (GeneralSecurityException | IOException ignored) {
-            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+    private void updatePlayerPosition(Session session) {
+        int viewId = 0;
+        switch (session.getColor()) {
+            case BLUE:
+                viewId = R.id.player_blue;
+                break;
+            case RED:
+                viewId = R.id.player_red;
+                break;
+            case GREEN:
+                viewId = R.id.player_green;
+                break;
+            case PURPLE:
+                viewId = R.id.player_purple;
+                break;
         }
-
+        if (viewId != 0) {
+            ImageView playerView = findViewById(viewId);
+            GameboardField gameboardField = fieldsHandler.getField(session.getCurrentPosition() - 1);
+            if(playerView.getVisibility() == View.VISIBLE) {
+                animateMove(playerView, playerView.getX(), playerView.getY(),
+                        gameboardField.getX(), gameboardField.getY());
+            } else {
+                playerView.setX(gameboardField.getX());
+                playerView.setY(gameboardField.getY());
+                playerView.setVisibility(View.VISIBLE);
+            }
+        }
     }
 }

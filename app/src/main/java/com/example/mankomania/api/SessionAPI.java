@@ -27,6 +27,9 @@ import okhttp3.ResponseBody;
 public class SessionAPI {
     private static final String SERVER = HttpClient.getServer();
     private static final int PORT = HttpClient.getPort();
+    private static final String responseFailureMessage = "Fehler beim Lesen der Response: ";
+   private static final String jsonResponseMessageKey = "message";
+   private static final String headerAuthorizationKey = "Authorization";
 
     public interface UpdatePositionCallback {
         void onUpdateSuccess(String message);
@@ -72,7 +75,7 @@ public class SessionAPI {
         RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
         Request request = new Request.Builder()
                 .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/session/setPosition/" + lobbyID)
-                .header("Authorization", token)
+                .header(headerAuthorizationKey, token)
                 .post(requestBody)
                 .build();
 
@@ -93,10 +96,10 @@ public class SessionAPI {
                         JSONObject jsonResponse = new JSONObject(responseBody);
 
                         // extract message from response
-                        String message = jsonResponse.getString("message");
+                        String message = jsonResponse.getString(jsonResponseMessageKey);
                         callback.onUpdateSuccess(message);
                     } catch (JSONException e) {
-                        callback.onUpdateFailure("Fehler beim Lesen der Response!");
+                        callback.onUpdateFailure(responseFailureMessage + e.getMessage());
                     }
                 } else {
                     callback.onUpdateFailure("Aktualisierung fehlgeschlagen, Antwortcode: " + response.code());
@@ -279,7 +282,7 @@ public class SessionAPI {
     public static Request createGetRequest(String token, String path) {
         return new Request.Builder()
                 .url(SERVER + ":" + PORT + path)
-                .header("Authorization", token)
+                .header(headerAuthorizationKey, token)
                 .build();
     }
 
@@ -294,7 +297,7 @@ public class SessionAPI {
         RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
         return new Request.Builder()
                 .url(SERVER + ":" + PORT + path)
-                .header("Authorization", token)
+                .header(headerAuthorizationKey, token)
                 .post(requestBody)
                 .build();
     }
@@ -322,10 +325,10 @@ public class SessionAPI {
                         JSONObject jsonResponse = new JSONObject(responseBody);
 
                         // return the message
-                        String successMessage = jsonResponse.getString("message");
+                        String successMessage = jsonResponse.getString(jsonResponseMessageKey);
                         callback.onJoinSessionSuccess(successMessage);
                     } catch (JSONException e) {
-                        callback.onJoinSessionFailure("Fehler beim Lesen der Response!");
+                        callback.onJoinSessionFailure(responseFailureMessage + e.getMessage());
                     }
                 } else {
                     callback.onJoinSessionFailure(response.message());
@@ -358,7 +361,7 @@ public class SessionAPI {
                             callback.onGetUnavailableColorsByLobbyFailure("Response Body ist leer!");
                         }
                     } catch (JSONException e) {
-                        callback.onGetUnavailableColorsByLobbyFailure("Fehler beim Lesen der Response: " + e.getMessage());
+                        callback.onGetUnavailableColorsByLobbyFailure(responseFailureMessage + e.getMessage());
                     }
                 } else {
                     callback.onGetUnavailableColorsByLobbyFailure(response.message());
@@ -391,7 +394,7 @@ public class SessionAPI {
                         callback.onGetStatusByLobbyFailure(response.message());
                     }
                 } catch (JSONException e) {
-                    callback.onGetStatusByLobbyFailure("Fehler beim Lesen der Response!");
+                    callback.onGetStatusByLobbyFailure(responseFailureMessage + e.getMessage());
                 }
             }
         });
@@ -420,10 +423,10 @@ public class SessionAPI {
                         JSONObject jsonResponse = new JSONObject(responseBody);
 
                         // return the message
-                        String successMessage = jsonResponse.getString("message");
+                        String successMessage = jsonResponse.getString(jsonResponseMessageKey);
                         callback.onSetColorSuccess(successMessage);
                     } catch (JSONException e) {
-                        callback.onSetColorFailure("Fehler beim Lesen der Response!");
+                        callback.onSetColorFailure(responseFailureMessage + e.getMessage());
                     }
                 } else {
                     callback.onSetColorFailure(response.message());
