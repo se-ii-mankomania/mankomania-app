@@ -7,7 +7,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
@@ -53,9 +52,6 @@ public class Board extends AppCompatActivity {
 
         UUID userId;
         SessionStatusService sessionStatusService = SessionStatusService.getInstance();
-        //derweil zu Überprüfungszwecken
-        TextView currentPlayer = findViewById(R.id.textView);
-
         try {
             MasterKey masterKey = new MasterKey.Builder(this)
                     .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -71,13 +67,6 @@ public class Board extends AppCompatActivity {
 
             String useridString = sharedPreferences.getString("userId", null);
             userId=UUID.fromString(useridString);
-
-
-            sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn1,userid) -> runOnUiThread(() -> {
-                if (newTurn1 && userid.equals(userId)) {
-                    currentPlayer.setText(color);
-                }
-            }));
 
             sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> runOnUiThread(() -> {
                 if(newTurn && userid.equals(userId)){
