@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.regex.Pattern;
 
-public class MainActivityLogin extends AppCompatActivity implements AuthAPI.AuthCallback{
+public class MainActivityLogin extends AppCompatActivity implements AuthAPI.LoginCallback{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +60,21 @@ public class MainActivityLogin extends AppCompatActivity implements AuthAPI.Auth
 
     }
 
+    /**
+     * Diese Methode überprüft mit einem simplen Regex, ob es sich bei dem
+     * Eingabestring um eine E-Mail-Adresse handelt.
+     * @param email zu überprüfende E-Mail-Adresse aus Eingabefeld
+     * @return ob E-Mail-Adresse nicht valide ist oder schon
+     */
+
+    public static boolean isNoValidEmail(String email){
+        String emailRegex ="^(.+)@([\\w.-]+)$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        return !pattern.matcher(email).matches();
+    }
+
     @Override
-    public void onSuccess(String token, String userId) {
+    public void onLoginSuccess(String token, String userId) {
         // store token
         try {
             MasterKey masterKey = new MasterKey.Builder(this)
@@ -90,21 +103,8 @@ public class MainActivityLogin extends AppCompatActivity implements AuthAPI.Auth
     }
 
     @Override
-    public void onFailure(String errorMessage) {
+    public void onLoginFailure(String errorMessage) {
         // handle login failure
         runOnUiThread(() -> Toast.makeText(MainActivityLogin.this, "Login fehlgeschlagen: " + errorMessage, Toast.LENGTH_SHORT).show());
-    }
-
-    /**
-     * Diese Methode überprüft mit einem simplen Regex, ob es sich bei dem
-     * Eingabestring um eine E-Mail-Adresse handelt.
-     * @param email zu überprüfende E-Mail-Adresse aus Eingabefeld
-     * @return ob E-Mail-Adresse nicht valide ist oder schon
-     */
-
-    public static boolean isNoValidEmail(String email){
-        String emailRegex ="^(.+)@([\\w.-]+)$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        return !pattern.matcher(email).matches();
     }
 }

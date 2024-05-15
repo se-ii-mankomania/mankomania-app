@@ -1,5 +1,7 @@
 package com.example.mankomania.api;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import org.json.JSONException;
@@ -20,16 +22,21 @@ public class AuthAPI {
     private static final int PORT = HttpClient.getPort();
 
     // interface to notify whether auth operation was successful or not
-    public interface AuthCallback {
-        void onSuccess(String message,String userid);
-        void onFailure(String errorMessage);
+    public interface LoginCallback {
+        void onLoginSuccess(String token, String userId);
+        void onLoginFailure(String errorMessage);
+    }
+
+    public interface RegisterCallback {
+        void onRegisterSuccess(String message);
+        void onRegisterFailure(String errorMessage);
     }
 
     /**
      * this method sends the user credentials to the server
      * on success, the server responds with a token, which is needed later for more requests
      */
-    public static void login(String email, String password, final AuthCallback callback) {
+    public static void login(String email, String password, final LoginCallback callback) {
         // create JSON Object that holds email and password
         JSONObject jsonRequest = createJSONRequest(email, password);
 
@@ -37,7 +44,7 @@ public class AuthAPI {
         Request request = createRequest(jsonRequest, "/api/auth/login");
 
         // execute request (at some point)
-        executeRequest(HttpClient.getHttpClient(), request, "token", "Falsche Credentials!", callback);
+        executeLoginRequest(HttpClient.getHttpClient(), request, callback);
     }
 
     /**
@@ -45,7 +52,7 @@ public class AuthAPI {
      * on success, the new user gets added into the db
      * the server will provide a feedback
      */
-    public static void register(String email, String password, final AuthCallback callback) {
+    public static void register(String email, String password, final RegisterCallback callback) {
         // create JSON Object that holds email and password
         JSONObject jsonRequest = createJSONRequest(email, password);
 
@@ -53,7 +60,7 @@ public class AuthAPI {
         Request request = createRequest(jsonRequest, "/api/auth/register");
 
         // execute request (at some point)
-        executeRequest(HttpClient.getHttpClient(), request, "message", "User bereits registriert!", callback);
+        executeRegisterRequest(HttpClient.getHttpClient(), request, callback);
     }
 
 
@@ -94,17 +101,16 @@ public class AuthAPI {
     }
 
     /**
-     * executes the request for login or register
+     * executes the login request
+     * @param okHttpClient: use HttpClient.getHttpClient() to get singleton instance
      * @param request: prepared Request object
-     * @param responseParameter: token or message (from server)
-     * @param errorMessage: errorMessage for callback
-     * @param callback: AuthCallback
+     * @param callback: use LoginCallback
      */
-    public static void executeRequest(OkHttpClient okHttpClient, Request request, String responseParameter, String errorMessage, final AuthCallback callback) {
+    public static void executeLoginRequest(OkHttpClient okHttpClient, Request request, final LoginCallback callback) {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onFailure("Keine Antwort!");
+                callback.onLoginFailure("Keine Antwort!");
             }
 
             @Override
@@ -116,16 +122,52 @@ public class AuthAPI {
                         // create JSON object for response
                         JSONObject jsonResponse = new JSONObject(responseBody);
 
-                        // return the token (login) or message (register)
-                        String message = jsonResponse.getString(responseParameter);
+                        // get token and userId
+                        String token = jsonResponse.getString("token");
                         //TODO bei Tests integrieren
-                        String userid= jsonResponse.getString("userId");
-                        callback.onSuccess(message,userid);
+                        String userId= jsonResponse.getString("userId");
+                        callback.onLoginSuccess(token, userId);
                     } catch (JSONException e) {
-                        callback.onFailure("Fehler beim Lesen der Response!");
+                        callback.onLoginFailure("Fehler beim Lesen der Response!");
                     }
                 } else {
-                    callback.onFailure(errorMessage);
+                    callback.onLoginFailure("User bereits registriert!");
+                }
+            }
+        });
+    }
+
+    /**
+     * executes the register request
+     * @param okHttpClient: use HttpClient.getHttpClient() to get singleton instance
+     * @param request: prepared Request object
+     * @param callback: use RegisterCallback
+     */
+    public static void executeRegisterRequest(OkHttpClient okHttpClient, Request request, final RegisterCallback callback) {
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                callback.onRegisterFailure("Keine Antwort!");
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseBody = response.body().string();
+
+                    try {
+                        // create JSON object for response
+                        JSONObject jsonResponse = new JSONObject(responseBody);
+
+                        // get message
+                        String message = jsonResponse.getString("message");
+
+                        callback.onRegisterSuccess(message);
+                    } catch (JSONException e) {
+                        callback.onRegisterFailure("Fehler beim Lesen der Response!");
+                    }
+                } else {
+                    callback.onRegisterFailure("User bereits registriert!");
                 }
             }
         });
