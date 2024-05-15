@@ -183,7 +183,7 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
     @Override
     public void onGetUnavailableColorsByLobbySuccess(List<Color> colors) {
         this.unavailiableColors=colors;
-        updateAvailableRadioButtons();
+        runOnUiThread(this::updateAvailableRadioButtons);
     }
 
     @Override
