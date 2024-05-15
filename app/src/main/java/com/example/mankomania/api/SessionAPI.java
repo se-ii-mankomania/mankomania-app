@@ -59,14 +59,7 @@ public class SessionAPI {
 
     public static void updatePlayerPosition(String token, String userID, int currentposition, String lobbyID, final UpdatePositionCallback callback) {
         // create JSON object for request
-        JSONObject jsonRequest = new JSONObject();
-        try {
-            jsonRequest.put("userId", userID);
-            jsonRequest.put("currentposition", currentposition);
-        } catch (JSONException e) {
-            callback.onUpdateFailure("Request konnte nicht erstellt werden!");
-            return;
-        }
+        JSONObject jsonRequest = createJSONObject(userID, currentposition);
 
         // create Request
         RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
@@ -267,6 +260,23 @@ public class SessionAPI {
 
         }
 
+        return jsonRequest;
+    }
+
+    /**
+     * creates a JSONObject representing a userID and currentposition
+     * @param userID: String representing userID
+     * @param currentposition: Integer representing current position
+     * @return JSONObject representing a userID and currentposition
+     */
+    public static JSONObject createJSONObject(String userID, int currentposition) {
+        JSONObject jsonRequest = new JSONObject();
+        try {
+            jsonRequest.put("userId", userID);
+            jsonRequest.put("currentposition", currentposition);
+        } catch (JSONException ignored) {
+
+        }
         return jsonRequest;
     }
 
