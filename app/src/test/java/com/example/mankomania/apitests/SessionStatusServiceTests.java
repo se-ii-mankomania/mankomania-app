@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 
 import androidx.security.crypto.EncryptedSharedPreferences;
-import androidx.security.crypto.MasterKey;
 
 import com.example.mankomania.api.Session;
 import com.example.mankomania.api.SessionStatusService;
@@ -16,10 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,9 +30,7 @@ class SessionStatusServiceTests {
 
 
     @BeforeEach
-    public void setUp() throws GeneralSecurityException, IOException {
-        MockitoAnnotations.initMocks(this);
-
+    public void setUp() {
         sharedPreferences = mock(EncryptedSharedPreferences.class);
         when(sharedPreferences.getString("token", null)).thenReturn("dummyToken");
         when(sharedPreferences.getString("lobbyid", null)).thenReturn("dummy-lobby-id");
