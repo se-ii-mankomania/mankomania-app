@@ -65,32 +65,7 @@ public class SessionAPI {
         Request request = createPostRequest(jsonRequest, token, "/api/session/setPosition/" + lobbyID);
 
         // execute request
-        HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onUpdateFailure("Keine Antwort vom Server!");
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseBody = response.body().string();
-
-                    try {
-                        // create JSON object for response
-                        JSONObject jsonResponse = new JSONObject(responseBody);
-
-                        // extract message from response
-                        String message = jsonResponse.getString("message");
-                        callback.onUpdateSuccess(message);
-                    } catch (JSONException e) {
-                        callback.onUpdateFailure("Fehler beim Lesen der Response!");
-                    }
-                } else {
-                    callback.onUpdateFailure("Aktualisierung fehlgeschlagen, Antwortcode: " + response.code());
-                }
-            }
-        });
+        executeUpdatePlayerPosition(HttpClient.getHttpClient(), request, callback);
     }
 
     /**
@@ -432,6 +407,35 @@ public class SessionAPI {
                     }
                 } else {
                     callback.onSetColorFailure(response.message());
+                }
+            }
+        });
+    }
+
+    public static void executeUpdatePlayerPosition(OkHttpClient okHttpClient, Request request, UpdatePositionCallback callback) {
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                callback.onUpdateFailure("Keine Antwort vom Server!");
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseBody = response.body().string();
+
+                    try {
+                        // create JSON object for response
+                        JSONObject jsonResponse = new JSONObject(responseBody);
+
+                        // extract message from response
+                        String message = jsonResponse.getString("message");
+                        callback.onUpdateSuccess(message);
+                    } catch (JSONException e) {
+                        callback.onUpdateFailure("Fehler beim Lesen der Response!");
+                    }
+                } else {
+                    callback.onUpdateFailure("Aktualisierung fehlgeschlagen, Antwortcode: " + response.code());
                 }
             }
         });
