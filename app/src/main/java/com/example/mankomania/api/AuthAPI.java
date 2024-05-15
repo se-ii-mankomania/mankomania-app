@@ -1,7 +1,5 @@
 package com.example.mankomania.api;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import org.json.JSONException;
@@ -124,7 +122,6 @@ public class AuthAPI {
 
                         // get token and userId
                         String token = jsonResponse.getString("token");
-                        //TODO bei Tests integrieren
                         String userId= jsonResponse.getString("userId");
                         callback.onLoginSuccess(token, userId);
                     } catch (JSONException e) {

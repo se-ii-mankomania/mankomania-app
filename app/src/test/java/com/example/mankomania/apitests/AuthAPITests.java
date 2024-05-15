@@ -165,8 +165,111 @@ class AuthAPITests {
         AuthAPI.executeLoginRequest(okHttpClient, request, callback);
 
         // verify callback
-        //TODO adjust Test for second parameter
         verify(callback).onLoginSuccess("test_token", "dd66707a-5599-4aa9-babb-e3c92704d852");
         verify(callback, never()).onLoginFailure(anyString());
+    }
+
+    @Test
+    void testExecuteRegisterRequest_ExceptionThrown() {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock Call
+        Call call = mock(Call.class);
+        // set behaviour when enqueue is called
+        // use doAnswer instead of when...thenThrow so types match
+        // simulate onFailure(..) being called
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onFailure(call, new IOException());
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        // make the okHttpClient return the call
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock RegisterCallback
+        AuthAPI.RegisterCallback callback = mock(AuthAPI.RegisterCallback.class);
+
+        // execute request (that should fail)
+        AuthAPI.executeRegisterRequest(okHttpClient, request, callback);
+
+        // verify callback
+        verify(callback, never()).onRegisterSuccess(anyString());
+        verify(callback).onRegisterFailure("Keine Antwort!");
+    }
+
+    @Test
+    void testExecuteRegisterRequest_FailureResponse() {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock Response that is not successful
+        Response response = mock(Response.class);
+        when(response.isSuccessful()).thenReturn(false);
+
+        // mock Call
+        // simulate onResponse(..) being called
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onResponse(call, response);
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock RegisterCallback
+        AuthAPI.RegisterCallback callback = mock(AuthAPI.RegisterCallback.class);
+
+        // execute request
+        AuthAPI.executeRegisterRequest(okHttpClient, request, callback);
+
+        // verify callback
+        verify(callback, never()).onRegisterSuccess(anyString());
+        verify(callback).onRegisterFailure("User bereits registriert!");
+    }
+
+
+    @Test
+    void testExecuteRegisterRequest_SuccessfulResponse() throws IOException {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock ResponseBody with token = test_token
+        ResponseBody responseBody = mock(ResponseBody.class);
+        when(responseBody.string()).thenReturn("{\"message\":\"User erfolgreich registriert!\"}");
+
+        // mock Response that is successful and has responseBody
+        Response response = mock(Response.class);
+        when(response.isSuccessful()).thenReturn(true);
+        when(response.body()).thenReturn(responseBody);
+
+        // mock Call
+        // simulate onResponse(..) being called
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onResponse(call, response);
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock RegisterCallback
+        AuthAPI.RegisterCallback callback = mock(AuthAPI.RegisterCallback.class);
+
+        // execute request
+        AuthAPI.executeRegisterRequest(okHttpClient, request, callback);
+
+        // verify callback
+        verify(callback).onRegisterSuccess("User erfolgreich registriert!");
+        verify(callback, never()).onRegisterFailure(anyString());
     }
 }
