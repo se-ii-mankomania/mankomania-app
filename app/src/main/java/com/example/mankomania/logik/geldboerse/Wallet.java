@@ -8,12 +8,11 @@ public class Wallet {
     private Map<NoteTypes, Integer> notes = new EnumMap<>(NoteTypes.class);
     private boolean isEmpty = false;
 
-
     public Wallet(){
-        notes.put(NoteTypes.FIVETHOUSAND, 6);
-        notes.put(NoteTypes.TENTHOUSAND, 7);
-        notes.put(NoteTypes.FIFTYTHOUSAND, 6);
-        notes.put(NoteTypes.HUNDREDTHOUSAND, 6);
+        notes.put(NoteTypes.FIVETHOUSAND, 0);
+        notes.put(NoteTypes.TENTHOUSAND, 0);
+        notes.put(NoteTypes.FIFTYTHOUSAND, 0);
+        notes.put(NoteTypes.HUNDREDTHOUSAND, 0);
     }
     public void addMoney(int amount){
         if (amount <= 0) {
