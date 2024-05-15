@@ -1,7 +1,7 @@
 package com.example.mankomania.apitests;
 
 import android.app.Service;
-import android.content.Intent;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 
@@ -9,13 +9,13 @@ import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
 import com.example.mankomania.api.Session;
-import com.example.mankomania.api.SessionAPI;
 import com.example.mankomania.api.SessionStatusService;
 import com.example.mankomania.logik.spieler.Color;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -34,13 +34,8 @@ class SessionStatusServiceTests {
     private SessionStatusService service;
 
     @Mock
-    private Handler handler;
-
-    @Mock
     private SharedPreferences sharedPreferences;
 
-    @Captor
-    private ArgumentCaptor<Runnable> runnableCaptor;
 
     @BeforeEach
     public void setUp() throws GeneralSecurityException, IOException {
@@ -61,31 +56,26 @@ class SessionStatusServiceTests {
         assertEquals("grün", sessionStatusService.convertEnumToStringColor(Color.GREEN));
     }
 
-    /*@Test
-    public void testOnCreate() {
-        doNothing().when(handler).postDelayed(any(Runnable.class), eq(5000L));
-
-        service.onCreate();
-
-        verify(handler, times(1)).postDelayed(runnableCaptor.capture(), eq(5000L));
-        Runnable capturedRunnable = runnableCaptor.getValue();
-        assertNotNull(capturedRunnable);
-    }
-
     @Test
     public void testOnStartCommand() {
-        Intent intent = new Intent();
-        int result = service.onStartCommand(intent, 0, 1);
+        Handler handlerMock=mock(Handler.class);
 
-        assertEquals(Service.START_STICKY, result);
-        verify(handler, times(1)).postDelayed(any(Runnable.class), eq(5000L));
+        when(handlerMock.postDelayed(any(Runnable.class), eq(5000L))).thenReturn(true);
+
+        SessionStatusService sessionStatusService = new SessionStatusService();
+        sessionStatusService.setHandler(handlerMock);
+
+        int expectedResult = Service.START_STICKY;
+        int actualResult = sessionStatusService.onStartCommand(null, 0, 1);
+
+        assertEquals(expectedResult, actualResult);
+
+        ArgumentCaptor<Runnable> runnableCaptor = ArgumentCaptor.forClass(Runnable.class);
+        ArgumentCaptor<Long> delayCaptor = ArgumentCaptor.forClass(Long.class);
+        verify(handlerMock, times(1)).postDelayed(runnableCaptor.capture(), delayCaptor.capture());
+        assertEquals(5000L, delayCaptor.getValue());
+        assertEquals(sessionStatusService.getRunnable(), runnableCaptor.getValue());
     }
-
-    @Test
-    public void testOnDestroy() {
-        service.onDestroy();
-        verify(handler, times(1)).removeCallbacks(any(Runnable.class));
-    }*/
 
     @Test
     public void testNotifyUpdatesInSession() {
