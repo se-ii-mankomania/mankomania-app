@@ -38,7 +38,6 @@ class SessionStatusServiceTests {
     public void setUp() throws GeneralSecurityException, IOException {
         MockitoAnnotations.initMocks(this);
 
-        MasterKey masterKey = mock(MasterKey.class);
         sharedPreferences = mock(EncryptedSharedPreferences.class);
         when(sharedPreferences.getString("token", null)).thenReturn("dummyToken");
         when(sharedPreferences.getString("lobbyid", null)).thenReturn("dummy-lobby-id");
@@ -124,6 +123,7 @@ class SessionStatusServiceTests {
         int newBalance = 100;
         String color = "blau";
         boolean newTurn = true;
+        Session session=new Session(userId,"email",Color.BLUE,newPosition,newBalance,0,0,0,newTurn);
 
         SessionStatusService.PositionObserver positionObserver = mock(SessionStatusService.PositionObserver.class);
         SessionStatusService.BalanceObserver balanceObserver = mock(SessionStatusService.BalanceObserver.class);
@@ -135,8 +135,8 @@ class SessionStatusServiceTests {
         service.registerObserver(playersTurnObserver);
         service.registerObserver(balanceBelowThresholdObserver);
 
-        service.notifyPositionChanged(userId, newPosition);
-        verify(positionObserver, times(1)).onPositionChanged(userId, newPosition);
+        service.notifyPositionChanged(session);
+        verify(positionObserver, times(1)).onPositionChanged(session);
 
         service.notifyBalanceChanged(userId, newBalance);
         verify(balanceObserver, times(1)).onBalanceChanged(userId, newBalance);
