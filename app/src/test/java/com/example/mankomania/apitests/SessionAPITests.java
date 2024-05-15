@@ -61,6 +61,20 @@ class SessionAPITests {
     }
 
     @Test
+    void testCreateJSONObject_UserID_CurrentPosition() {
+        // prepare input
+        String userID = UUID.randomUUID().toString();
+        int currentPosition = 7;
+
+        // call method
+        JSONObject jsonObject = SessionAPI.createJSONObject(userID, currentPosition);
+
+        // assert
+        assertTrue(jsonObject.has("userId"));
+        assertTrue(jsonObject.has("currentposition"));
+    }
+
+    @Test
     void testCreateGetRequest() {
         // set up
         String token = "test_token";
