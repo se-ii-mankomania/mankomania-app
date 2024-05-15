@@ -135,7 +135,7 @@ public class SessionStatusService extends Service {
         }
     }
 
-    private String convertEnumToStringColor(Color color){
+    public String convertEnumToStringColor(Color color){
         switch(color){
             case BLUE: return "blau";
             case RED: return "rot";
@@ -208,5 +208,21 @@ public class SessionStatusService extends Service {
         for (BalanceBelowThresholdObserver observer : balanceBelowThresholdObservers) {
             observer.onBalanceBelowThreshold(userId,color);
         }
+    }
+
+    public Set<PositionObserver> getPositionObservers() {
+        return positionObservers;
+    }
+
+    public Set<BalanceObserver> getBalanceObservers() {
+        return balanceObservers;
+    }
+
+    public Set<PlayersTurnObserver> getPlayersTurnObservers() {
+        return playersTurnObservers;
+    }
+
+    public Set<BalanceBelowThresholdObserver> getBalanceBelowThresholdObservers() {
+        return balanceBelowThresholdObservers;
     }
 }
