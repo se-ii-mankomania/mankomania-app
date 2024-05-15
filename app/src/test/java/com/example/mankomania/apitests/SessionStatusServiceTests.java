@@ -1,7 +1,6 @@
 package com.example.mankomania.apitests;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 
@@ -15,8 +14,6 @@ import com.example.mankomania.logik.spieler.Color;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -88,7 +85,6 @@ class SessionStatusServiceTests {
 
         service.notifyUpdatesInSession(session, userId);
 
-        // Verifying notifyTurnChanged and notifyBalanceBelowThreshold calls
         service.notifyTurnChanged("blau", true, userId);
         service.notifyBalanceBelowThreshold(userId, "blau");
     }
