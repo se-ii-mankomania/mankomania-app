@@ -7,7 +7,10 @@ import com.example.mankomania.gameboardfields.HotelField;
 import com.example.mankomania.gameboardfields.ProfitField;
 import com.example.mankomania.logik.spieler.Player;
 
-public class FieldsHandler {
+import java.io.Serializable;
+
+public class FieldsHandler implements Serializable {
+
     private GameboardField[] fields = new GameboardField[52];
     public GameboardField getField(int index) {
         if (index < 0 || index >= fields.length) {
@@ -53,7 +56,7 @@ public class FieldsHandler {
             moveFromAuctionHouse(player, diceNr);
         }
         //Bewegung innerhalb des Quadrats
-        else if (currentId >= 1 && currentId <= 43) {
+        else if (currentId >= 1 && currentId <= 44) {
             moveWithinBoard(player, diceNr);
         }
         else{
@@ -107,7 +110,7 @@ public class FieldsHandler {
 
     private void moveWithinBoard(Player player, int diceNr) {
         int newPosition = player.getCurrentField().getId() + diceNr;
-        if (newPosition > 43) {
+        if (newPosition > 44) {
             int newID = newPosition - 45;
             player.setCurrentField(fields[newID]);
         } else {

@@ -2,17 +2,22 @@ package com.example.mankomania.screens;
 
 import androidx.lifecycle.ViewModel;
 
-public class PlayerViewModel extends ViewModel {
-    //TODO auf Klasse Player anpassen
-    /*private MutableLiveData<Player> currentPlayer=new MutableLiveData<Player>();
+import androidx.lifecycle.MutableLiveData;
 
-    public LiveData<Player> getCurrentPlayer(){
-        return this.currentPlayer;
+import com.example.mankomania.logik.spieler.Color;
+import com.example.mankomania.logik.spieler.Player;
+
+public class PlayerViewModel extends ViewModel {
+    private final MutableLiveData<Player> playerLiveData = new MutableLiveData<>();
+
+    public PlayerViewModel() {
+        // Initialisieren Sie den Player mit Dummy-Daten
+        Player dummy = new Player("Dummy", Color.BLUE);
+        playerLiveData.setValue(dummy);
     }
 
-    public void setCurrentPlayer(Player player){
-        this.currentPlayer.setValue(player);
-    }*/
-
-
+    public MutableLiveData<Player> getPlayer() {
+        return playerLiveData;
+    }
 }
+

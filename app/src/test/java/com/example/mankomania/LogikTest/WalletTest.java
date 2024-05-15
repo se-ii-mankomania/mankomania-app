@@ -33,18 +33,19 @@ class WalletTest {
     @Test
     void testAddMoneyAddsCorrectNotetype(){
             wallet.addMoney(80000);
-            assertEquals(6, wallet.getNoteCount(NoteTypes.HUNDREDTHOUSAND));
-            assertEquals(7, wallet.getNoteCount(NoteTypes.FIFTYTHOUSAND));
-            assertEquals(10, wallet.getNoteCount(NoteTypes.TENTHOUSAND));
-            assertEquals(6, wallet.getNoteCount(NoteTypes.FIVETHOUSAND));
+            assertEquals(0, wallet.getNoteCount(NoteTypes.HUNDREDTHOUSAND));
+            assertEquals(1, wallet.getNoteCount(NoteTypes.FIFTYTHOUSAND));
+            assertEquals(3, wallet.getNoteCount(NoteTypes.TENTHOUSAND));
+            assertEquals(0, wallet.getNoteCount(NoteTypes.FIVETHOUSAND));
     }
 
     @Test
     void testRemoveMoneyDecreasesTotalAmount(){
-        int initialTotal = wallet.totalAmount();
-        int amountToRemove = 5000;
+        int amountToBeAdded=30000;
+        wallet.addMoney(amountToBeAdded);
+        int amountToRemove = 20000;
         wallet.removeMoney(amountToRemove);
-        assertEquals(initialTotal - amountToRemove, wallet.totalAmount());
+        assertEquals(amountToBeAdded - amountToRemove, wallet.totalAmount());
     }
 
     @Test
@@ -63,8 +64,9 @@ class WalletTest {
 
     @Test
     void testRemoveMoneyRemovesNotetypes(){
-        wallet.removeMoney(5000);
-        assertEquals(5, wallet.getNoteCount(NoteTypes.FIVETHOUSAND));
+        wallet.addMoney(30000);
+        wallet.removeMoney(20000);
+        assertEquals(1, wallet.getNoteCount(NoteTypes.TENTHOUSAND));
     }
 
     @Test
@@ -75,7 +77,8 @@ class WalletTest {
 
     @Test
     void testTotalAmountCalculatesCorrectly() {
-        int expectedTotal = (6 * 5000) + (7 * 10000) + (6 * 50000) + (6 * 100000);
+        wallet.addMoney(75000);
+        int expectedTotal = 5000 + (2 * 10000) + 50000;
         assertEquals(expectedTotal, wallet.totalAmount());
     }
 

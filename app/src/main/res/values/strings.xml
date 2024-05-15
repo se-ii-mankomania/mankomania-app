@@ -10,7 +10,7 @@
     <string name="ChooseYourCharacter_PurplePlayer">Lila</string>
     <string name="ChooseYourCharacter_GreenPlayer">Grün</string>
     <string name="ChooseYourCharacter_BluePlayer">Blau</string>
-    <string name="ChooseYourCharacter_OrangePlayer">Orange</string>
+    <string name="ChooseYourCharacter_RedPlayer">Rot</string>
     <string name="Start">Start</string>
     <string name="FinancesStocks_ReturnToBoard">zurück zum Spielfeld</string>
     <string name="Kontostand">Kontostand:</string>
@@ -72,7 +72,7 @@
     <string name="field_37_description">Gehe an die Börse!</string>
     <string name="field_38_description">Deine Oma benötigt ein neues Facelifting. Zahle 80.000€</string>
     <string name="field_39_description">Verwöhne dich bei Juwelier „Bling, Bling und Bling“. Zahle 100.000€</string>
-    <string name="field_40_description">Alles Gute zum Geburtstag! Erhalte von jedem Mitspieler 5.000€</string>
+    <string name="field_40_description">Alles Gute zum Geburtstag! Erhalte von deinen Geburtstagsgästen 15.000€</string>
     <string name="field_41_description">Hotel E</string>
     <string name="field_42_description">Kaufe eine Aktie der Trockenöl AG! Zahle 100.000€</string>
     <string name="field_43_description">Gehe zum Auktionshaus!</string>
@@ -92,7 +92,15 @@
     <string name="createNewLobby_passwordEditText_hint">Passwort</string>
     <string name="createNewLobby_maxSpielerTextView_text">Max. Spieler:</string>
     <string name="createNewLobby_createLobbyButton_text">Lobby erstellen</string>
+
+    <string name="spielFigurBlau_farbcode">#5b85fc</string>
+    <string name="spielFigurGruen_farbcode">#7eff5b</string>
+    <string name="spielFigurRot_farbcode">#ff4416</string>
+    <string name="spielFigurLila_farbcode">#dd3cf5</string>
+
+
     <string name="RollDice">Würfeln</string>
     <string name="RollDice_Explanation">Schütteln um zu Würfeln</string>
     <string name="dice">dice</string>
+    <string name="gewonnen_hat">Gewonnen hat:</string>
 </resources>

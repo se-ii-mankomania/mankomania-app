@@ -43,20 +43,23 @@ class PlayerTest {
 
     @Test
     void removeMoneyFromWallet(){
-        int initialTotal = player1.getWalletBalance();
+        int amountToBeAdded =40000;
+        player1.addMoneyToWallet(amountToBeAdded);
         int amountToRemove = 10000;
         player1.removeMoneyFromWallet(amountToRemove);
-        assertEquals(initialTotal - amountToRemove, player1.getWalletBalance());
+        assertEquals(amountToBeAdded - amountToRemove, player1.getWalletBalance());
     }
 
     @Test
     void testPayToPlayer() {
-        int payAmount = 5000;
-        int initialTotalPlayer1 = player1.getWalletBalance();
-        int initialTotalPlayer2 = player2.getWalletBalance();
+        int payAmount = 10000;
+        int balancePlayer1=40000;
+        int balancePlayer2=20000;
+        player1.addMoneyToWallet(balancePlayer1);
+        player2.addMoneyToWallet(balancePlayer2);
         player1.payToPlayer(player2, payAmount);
-        assertEquals(initialTotalPlayer1 - payAmount, player1.getWalletBalance());
-        assertEquals(initialTotalPlayer2 + payAmount, player2.getWalletBalance());
+        assertEquals(balancePlayer1 - payAmount, player1.getWalletBalance());
+        assertEquals(balancePlayer2 + payAmount, player2.getWalletBalance());
 
     }
 

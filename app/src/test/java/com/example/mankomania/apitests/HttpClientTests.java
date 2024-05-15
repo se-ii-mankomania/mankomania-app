@@ -8,7 +8,7 @@ import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.Test;
 
 
-public class HttpClientTests {
+class HttpClientTests {
 
     @Test
     void testGetHttpClient() {

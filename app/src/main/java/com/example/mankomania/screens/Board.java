@@ -1,7 +1,7 @@
 package com.example.mankomania.screens;
 
-
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -9,18 +9,29 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
 
 import com.example.mankomania.R;
 
-import com.example.mankomania.logik.spieler.Color;
-import com.example.mankomania.logik.spieler.Player;
+import com.example.mankomania.api.SessionStatusService;
+import com.example.mankomania.api.Session;
+import com.example.mankomania.gameboardfields.GameboardField;
+
+import android.animation.ObjectAnimator;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.UUID;
 
 public class Board extends AppCompatActivity {
-    Player[] players = new Player[4];
+
     FieldsHandler fieldsHandler = new FieldsHandler();
 
     Cellposition[][] cellPositions = new Cellposition[14][14];
@@ -32,6 +43,52 @@ public class Board extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_board);
+        //zuerst Button enablen, zur Sicherheit
+        Button rollDice = findViewById(R.id.Board_ButtonDice);
+        rollDice.setEnabled(false);
+
+        Intent sessionStatusServiceIntent = new Intent(this, SessionStatusService.class);
+        startService(sessionStatusServiceIntent);
+
+        UUID userId;
+        SessionStatusService sessionStatusService = SessionStatusService.getInstance();
+        try {
+            MasterKey masterKey = new MasterKey.Builder(this)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
+
+            SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
+                    this,
+                    "MyPrefs",
+                    masterKey,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+
+            String useridString = sharedPreferences.getString("userId", null);
+            userId=UUID.fromString(useridString);
+
+            sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> runOnUiThread(() -> {
+                if(newTurn && userid.equals(userId)){
+                    rollDice.setEnabled(true);
+                }else{
+                    rollDice.setEnabled(false);
+                }
+            }));
+
+            sessionStatusService.registerObserver((SessionStatusService.PositionObserver) (session) -> runOnUiThread(() -> {
+                updatePlayerPosition(session);
+            }));
+
+        } catch (GeneralSecurityException | IOException ignored) {
+            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+        }
+
+        rollDice.setOnClickListener(v -> {
+            Intent toEventRollDice = new Intent(Board.this, EventRollDice.class);
+            toEventRollDice.putExtra("fieldsHandler", fieldsHandler);
+            startActivity(toEventRollDice);
+        });
 
 
         ZoomLayout zoomLayout = findViewById(R.id.zoom_linear_layout);
@@ -48,12 +105,39 @@ public class Board extends AppCompatActivity {
 
         ToolbarFunctionalities.setUpToolbar(this);
 
-        Button rollDice=findViewById(R.id.Board_ButtonDice);
-        rollDice.setOnClickListener(v -> {
-           Intent toEventRollDice=new Intent(Board.this,EventRollDice.class);
-           startActivity(toEventRollDice);
-        });
+        sessionStatusService.registerObserver((SessionStatusService.BalanceBelowThresholdObserver) (userIdWinner, colorWinner) -> runOnUiThread(() -> {
+            stopSessionStatusService();
+            Intent toEndWinner = new Intent(Board.this, EndWinner.class);
+            toEndWinner.putExtra("Winner",colorWinner);
+            startActivity(toEndWinner);
+            finish();
+        }));
+
+
+        //Wenn der Back-Button betätigt wird, wird der Polling-Service für den Status gestoppt
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                stopSessionStatusService();
+                if (isEnabled()) {
+                    getOnBackPressedDispatcher().onBackPressed();
+                }
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
+
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SessionStatusService sessionStatusService = SessionStatusService.getInstance();
+        sessionStatusService.removeObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> {
+            //Könnte Ausgabe enthalten, ist aber nicht nötig
+        });
+
+    }
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -61,85 +145,81 @@ public class Board extends AppCompatActivity {
 
         ImageView board = findViewById(R.id.gameboard);
         int cellWidth = board.getWidth() / 14;
-        int cellHeight = board.getHeight()/14;
-        for (int row = 0; row<14; row++){
-            for(int col = 0; col<14; col++){
-                cellPositions[row][col] = new Cellposition((int) (col*cellWidth + board.getX()), (int) (row*cellHeight + board.getY()));
+        int cellHeight = board.getHeight() / 14;
+        for (int row = 0; row < 14; row++) {
+            for (int col = 0; col < 14; col++) {
+                cellPositions[row][col] = new Cellposition((int) (col * cellWidth + board.getX()), (int) (row * cellHeight + board.getY()));
             }
         }
 
         fieldsHandler.initFields(cellPositions);
 
-
-        Player playerBlue = new Player("BLUE", Color.BLUE );
-        playerBlue.setCurrentField(fieldsHandler.getField(44));
-        Player playerGreen = new Player("GREEN", Color.GREEN);
-        playerGreen.setCurrentField(fieldsHandler.getField(45));
-        Player playerRed = new Player("RED", Color.RED);
-        playerRed.setCurrentField(fieldsHandler.getField(46));
-        Player playerPurple = new Player("PURPLE", Color.PURPLE );
-        playerPurple.setCurrentField(fieldsHandler.getField(47));
-        players[0] = playerBlue;
-        players[1] = playerGreen;
-        players[2] = playerRed;
-        players[3] = playerPurple;
-
-        //Testing
-        fieldsHandler.movePlayer(playerBlue, 5);
-        fieldsHandler.movePlayer(playerGreen, 5);
-        fieldsHandler.movePlayer(playerRed, 5);
-        fieldsHandler.movePlayer(playerPurple, 5);
-
-        updatePlayerPositions();
-
-
-
         ImageView playerBlueImage = findViewById(R.id.player_blue);
         playerBlueImage.getLayoutParams().height = cellHeight;
         playerBlueImage.getLayoutParams().width = cellWidth;
+        playerBlueImage.setVisibility(View.INVISIBLE);
         playerBlueImage.requestLayout();
 
         ImageView playerGreenImage = findViewById(R.id.player_green);
         playerGreenImage.getLayoutParams().height = cellHeight;
         playerGreenImage.getLayoutParams().width = cellWidth;
+        playerGreenImage.setVisibility(View.INVISIBLE);
         playerGreenImage.requestLayout();
 
         ImageView playerPurpleImage = findViewById(R.id.player_purple);
         playerPurpleImage.getLayoutParams().height = cellHeight;
         playerPurpleImage.getLayoutParams().width = cellWidth;
+        playerPurpleImage.setVisibility(View.INVISIBLE);
         playerPurpleImage.requestLayout();
 
         ImageView playerRedImage = findViewById(R.id.player_red);
         playerRedImage.getLayoutParams().height = cellHeight;
         playerRedImage.getLayoutParams().width = cellWidth;
+        playerRedImage.setVisibility(View.INVISIBLE);
         playerRedImage.requestLayout();
-
-
     }
-   public void updatePlayerPositions(){
-       for (Player player: players
-            ) {
-           if(player.getColor() == Color.BLUE){
-               ImageView playerBlue = findViewById(R.id.player_blue);
-               playerBlue.setX(player.getCurrentField().getX());
-               playerBlue.setY(player.getCurrentField().getY());
-           }
-           if(player.getColor() == Color.RED){
-               ImageView playerRed = findViewById(R.id.player_red);
-               playerRed.setX(player.getCurrentField().getX());
-               playerRed.setY(player.getCurrentField().getY());
-           }
-           if(player.getColor() == Color.GREEN){
-               ImageView playerGreen = findViewById(R.id.player_green);
-               playerGreen.setX(player.getCurrentField().getX());
-               playerGreen.setY(player.getCurrentField().getY());
-           }
-           if(player.getColor() == Color.PURPLE){
-               ImageView playerPurple = findViewById(R.id.player_purple);
-               playerPurple.setX(player.getCurrentField().getX());
-               playerPurple.setY(player.getCurrentField().getY());
-           }
-       }
 
-   }
+    private void stopSessionStatusService() {
+        Intent sessionStatusServiceIntent = new Intent(this, SessionStatusService.class);
+        stopService(sessionStatusServiceIntent);
+    }
+
+    private void animateMove(ImageView imageView, float startX, float startY, float endX, float endY) {
+        ObjectAnimator animatorX = ObjectAnimator.ofFloat(imageView, "x", startX, endX);
+        ObjectAnimator animatorY = ObjectAnimator.ofFloat(imageView, "y", startY, endY);
+        animatorX.setDuration(500); // 500ms
+        animatorY.setDuration(500);
+        animatorX.start();
+        animatorY.start();
+    }
+
+    private void updatePlayerPosition(Session session) {
+        int viewId = 0;
+        switch (session.getColor()) {
+            case BLUE:
+                viewId = R.id.player_blue;
+                break;
+            case RED:
+                viewId = R.id.player_red;
+                break;
+            case GREEN:
+                viewId = R.id.player_green;
+                break;
+            case PURPLE:
+                viewId = R.id.player_purple;
+                break;
+        }
+        if (viewId != 0) {
+            ImageView playerView = findViewById(viewId);
+            GameboardField gameboardField = fieldsHandler.getField(session.getCurrentPosition() - 1);
+            if(playerView.getVisibility() == View.VISIBLE) {
+                animateMove(playerView, playerView.getX(), playerView.getY(),
+                        gameboardField.getX(), gameboardField.getY());
+            } else {
+                playerView.setX(gameboardField.getX());
+                playerView.setY(gameboardField.getY());
+                playerView.setVisibility(View.VISIBLE);
+            }
+        }
+    }
 }

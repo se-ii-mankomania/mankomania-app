@@ -64,7 +64,7 @@ sonar {
               "**/Event_RollDice,**/FinancesAndStocks.java,**/GameScore.java," +
                 "**/MainActivityLogin.java, **/PlayerViewModel.java," +
                 "**/Register.java, **/ToolbarFunctionalities.java, **/EventRollDice.java," +
-                "**/CreateNewLobby.java, **/Status.java, **/ZoomLayout.java"
+                "**/CreateNewLobby.java, **/Status.java, **/ZoomLayout.java, **/EndWinner.java"
 
     }
 }
@@ -79,4 +79,8 @@ dependencies {
     implementation libs.okhttp
     testImplementation libs.junit.jupiter.api
     testRuntimeOnly libs.jupiter.junit.jupiter.engine
+    testImplementation libs.json
+    testImplementation libs.junit.jupiter.params
+    testImplementation libs.mockito.core
+    implementation libs.security.crypto
 }
