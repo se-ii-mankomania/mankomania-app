@@ -66,7 +66,7 @@ class AuthAPITests {
     }
 
     @Test
-    void testExecuteRequest_ExceptionThrown() {
+    void testExecuteLoginRequest_ExceptionThrown() {
         // mock OkHttpClient
         OkHttpClient okHttpClient = mock(OkHttpClient.class);
 
@@ -86,19 +86,19 @@ class AuthAPITests {
         // make the okHttpClient return the call
         when(okHttpClient.newCall(any())).thenReturn(call);
 
-        // mock AuthCallback
-        AuthAPI.AuthCallback callback = mock(AuthAPI.AuthCallback.class);
+        // mock LoginCallback
+        AuthAPI.LoginCallback callback = mock(AuthAPI.LoginCallback.class);
 
         // execute request (that should fail)
-        AuthAPI.executeRequest(okHttpClient, request, "token", "Falsche Credentials!", callback);
+        AuthAPI.executeLoginRequest(okHttpClient, request, callback);
 
         // verify callback
-        verify(callback, never()).onSuccess(anyString(), anyString());
-        verify(callback).onFailure("Keine Antwort!");
+        verify(callback, never()).onLoginSuccess(anyString(), anyString());
+        verify(callback).onLoginFailure("Keine Antwort!");
     }
 
     @Test
-    void testExecuteRequest_FailureResponse() {
+    void testExecuteLoginRequest_FailureResponse() {
         // mock OkHttpClient
         OkHttpClient okHttpClient = mock(OkHttpClient.class);
 
@@ -119,26 +119,26 @@ class AuthAPITests {
         Request request = mock(Request.class);
         when(okHttpClient.newCall(any())).thenReturn(call);
 
-        // mock AuthCallback
-        AuthAPI.AuthCallback callback = mock(AuthAPI.AuthCallback.class);
+        // mock LoginCallback
+        AuthAPI.LoginCallback callback = mock(AuthAPI.LoginCallback.class);
 
         // execute request
-        AuthAPI.executeRequest(okHttpClient, request, "token", "Falsche Credentials!", callback);
+        AuthAPI.executeLoginRequest(okHttpClient, request, callback);
 
         // verify callback
-        verify(callback, never()).onSuccess(anyString(),anyString());
-        verify(callback).onFailure("Falsche Credentials!");
+        verify(callback, never()).onLoginSuccess(anyString(),anyString());
+        verify(callback).onLoginFailure("Falsche Credentials!");
     }
 
 
     @Test
-    void testExecuteRequest_SuccessfulResponse() throws IOException {
+    void testExecuteLoginRequest_SuccessfulResponse() throws IOException {
         // mock OkHttpClient
         OkHttpClient okHttpClient = mock(OkHttpClient.class);
 
         // mock ResponseBody with token = test_token
         ResponseBody responseBody = mock(ResponseBody.class);
-        when(responseBody.string()).thenReturn("{\"token\": \"test_token\"}");
+        when(responseBody.string()).thenReturn("{\"token\":\"test_token\",\"userId\":\"dd66707a-5599-4aa9-babb-e3c92704d852\"}");
 
         // mock Response that is successful and has responseBody
         Response response = mock(Response.class);
@@ -158,15 +158,15 @@ class AuthAPITests {
         Request request = mock(Request.class);
         when(okHttpClient.newCall(any())).thenReturn(call);
 
-        // mock AuthCallback
-        AuthAPI.AuthCallback callback = mock(AuthAPI.AuthCallback.class);
+        // mock LoginCallback
+        AuthAPI.LoginCallback callback = mock(AuthAPI.LoginCallback.class);
 
         // execute request
-        AuthAPI.executeRequest(okHttpClient, request, "token", "Error message", callback);
+        AuthAPI.executeLoginRequest(okHttpClient, request, callback);
 
         // verify callback
         //TODO adjust Test for second parameter
-        //verify(callback).onSuccess("test_token");
-        //verify(callback, never()).onFailure(anyString());
+        verify(callback).onLoginSuccess("test_token", "dd66707a-5599-4aa9-babb-e3c92704d852");
+        verify(callback, never()).onLoginFailure(anyString());
     }
 }
