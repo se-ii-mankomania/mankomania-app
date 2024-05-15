@@ -62,12 +62,7 @@ public class SessionAPI {
         JSONObject jsonRequest = createJSONObject(userID, currentposition);
 
         // create Request
-        RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
-        Request request = new Request.Builder()
-                .url(HttpClient.getServer() + ":" + HttpClient.getPort() + "/api/session/setPosition/" + lobbyID)
-                .header("Authorization", token)
-                .post(requestBody)
-                .build();
+        Request request = createPostRequest(jsonRequest, token, "/api/session/setPosition/" + lobbyID);
 
         // execute request
         HttpClient.getHttpClient().newCall(request).enqueue(new Callback() {
