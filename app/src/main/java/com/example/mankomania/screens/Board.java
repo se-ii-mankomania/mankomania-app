@@ -170,24 +170,26 @@ public class Board extends AppCompatActivity {
         ImageView playerBlueImage = findViewById(R.id.player_blue);
         playerBlueImage.getLayoutParams().height = cellHeight;
         playerBlueImage.getLayoutParams().width = cellWidth;
+        playerBlueImage.setVisibility(View.INVISIBLE);
         playerBlueImage.requestLayout();
 
         ImageView playerGreenImage = findViewById(R.id.player_green);
         playerGreenImage.getLayoutParams().height = cellHeight;
         playerGreenImage.getLayoutParams().width = cellWidth;
+        playerGreenImage.setVisibility(View.INVISIBLE);
         playerGreenImage.requestLayout();
 
         ImageView playerPurpleImage = findViewById(R.id.player_purple);
         playerPurpleImage.getLayoutParams().height = cellHeight;
         playerPurpleImage.getLayoutParams().width = cellWidth;
+        playerPurpleImage.setVisibility(View.INVISIBLE);
         playerPurpleImage.requestLayout();
 
         ImageView playerRedImage = findViewById(R.id.player_red);
         playerRedImage.getLayoutParams().height = cellHeight;
         playerRedImage.getLayoutParams().width = cellWidth;
+        playerRedImage.setVisibility(View.INVISIBLE);
         playerRedImage.requestLayout();
-
-
     }
 
     private void stopSessionStatusService() {
@@ -222,11 +224,15 @@ public class Board extends AppCompatActivity {
         }
         if (viewId != 0) {
             ImageView playerView = findViewById(viewId);
-            playerView.setVisibility(View.VISIBLE);
-
             GameboardField gameboardField = fieldsHandler.getField(session.getCurrentPosition() - 1);
-            animateMove(playerView, playerView.getX(), playerView.getY(),
-                    gameboardField.getX(), gameboardField.getY());
+            if(playerView.getVisibility() == View.VISIBLE) {
+                animateMove(playerView, playerView.getX(), playerView.getY(),
+                        gameboardField.getX(), gameboardField.getY());
+            } else {
+                playerView.setX(gameboardField.getX());
+                playerView.setY(gameboardField.getY());
+                playerView.setVisibility(View.VISIBLE);
+            }
         }
     }
 }
