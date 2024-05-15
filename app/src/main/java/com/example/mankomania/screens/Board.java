@@ -39,8 +39,6 @@ public class Board extends AppCompatActivity {
 
     Cellposition[][] cellPositions = new Cellposition[14][14];
 
-    UUID userid;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +71,7 @@ public class Board extends AppCompatActivity {
                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
             );
 
-            String useridString = sharedPreferences.getString("token", null);
+            String useridString = sharedPreferences.getString("userId", null);
             userId=UUID.fromString(useridString);
 
 
