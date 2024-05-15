@@ -193,7 +193,6 @@ public class SessionAPI {
 
             if(color!=null) {
                 Session session = new Session(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
-                //Session formerSession=sessions.get(userid);
                 sessions.put(userid, session);
                 SessionStatusService sessionStatusService = SessionStatusService.getInstance();
                 sessionStatusService.notifyUpdatesInSession(session, userid);
