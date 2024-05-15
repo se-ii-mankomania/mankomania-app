@@ -22,7 +22,6 @@ import com.example.mankomania.R;
 
 import com.example.mankomania.api.SessionStatusService;
 import com.example.mankomania.api.Session;
-import com.example.mankomania.api.SessionAPI;
 import com.example.mankomania.gameboardfields.GameboardField;
 
 import android.animation.ObjectAnimator;
@@ -30,7 +29,6 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.HashMap;
 import java.util.UUID;
 
 public class Board extends AppCompatActivity {
