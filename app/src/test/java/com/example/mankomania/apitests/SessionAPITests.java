@@ -315,6 +315,39 @@ class SessionAPITests {
     }
 
     @Test
+    void testExecuteUpdatePlayerPosition_FailureResponse() {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock Response that is not successful
+        Response response = mock(Response.class);
+        when(response.isSuccessful()).thenReturn(false);
+
+        // mock Call
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onResponse(call, response);
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock UpdatePositionCallback
+        SessionAPI.UpdatePositionCallback callback = mock(SessionAPI.UpdatePositionCallback.class);
+
+        // execute request
+        SessionAPI.executeUpdatePlayerPosition(okHttpClient, request, callback);
+
+        // verify callback
+        verify(callback, never()).onUpdateSuccess(anyString());
+        verify(callback).onUpdateFailure("Aktualisierung fehlgeschlagen, Antwortcode: " + response.code());
+
+    }
+
+    @Test
     void testExecuteJoinSessionRequest_ExceptionThrown() {
         // mock OkHttpClient
         OkHttpClient okHttpClient = mock(OkHttpClient.class);
@@ -424,6 +457,34 @@ class SessionAPITests {
         // verify callback
         verify(callback, never()).onSetColorSuccess(anyString());
         verify(callback).onSetColorFailure("Keine Antwort!");
+    }
+
+    @Test
+    void testExecuteUpdatePlayerPosition_ExceptionThrown() {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock call
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onFailure(call, new IOException());
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock UpdatePositionCallback
+        SessionAPI.UpdatePositionCallback callback = mock(SessionAPI.UpdatePositionCallback.class);
+
+        // execute request
+        SessionAPI.executeUpdatePlayerPosition(okHttpClient, request, callback);
+
+        // verify callback
+        verify(callback, never()).onUpdateSuccess(anyString());
+        verify(callback).onUpdateFailure("Keine Antwort vom Server!");
     }
 
     @Test
@@ -605,5 +666,41 @@ class SessionAPITests {
         // verify callback
         verify(callback).onSetColorSuccess("Color set successfully");
         verify(callback, never()).onSetColorFailure(anyString());
+    }
+
+    @Test
+    void testExecuteUpdatePlayerPosition_SuccessfulResponse() throws IOException {
+        // mock OkHttpClient
+        OkHttpClient okHttpClient = mock(OkHttpClient.class);
+
+        // mock Response
+        ResponseBody responseBody = mock(ResponseBody.class);
+        when(responseBody.string()).thenReturn("{\"message\":\"Player moved 7 positions.\"}");
+
+        Response response = mock(Response.class);
+        when(response.isSuccessful()).thenReturn(true);
+        when(response.body()).thenReturn(responseBody);
+
+        // mock Call
+        Call call = mock(Call.class);
+        doAnswer(invocation -> {
+            Callback callback = invocation.getArgument(0);
+            callback.onResponse(call, response);
+            return null;
+        }).when(call).enqueue(any());
+
+        // mock Request
+        Request request = mock(Request.class);
+        when(okHttpClient.newCall(any())).thenReturn(call);
+
+        // mock UpdatePositionCallback
+        SessionAPI.UpdatePositionCallback callback = mock(SessionAPI.UpdatePositionCallback.class);
+
+        // execute request
+        SessionAPI.executeUpdatePlayerPosition(okHttpClient, request, callback);
+
+        // verify callback
+        verify(callback).onUpdateSuccess("Player moved 7 positions.");
+        verify(callback, never()).onUpdateFailure(anyString());
     }
 }
