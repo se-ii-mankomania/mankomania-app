@@ -19,15 +19,13 @@ import com.example.mankomania.logik.geldboerse.NoteTypes;
 
 public class FinancesAndStocks extends AppCompatActivity {
 
-    private PlayerViewModel playerViewModel;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_finances_and_stocks);
 
-        playerViewModel = new ViewModelProvider(this).get(PlayerViewModel.class);
+        PlayerViewModel playerViewModel = new ViewModelProvider(this).get(PlayerViewModel.class);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -46,7 +44,6 @@ public class FinancesAndStocks extends AppCompatActivity {
         TextView kurzschlussAG=findViewById(R.id.Stocks_KurzschulssAGAnswer);
         TextView numberStocks=findViewById(R.id.Stocks_totalAnswer);
 
-        //TODO mithilfe von ViewModel(?) ein Observable implemntieren,dass die Daten enthält
         playerViewModel.getPlayer().observe(this, player -> {
             // UI mit Daten aus dem Player-Objekt aktualisieren
             bills5k.setText(String.valueOf(player.getWallet().getNoteCount(NoteTypes.FIVETHOUSAND)));
@@ -69,7 +66,6 @@ public class FinancesAndStocks extends AppCompatActivity {
 
             Button logout = findViewById(R.id.FinancesStocks_LogoutButton);
             logout.setOnClickListener((View v) -> {
-                //TODO Daten des Spiels speichern etc.
                 Intent fromFinancesAndStocksToLogin = new Intent(FinancesAndStocks.this, MainActivityLogin.class);
                 startActivity(fromFinancesAndStocksToLogin);
             });

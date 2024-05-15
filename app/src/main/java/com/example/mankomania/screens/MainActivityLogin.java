@@ -45,19 +45,17 @@ public class MainActivityLogin extends AppCompatActivity implements AuthAPI.Logi
 
         Button login=findViewById(R.id.Login_LoginButton);
         login.setOnClickListener(v -> {
-            Intent registerIntent=new Intent(MainActivityLogin.this, FinancesAndStocks.class);
-            startActivity(registerIntent);
-//            EditText emailInput=findViewById(R.id.Login_Email);
-//            EditText passwordInput=findViewById(R.id.Login_Passwort);
-//
-//            String email = emailInput.getText().toString();
-//            String password = passwordInput.getText().toString();
-//
-//            if(isNoValidEmail(email)) {
-//                emailInput.setError("E-Mail-Adresse ist ungültig.");
-//            } else {
-//                AuthAPI.login(email, password, MainActivityLogin.this);
-//            }
+            EditText emailInput=findViewById(R.id.Login_Email);
+            EditText passwordInput=findViewById(R.id.Login_Passwort);
+
+            String email = emailInput.getText().toString();
+            String password = passwordInput.getText().toString();
+
+            if(isNoValidEmail(email)) {
+                emailInput.setError("E-Mail-Adresse ist ungültig.");
+            } else {
+                AuthAPI.login(email, password, MainActivityLogin.this);
+            }
         });
 
     }
