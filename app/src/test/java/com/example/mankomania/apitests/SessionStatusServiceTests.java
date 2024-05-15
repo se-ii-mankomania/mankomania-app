@@ -54,7 +54,7 @@ class SessionStatusServiceTests {
     }
 
     @Test
-    public void testOnStartCommand() {
+    void testOnStartCommand() {
         Handler handlerMock=mock(Handler.class);
 
         when(handlerMock.postDelayed(any(Runnable.class), eq(5000L))).thenReturn(true);
@@ -75,7 +75,7 @@ class SessionStatusServiceTests {
     }
 
     @Test
-    public void testNotifyUpdatesInSession() {
+    void testNotifyUpdatesInSession() {
         Session session = mock(Session.class);
         UUID userId = UUID.randomUUID();
 
@@ -90,7 +90,7 @@ class SessionStatusServiceTests {
     }
 
     @Test
-    public void testRegisterAndRemoveObservers() {
+    void testRegisterAndRemoveObservers() {
         SessionStatusService.PositionObserver positionObserver = mock(SessionStatusService.PositionObserver.class);
         SessionStatusService.BalanceObserver balanceObserver = mock(SessionStatusService.BalanceObserver.class);
         SessionStatusService.PlayersTurnObserver playersTurnObserver = mock(SessionStatusService.PlayersTurnObserver.class);
@@ -118,7 +118,7 @@ class SessionStatusServiceTests {
     }
 
     @Test
-    public void testNotifyObservers() {
+    void testNotifyObservers() {
         UUID userId = UUID.randomUUID();
         int newPosition = 5;
         int newBalance = 100;

@@ -8,7 +8,6 @@ import com.example.mankomania.logik.geldboerse.Wallet;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class Player {
 
