@@ -174,8 +174,11 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
                         public void onUpdateSuccess(String message) {
                             runOnUiThread(() -> {
                                 int resource = getResId("field_" + player.getCurrentField().getId()+ "_description", R.string.class);
-                                Toast.makeText(getApplicationContext(), getString(resource), Toast.LENGTH_LONG).show();
-
+                                if(resource == -1) {
+                                    Toast.makeText(getApplicationContext(), "Field description could not be found", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), getString(resource), Toast.LENGTH_LONG).show();
+                                }
                             });
 
                         }
@@ -210,12 +213,10 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
     }
 
     public static int getResId(String resName, Class<?> c) {
-
         try {
             Field idField = c.getDeclaredField(resName);
             return idField.getInt(idField);
         } catch (Exception e) {
-            e.printStackTrace();
             return -1;
         }
     }
