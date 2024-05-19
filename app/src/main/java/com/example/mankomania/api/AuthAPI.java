@@ -15,6 +15,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+// fixme prefer instance methods over static methods to stay oo
 public class AuthAPI {
     private static final String SERVER = HttpClient.getServer();
     private static final int PORT = HttpClient.getPort();
@@ -61,7 +62,7 @@ public class AuthAPI {
         executeRegisterRequest(HttpClient.getHttpClient(), request, callback);
     }
 
-
+    // fixme avoid manual serialization, use Java's automatic one
     /**
      * Hier wird für Login/Registrierung ein JSONObject erstellt, das die benötigten Parameter enthält.
      * Für Auth werden email und password benötigt.

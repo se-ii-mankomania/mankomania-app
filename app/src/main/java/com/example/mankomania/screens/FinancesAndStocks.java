@@ -49,6 +49,7 @@ public class FinancesAndStocks extends AppCompatActivity implements SessionAPI.G
     private TextView kurzschlussAG;
     private TextView numberStocks;
 
+    // fixme extract methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

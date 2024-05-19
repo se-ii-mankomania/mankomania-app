@@ -60,6 +60,7 @@ public class SessionAPI {
         void onSetColorFailure(String errorMessage);
     }
 
+    // fixme dont use static methods (see other APIs)
     public static void updatePlayerPosition(String token, String userID, int currentposition, String lobbyID, final UpdatePositionCallback callback) {
         // create JSON object for request
         JSONObject jsonRequest = createJSONObject(userID, currentposition);
@@ -134,6 +135,7 @@ public class SessionAPI {
         executeSetColorRequest(HttpClient.getHttpClient(), request, callback);
     }
 
+    // fixme use Enum::valueOf (see other conversion)
     /**
      * converts a string to Color object
      * @param color: String ("blue", "red", "green", "lila")
@@ -218,6 +220,7 @@ public class SessionAPI {
         return jsonRequest;
     }
 
+    // fixme convert serializable java objects ("POJOs") automatically
     /**
      * creates a JSONObject representing a color
      * @param color: String representation of a Color object

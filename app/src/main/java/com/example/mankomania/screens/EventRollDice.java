@@ -117,6 +117,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
         this.backPressedBlocked=true;
     }
 
+    // fixme extract and simplify method!
     private void rollDice() {
         FieldsHandler  fieldshandler = (FieldsHandler) getIntent().getSerializableExtra("fieldsHandler");
 

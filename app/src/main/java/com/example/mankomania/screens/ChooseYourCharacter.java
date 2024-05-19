@@ -130,6 +130,7 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
      * anfänglichen Zustand zurückgesetzt wird. Jeder Button ist auswählbar.
      */
     private void restoreRadioButtons(){
+        // fixme extract method for these four blocks with two parameters R.id and R.color
         RadioButton purple=findViewById(R.id.ChooseYourCharacter_PurplePlayer);
         purple.setEnabled(true);
         purple.setTextColor(ContextCompat.getColor(this,R.color.purplePlayer));

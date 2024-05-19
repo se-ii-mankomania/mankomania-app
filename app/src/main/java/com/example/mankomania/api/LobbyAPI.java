@@ -21,6 +21,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+// fixme do not use static methods
 public class LobbyAPI {
     private static final String SERVER = HttpClient.getServer();
     private static final int PORT = HttpClient.getPort();
@@ -62,6 +63,7 @@ public class LobbyAPI {
         executeGetRequest(HttpClient.getHttpClient(), request, callback);
     }
 
+    // fixme too many parameters, use a lobby object
     /**
      * call this method to create a new lobby and insert it into the database
      * @param token: authentication token (generated at login)
@@ -83,6 +85,7 @@ public class LobbyAPI {
         executePostRequest(HttpClient.getHttpClient(), request, callback);
     }
 
+    // fixme avoid manual conversion to json, autoserialize the lobby object
     /**
      * creates a JSONObject that represents a lobby (used for adding a new lobby)
      * @param name: name of the lobby
@@ -250,6 +253,7 @@ public class LobbyAPI {
         int maxPlayers = jsonLobby.getInt("maxplayers");
         Status status;
 
+        // fixme use Enum::valueOf to convert string to enum
         switch (jsonLobby.getString("status")) {
             case "open":
                 status = Status.open;

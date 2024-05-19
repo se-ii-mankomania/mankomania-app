@@ -17,6 +17,7 @@ public class Session {
     private final int amountBShares;
     private final boolean isPlayersTurn;
 
+    // fixme rename class to clarify it reflects player information
     public Session(UUID userId, String email, Color color, int currentPosition, int balance, int amountKVShares, int amountTShares, int amountBShares, boolean isPlayersTurn) {
         this.userId = userId;
         this.email=email;

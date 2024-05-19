@@ -34,7 +34,7 @@ public class CreateNewLobby extends AppCompatActivity implements LobbyAPI.AddLob
     Spinner maxPlayerSpinner;
     Button createLobbyButton;
 
-
+    // fixme extract methods based on commented blocks
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

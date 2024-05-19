@@ -36,7 +36,7 @@ public class Board extends AppCompatActivity {
 
     Cellposition[][] cellPositions = new Cellposition[14][14];
 
-
+    // fixme extract methods from this long method
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -154,6 +154,7 @@ public class Board extends AppCompatActivity {
 
         fieldsHandler.initFields(cellPositions);
 
+        // fixme extract method for the four blocks with parameter for R.id
         ImageView playerBlueImage = findViewById(R.id.player_blue);
         playerBlueImage.getLayoutParams().height = cellHeight;
         playerBlueImage.getLayoutParams().width = cellWidth;

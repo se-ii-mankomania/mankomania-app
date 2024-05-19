@@ -88,6 +88,7 @@ class SessionStatusServiceTests {
         service.notifyBalanceBelowThreshold(userId, "blau");
     }
 
+    // fixme split into individual tests for register and remove
     @Test
     void testRegisterAndRemoveObservers() {
         SessionStatusService.PositionObserver positionObserver = mock(SessionStatusService.PositionObserver.class);
