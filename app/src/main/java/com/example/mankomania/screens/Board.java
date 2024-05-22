@@ -43,15 +43,83 @@ public class Board extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_board);
+
+        Button rollDice = setupViews();
+
+        startSessionService();
+
+        setupRollDiceButton();
+
+        setupZoomLayout();
+
+        setupWindowInsets();
+
+        setupToolbar();
+
+        setupBackButton();
+
+        UUID userId = initSharedPreferences();
+
+        registerObservers(userId, rollDice);
+
+
+    }
+
+    private Button setupViews(){
         //zuerst Button enablen, zur Sicherheit
         Button rollDice = findViewById(R.id.Board_ButtonDice);
         rollDice.setEnabled(false);
-
+        return rollDice;
+    }
+    private void startSessionService(){
         Intent sessionStatusServiceIntent = new Intent(this, SessionStatusService.class);
         startService(sessionStatusServiceIntent);
+    }
 
-        UUID userId;
-        SessionStatusService sessionStatusService = SessionStatusService.getInstance();
+    private void setupRollDiceButton(){
+        Button rollDice = findViewById(R.id.Board_ButtonDice);
+        rollDice.setOnClickListener(v -> {
+            Intent toEventRollDice = new Intent(Board.this, EventRollDice.class);
+            toEventRollDice.putExtra("fieldsHandler", fieldsHandler);
+            startActivity(toEventRollDice);
+        });
+    }
+    private void setupZoomLayout(){
+        ZoomLayout zoomLayout = findViewById(R.id.zoom_linear_layout);
+        zoomLayout.setOnTouchListener((View v, MotionEvent event) -> {
+            zoomLayout.init(Board.this);
+            return false;
+        });
+    }
+
+    private void setupWindowInsets(){
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+    }
+    private void setupToolbar(){
+        ToolbarFunctionalities.setUpToolbar(this);
+    }
+
+    private void setupBackButton(){
+        //Wenn der Back-Button betätigt wird, wird der Polling-Service für den Status gestoppt
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                stopSessionStatusService();
+                if (isEnabled()) {
+                    getOnBackPressedDispatcher().onBackPressed();
+                }
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
+    }
+
+    private UUID initSharedPreferences(){
+        UUID userId  = null;
+
         try {
             MasterKey masterKey = new MasterKey.Builder(this)
                     .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -68,39 +136,23 @@ public class Board extends AppCompatActivity {
             String useridString = sharedPreferences.getString("userId", null);
             userId=UUID.fromString(useridString);
 
-            sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> runOnUiThread(() -> {
-                rollDice.setEnabled(newTurn && userid.equals(userId));
-
-            }));
-
-            sessionStatusService.registerObserver((SessionStatusService.PositionObserver) session -> runOnUiThread(() ->
-                updatePlayerPosition(session)
-            ));
 
         } catch (GeneralSecurityException | IOException ignored) {
             Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
         }
+        return userId;
+    }
+    private void registerObservers(UUID userId, Button rollDice){
+        SessionStatusService sessionStatusService = SessionStatusService.getInstance();
 
-        rollDice.setOnClickListener(v -> {
-            Intent toEventRollDice = new Intent(Board.this, EventRollDice.class);
-            toEventRollDice.putExtra("fieldsHandler", fieldsHandler);
-            startActivity(toEventRollDice);
-        });
+        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> runOnUiThread(() -> {
+            rollDice.setEnabled(newTurn && userid.equals(userId));
 
+        }));
 
-        ZoomLayout zoomLayout = findViewById(R.id.zoom_linear_layout);
-        zoomLayout.setOnTouchListener((View v, MotionEvent event) -> {
-            zoomLayout.init(Board.this);
-            return false;
-        });
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-        ToolbarFunctionalities.setUpToolbar(this);
+        sessionStatusService.registerObserver((SessionStatusService.PositionObserver) session -> runOnUiThread(() ->
+                updatePlayerPosition(session)
+        ));
 
         sessionStatusService.registerObserver((SessionStatusService.BalanceBelowThresholdObserver) (userIdWinner, colorWinner) -> runOnUiThread(() -> {
             stopSessionStatusService();
@@ -109,20 +161,6 @@ public class Board extends AppCompatActivity {
             startActivity(toEndWinner);
             finish();
         }));
-
-
-        //Wenn der Back-Button betätigt wird, wird der Polling-Service für den Status gestoppt
-        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                stopSessionStatusService();
-                if (isEnabled()) {
-                    getOnBackPressedDispatcher().onBackPressed();
-                }
-            }
-        };
-        getOnBackPressedDispatcher().addCallback(this, callback);
-
     }
 
     @Override
