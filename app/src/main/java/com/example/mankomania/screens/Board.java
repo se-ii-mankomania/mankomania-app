@@ -69,11 +69,8 @@ public class Board extends AppCompatActivity {
             userId=UUID.fromString(useridString);
 
             sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> runOnUiThread(() -> {
-                if(newTurn && userid.equals(userId))
-                    rollDice.setEnabled(true);
-                else
-                    rollDice.setEnabled(false);
-                
+                rollDice.setEnabled(newTurn && userid.equals(userId));
+
             }));
 
             sessionStatusService.registerObserver((SessionStatusService.PositionObserver) session -> runOnUiThread(() ->
