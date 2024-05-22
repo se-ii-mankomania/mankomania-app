@@ -176,6 +176,7 @@ public class Board extends AppCompatActivity {
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
+
         super.onWindowFocusChanged(hasFocus);
 
         ImageView board = findViewById(R.id.gameboard);
@@ -189,29 +190,18 @@ public class Board extends AppCompatActivity {
 
         fieldsHandler.initFields(cellPositions);
 
-        ImageView playerBlueImage = findViewById(R.id.player_blue);
-        playerBlueImage.getLayoutParams().height = cellHeight;
-        playerBlueImage.getLayoutParams().width = cellWidth;
-        playerBlueImage.setVisibility(View.INVISIBLE);
-        playerBlueImage.requestLayout();
+        setupPlayerImages(findViewById(R.id.player_blue), cellWidth, cellHeight);
+        setupPlayerImages(findViewById(R.id.player_green), cellWidth, cellHeight);
+        setupPlayerImages(findViewById(R.id.player_purple), cellWidth, cellHeight);
+        setupPlayerImages(findViewById(R.id.player_red), cellWidth, cellHeight);
 
-        ImageView playerGreenImage = findViewById(R.id.player_green);
-        playerGreenImage.getLayoutParams().height = cellHeight;
-        playerGreenImage.getLayoutParams().width = cellWidth;
-        playerGreenImage.setVisibility(View.INVISIBLE);
-        playerGreenImage.requestLayout();
+    }
 
-        ImageView playerPurpleImage = findViewById(R.id.player_purple);
-        playerPurpleImage.getLayoutParams().height = cellHeight;
-        playerPurpleImage.getLayoutParams().width = cellWidth;
-        playerPurpleImage.setVisibility(View.INVISIBLE);
-        playerPurpleImage.requestLayout();
-
-        ImageView playerRedImage = findViewById(R.id.player_red);
-        playerRedImage.getLayoutParams().height = cellHeight;
-        playerRedImage.getLayoutParams().width = cellWidth;
-        playerRedImage.setVisibility(View.INVISIBLE);
-        playerRedImage.requestLayout();
+    private void setupPlayerImages(ImageView playerImage, int cellWidth, int cellHeight){
+        playerImage.getLayoutParams().height = cellHeight;
+        playerImage.getLayoutParams().width = cellWidth;
+        playerImage.setVisibility(View.INVISIBLE);
+        playerImage.requestLayout();
     }
 
     private void stopSessionStatusService() {
