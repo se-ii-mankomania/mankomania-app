@@ -5,11 +5,12 @@ import com.example.mankomania.logik.aktien.StockInitializer;
 import com.example.mankomania.logik.aktien.StockTypes;
 import com.example.mankomania.logik.geldboerse.Wallet;
 
+import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Player {
+public class Player implements Serializable {
 
     private GameboardField currentField;
     private int id;
