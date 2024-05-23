@@ -120,14 +120,8 @@ public class SessionStatusService extends Service {
     }
 
     public void notifyUpdatesInSession(Session newSession,UUID userId){
-
         notifyPositionChanged(newSession);
-        /*if(formerSession==null || !Objects.equals(formerSession.getCurrentPosition(), newSession.getCurrentPosition())){
-            notifyPositionChanged(userId,newSession.getCurrentPosition());
-        }
-        if(formerSession==null || !Objects.equals(formerSession.getBalance(), newSession.getBalance())){
-            notifyBalanceChanged(userId,newSession.getBalance());
-        }*/
+
         if(newSession.getIsPlayersTurn()){
             notifyTurnChanged(convertEnumToStringColor(newSession.getColor()),newSession.getIsPlayersTurn(),userId);
         }
