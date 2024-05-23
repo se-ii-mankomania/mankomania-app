@@ -221,10 +221,6 @@ public class SessionStatusService extends Service {
         return balanceBelowThresholdObservers;
     }
 
-    public Handler getHandler() {
-        return handler;
-    }
-
     public Runnable getRunnable() {
         return runnable;
     }
