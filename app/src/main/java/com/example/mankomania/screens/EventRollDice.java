@@ -24,7 +24,7 @@ import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
 import com.example.mankomania.R;
-import com.example.mankomania.api.Session;
+import com.example.mankomania.api.PlayerSession;
 import com.example.mankomania.api.SessionAPI;
 import com.example.mankomania.gameboardfields.GameboardField;
 import com.example.mankomania.logik.spieler.Dice;
@@ -175,16 +175,16 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
         SessionAPI.getStatusByLobby(token, UUID.fromString(lobbyId), new SessionAPI.GetStatusByLobbyCallback() {
 
             @Override
-            public void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions) {
-                Session userSession = null;
-                for(Session session: sessions.values()){
-                    if(session.getUserId().equals(UUID.fromString(userId))){
-                        userSession = session;
+            public void onGetStatusByLobbySuccess(HashMap<UUID, PlayerSession> sessions) {
+                PlayerSession userPlayerSession = null;
+                for(PlayerSession playerSession : sessions.values()){
+                    if(playerSession.getUserId().equals(UUID.fromString(userId))){
+                        userPlayerSession = playerSession;
                         break;
                     }
                 }
-                Player player = new Player("", Objects.requireNonNull(userSession).getColor());
-                GameboardField field = Objects.requireNonNull(fieldshandler).getField(userSession.getCurrentPosition()-1);
+                Player player = new Player("", Objects.requireNonNull(userPlayerSession).getColor());
+                GameboardField field = Objects.requireNonNull(fieldshandler).getField(userPlayerSession.getCurrentPosition()-1);
                 player.setCurrentField(field);
                 fieldshandler.movePlayer(player, randomNumber[0] + randomNumber[1]);
 

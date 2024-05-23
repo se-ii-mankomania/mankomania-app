@@ -49,7 +49,7 @@ public class SessionAPI {
     }
 
     public interface GetStatusByLobbyCallback {
-        void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions);
+        void onGetStatusByLobbySuccess(HashMap<UUID, PlayerSession> sessions);
 
         void onGetStatusByLobbyFailure(String errorMessage);
     }
@@ -179,8 +179,8 @@ public class SessionAPI {
      * @return HashMap containing sessions, mapped by userID
      * @throws JSONException when JSONObject handling goes wrong
      */
-    public static HashMap<UUID, Session> createSessions(JSONArray responseArray) throws JSONException {
-        HashMap<UUID, Session> sessions = new HashMap<>();
+    public static HashMap<UUID, PlayerSession> createSessions(JSONArray responseArray) throws JSONException {
+        HashMap<UUID, PlayerSession> sessions = new HashMap<>();
         for (int i = 0; i < responseArray.length(); i++) {
             JSONObject jsonSession = responseArray.getJSONObject(i);
             UUID userid = UUID.fromString(jsonSession.getString("userid"));
@@ -192,10 +192,10 @@ public class SessionAPI {
             boolean isPlayersTurn = jsonSession.getBoolean("isplayersturn");
 
             if(color!=null) {
-                Session session = new Session(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
-                sessions.put(userid, session);
+                PlayerSession playerSession = new PlayerSession(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
+                sessions.put(userid, playerSession);
                 SessionStatusService sessionStatusService = SessionStatusService.getInstance();
-                sessionStatusService.notifyUpdatesInSession(session, userid);
+                sessionStatusService.notifyUpdatesInSession(playerSession, userid);
             }
         }
         return sessions;
@@ -367,7 +367,7 @@ public class SessionAPI {
                 try (ResponseBody responseBody = response.body()) {
                     if (response.isSuccessful() && responseBody != null) {
                         JSONArray responseArray = new JSONArray(responseBody.string());
-                        HashMap<UUID, Session> sessions = createSessions(responseArray);
+                        HashMap<UUID, PlayerSession> sessions = createSessions(responseArray);
                         callback.onGetStatusByLobbySuccess(sessions);
                     } else {
                         callback.onGetStatusByLobbyFailure(response.message());

@@ -20,7 +20,7 @@ import androidx.security.crypto.MasterKey;
 import com.example.mankomania.R;
 
 import com.example.mankomania.api.SessionStatusService;
-import com.example.mankomania.api.Session;
+import com.example.mankomania.api.PlayerSession;
 import com.example.mankomania.gameboardfields.GameboardField;
 
 import android.animation.ObjectAnimator;
@@ -218,9 +218,9 @@ public class Board extends AppCompatActivity {
         animatorY.start();
     }
 
-    private void updatePlayerPosition(Session session) {
+    private void updatePlayerPosition(PlayerSession playerSession) {
         int viewId = 0;
-        switch (session.getColor()) {
+        switch (playerSession.getColor()) {
             case BLUE:
                 viewId = R.id.player_blue;
                 break;
@@ -236,7 +236,7 @@ public class Board extends AppCompatActivity {
         }
         if (viewId != 0) {
             ImageView playerView = findViewById(viewId);
-            GameboardField gameboardField = fieldsHandler.getField(session.getCurrentPosition() - 1);
+            GameboardField gameboardField = fieldsHandler.getField(playerSession.getCurrentPosition() - 1);
             if(playerView.getVisibility() == View.VISIBLE) {
                 animateMove(playerView, playerView.getX(), playerView.getY(),
                         gameboardField.getX(), gameboardField.getY());

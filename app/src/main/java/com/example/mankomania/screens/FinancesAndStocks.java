@@ -17,7 +17,7 @@ import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
 import com.example.mankomania.R;
-import com.example.mankomania.api.Session;
+import com.example.mankomania.api.PlayerSession;
 import com.example.mankomania.api.SessionAPI;
 import com.example.mankomania.logik.geldboerse.NoteTypes;
 import com.example.mankomania.logik.geldboerse.Wallet;
@@ -105,16 +105,16 @@ public class FinancesAndStocks extends AppCompatActivity implements SessionAPI.G
     }
 
     @Override
-    public void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions) {
-        for (Map.Entry<UUID, Session> entry : sessions.entrySet()) {
+    public void onGetStatusByLobbySuccess(HashMap<UUID, PlayerSession> sessions) {
+        for (Map.Entry<UUID, PlayerSession> entry : sessions.entrySet()) {
             if(entry.getKey().equals(userId)){
                 setTextsForTextVies(entry.getValue());
             }
         }
     }
 
-    private void setTextsForTextVies(Session session) {
-        int currentBalance=session.getBalance();
+    private void setTextsForTextVies(PlayerSession playerSession) {
+        int currentBalance= playerSession.getBalance();
         balance.setText(String.valueOf(currentBalance));
 
         Wallet wallet=new Wallet();
@@ -124,10 +124,10 @@ public class FinancesAndStocks extends AppCompatActivity implements SessionAPI.G
         bills50k.setText(String.valueOf(wallet.getNoteCount(NoteTypes.FIFTYTHOUSAND)));
         bills100k.setText(String.valueOf(wallet.getNoteCount(NoteTypes.HUNDREDTHOUSAND)));
 
-        bruchstahlAG.setText(String.valueOf(session.getAmountBShares()));
-        trockenoelAG.setText(String.valueOf(session.getAmountTShares()));
-        kurzschlussAG.setText(String.valueOf(session.getAmountKVShares()));
-        int numberOfStocks=session.getAmountBShares()+session.getAmountKVShares()+session.getAmountTShares();
+        bruchstahlAG.setText(String.valueOf(playerSession.getAmountBShares()));
+        trockenoelAG.setText(String.valueOf(playerSession.getAmountTShares()));
+        kurzschlussAG.setText(String.valueOf(playerSession.getAmountKVShares()));
+        int numberOfStocks= playerSession.getAmountBShares()+ playerSession.getAmountKVShares()+ playerSession.getAmountTShares();
         numberStocks.setText(String.valueOf(numberOfStocks));
     }
 

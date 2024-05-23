@@ -6,7 +6,7 @@ import android.os.Handler;
 
 import androidx.security.crypto.EncryptedSharedPreferences;
 
-import com.example.mankomania.api.Session;
+import com.example.mankomania.api.PlayerSession;
 import com.example.mankomania.api.SessionStatusService;
 import com.example.mankomania.logik.spieler.Color;
 
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class SessionStatusServiceTests {
+class PlayerSessionStatusServiceTests {
     @InjectMocks
     private SessionStatusService service;
 
@@ -72,14 +72,14 @@ class SessionStatusServiceTests {
 
     @Test
     void testNotifyUpdatesInSession() {
-        Session session = mock(Session.class);
+        PlayerSession playerSession = mock(PlayerSession.class);
         UUID userId = UUID.randomUUID();
 
-        when(session.getIsPlayersTurn()).thenReturn(true);
-        when(session.getBalance()).thenReturn(0);
-        when(session.getColor()).thenReturn(Color.BLUE);
+        when(playerSession.getIsPlayersTurn()).thenReturn(true);
+        when(playerSession.getBalance()).thenReturn(0);
+        when(playerSession.getColor()).thenReturn(Color.BLUE);
 
-        service.notifyUpdatesInSession(session, userId);
+        service.notifyUpdatesInSession(playerSession, userId);
 
         service.notifyTurnChanged("blau", true, userId);
         service.notifyBalanceBelowThreshold(userId, "blau");
@@ -120,7 +120,7 @@ class SessionStatusServiceTests {
         int newBalance = 100;
         String color = "blau";
         boolean newTurn = true;
-        Session session=new Session(userId,"email",Color.BLUE,newPosition,newBalance,0,0,0,newTurn);
+        PlayerSession playerSession =new PlayerSession(userId,"email",Color.BLUE,newPosition,newBalance,0,0,0,newTurn);
 
         SessionStatusService.PositionObserver positionObserver = mock(SessionStatusService.PositionObserver.class);
         SessionStatusService.BalanceObserver balanceObserver = mock(SessionStatusService.BalanceObserver.class);
@@ -132,8 +132,8 @@ class SessionStatusServiceTests {
         service.registerObserver(playersTurnObserver);
         service.registerObserver(balanceBelowThresholdObserver);
 
-        service.notifyPositionChanged(session);
-        verify(positionObserver, times(1)).onPositionChanged(session);
+        service.notifyPositionChanged(playerSession);
+        verify(positionObserver, times(1)).onPositionChanged(playerSession);
 
         service.notifyBalanceChanged(userId, newBalance);
         verify(balanceObserver, times(1)).onBalanceChanged(userId, newBalance);

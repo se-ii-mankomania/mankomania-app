@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import org.mockito.ArgumentCaptor;
 
-import com.example.mankomania.api.Session;
+import com.example.mankomania.api.PlayerSession;
 import com.example.mankomania.logik.spieler.Color;
 import com.example.mankomania.api.SessionAPI;
 
@@ -25,7 +25,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-class SessionAPITests {
+class PlayerSessionAPITests {
     @Test
     void testConvertToEnums() {
         assertEquals(Color.BLUE, SessionAPI.convertToEnums("blue"));
@@ -163,26 +163,26 @@ class SessionAPITests {
         responseArray.put(session2);
 
         // call method and store in HashMap
-        HashMap<UUID, Session> sessions = SessionAPI.createSessions(responseArray);
+        HashMap<UUID, PlayerSession> sessions = SessionAPI.createSessions(responseArray);
 
         // get actual Session Objects for assertions
-        Session session1Result = sessions.get(UUID.fromString("11f28510-4d63-4f8d-943a-12ecbc16caae"));
-        Session session2Result = sessions.get(UUID.fromString("224a27d5-96a3-433c-89a2-d9a2ae2b2041"));
+        PlayerSession playerSession1Result = sessions.get(UUID.fromString("11f28510-4d63-4f8d-943a-12ecbc16caae"));
+        PlayerSession playerSession2Result = sessions.get(UUID.fromString("224a27d5-96a3-433c-89a2-d9a2ae2b2041"));
 
         // assert
         assertEquals(2, sessions.size());
 
-        assertEquals("abc@abc.com", session1Result.getEmail());
-        assertEquals(Color.BLUE, session1Result.getColor());
-        assertEquals(5, session1Result.getCurrentPosition());
-        assertEquals(100, session1Result.getBalance());
-        assertEquals(true, session1Result.getIsPlayersTurn());
+        assertEquals("abc@abc.com", playerSession1Result.getEmail());
+        assertEquals(Color.BLUE, playerSession1Result.getColor());
+        assertEquals(5, playerSession1Result.getCurrentPosition());
+        assertEquals(100, playerSession1Result.getBalance());
+        assertEquals(true, playerSession1Result.getIsPlayersTurn());
 
-        assertEquals("def@def.com", session2Result.getEmail());
-        assertEquals(Color.RED, session2Result.getColor());
-        assertEquals(8, session2Result.getCurrentPosition());
-        assertEquals(150, session2Result.getBalance());
-        assertEquals(false, session2Result.getIsPlayersTurn());
+        assertEquals("def@def.com", playerSession2Result.getEmail());
+        assertEquals(Color.RED, playerSession2Result.getColor());
+        assertEquals(8, playerSession2Result.getCurrentPosition());
+        assertEquals(150, playerSession2Result.getBalance());
+        assertEquals(false, playerSession2Result.getIsPlayersTurn());
     }
 
     @Test
@@ -613,10 +613,10 @@ class SessionAPITests {
         SessionAPI.executeGetStatusByLobbyRequest(okHttpClient, request, callback);
 
         // set up ArgumentCaptor
-        ArgumentCaptor<HashMap<UUID, Session>> captor = ArgumentCaptor.forClass(HashMap.class);
+        ArgumentCaptor<HashMap<UUID, PlayerSession>> captor = ArgumentCaptor.forClass(HashMap.class);
 
         // set up HashMap
-        HashMap<UUID, Session> sessions = SessionAPI.createSessions(sessionsJsonArray);
+        HashMap<UUID, PlayerSession> sessions = SessionAPI.createSessions(sessionsJsonArray);
 
         // verify callbacks
         verify(callback).onGetStatusByLobbySuccess(captor.capture());
@@ -624,12 +624,12 @@ class SessionAPITests {
 
         // assert
         assertEquals(1, sessions.size());
-        Session session = sessions.values().iterator().next();
-        assertEquals("abc@abc.com", session.getEmail());
-        assertEquals(Color.BLUE, session.getColor());
-        assertEquals(5, session.getCurrentPosition());
-        assertEquals(100, session.getBalance());
-        assertEquals(true, session.getIsPlayersTurn());
+        PlayerSession playerSession = sessions.values().iterator().next();
+        assertEquals("abc@abc.com", playerSession.getEmail());
+        assertEquals(Color.BLUE, playerSession.getColor());
+        assertEquals(5, playerSession.getCurrentPosition());
+        assertEquals(100, playerSession.getBalance());
+        assertEquals(true, playerSession.getIsPlayersTurn());
     }
 
     @Test

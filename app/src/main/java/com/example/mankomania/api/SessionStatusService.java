@@ -105,7 +105,7 @@ public class SessionStatusService extends Service {
         if (lobbyId != null) {
             SessionAPI.getStatusByLobby(token, lobbyId, new SessionAPI.GetStatusByLobbyCallback() {
                 @Override
-                public void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions) {
+                public void onGetStatusByLobbySuccess(HashMap<UUID, PlayerSession> sessions) {
                     // brauchi no was?
                 }
 
@@ -119,14 +119,14 @@ public class SessionStatusService extends Service {
         }
     }
 
-    public void notifyUpdatesInSession(Session newSession,UUID userId){
-        notifyPositionChanged(newSession);
+    public void notifyUpdatesInSession(PlayerSession newPlayerSession, UUID userId){
+        notifyPositionChanged(newPlayerSession);
 
-        if(newSession.getIsPlayersTurn()){
-            notifyTurnChanged(convertEnumToStringColor(newSession.getColor()),newSession.getIsPlayersTurn(),userId);
+        if(newPlayerSession.getIsPlayersTurn()){
+            notifyTurnChanged(convertEnumToStringColor(newPlayerSession.getColor()), newPlayerSession.getIsPlayersTurn(),userId);
         }
-        if(newSession.getBalance()<=0){
-            notifyBalanceBelowThreshold(userId,convertEnumToStringColor(newSession.getColor()));
+        if(newPlayerSession.getBalance()<=0){
+            notifyBalanceBelowThreshold(userId,convertEnumToStringColor(newPlayerSession.getColor()));
         }
     }
 
@@ -143,7 +143,7 @@ public class SessionStatusService extends Service {
         void onBalanceBelowThreshold(UUID userId,String color);
     }
     public interface PositionObserver {
-        void onPositionChanged(Session session);
+        void onPositionChanged(PlayerSession playerSession);
     }
     public interface BalanceObserver{
         void onBalanceChanged(UUID userId, int newBalance);
@@ -174,9 +174,9 @@ public class SessionStatusService extends Service {
         playersTurnObservers.remove(observer);
     }
 
-    public void notifyPositionChanged(Session session) {
+    public void notifyPositionChanged(PlayerSession playerSession) {
         for (SessionStatusService.PositionObserver observer : positionObservers) {
-            observer.onPositionChanged(session);
+            observer.onPositionChanged(playerSession);
         }
     }
 
