@@ -1,44 +1,27 @@
 package com.example.mankomania.apitests;
 
 import android.app.Service;
-import android.content.SharedPreferences;
 import android.os.Handler;
-
-import androidx.security.crypto.EncryptedSharedPreferences;
 
 import com.example.mankomania.api.PlayerSession;
 import com.example.mankomania.api.SessionStatusService;
 import com.example.mankomania.logik.spieler.Color;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class SessionStatusServiceTests {
     @InjectMocks
     private SessionStatusService service;
-
-    @Mock
-    private SharedPreferences sharedPreferences;
-
-
-    @BeforeEach
-    public void setUp(){
-        MockitoAnnotations.initMocks(this);
-
-        sharedPreferences = mock(EncryptedSharedPreferences.class);
-        when(sharedPreferences.getString("token", null)).thenReturn("dummyToken");
-        when(sharedPreferences.getString("lobbyid", null)).thenReturn("dummy-lobby-id");
-    }
 
     @Test
     void testConvertEnumToStringColor() {
@@ -52,8 +35,6 @@ class SessionStatusServiceTests {
     @Test
     void testOnStartCommand() {
         Handler handlerMock=mock(Handler.class);
-
-        when(handlerMock.postDelayed(any(Runnable.class), eq(5000L))).thenReturn(true);
 
         SessionStatusService sessionStatusService = SessionStatusService.getInstance();
         sessionStatusService.setHandler(handlerMock);
@@ -85,7 +66,7 @@ class SessionStatusServiceTests {
         service.notifyBalanceBelowThreshold(userId, "blau");
     }
     @Test
-    public void testRegisterObservers() {
+    void testRegisterObservers() {
         SessionStatusService.PositionObserver positionObserver = mock(SessionStatusService.PositionObserver.class);
         SessionStatusService.BalanceObserver balanceObserver = mock(SessionStatusService.BalanceObserver.class);
         SessionStatusService.PlayersTurnObserver playersTurnObserver = mock(SessionStatusService.PlayersTurnObserver.class);
@@ -103,7 +84,7 @@ class SessionStatusServiceTests {
     }
 
     @Test
-    public void testRemoveObservers() {
+    void testRemoveObservers() {
         SessionStatusService.PositionObserver positionObserver = mock(SessionStatusService.PositionObserver.class);
         SessionStatusService.BalanceObserver balanceObserver = mock(SessionStatusService.BalanceObserver.class);
         SessionStatusService.PlayersTurnObserver playersTurnObserver = mock(SessionStatusService.PlayersTurnObserver.class);
