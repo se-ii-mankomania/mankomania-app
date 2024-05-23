@@ -84,9 +84,8 @@ class SessionStatusServiceTests {
         service.notifyTurnChanged("blau", true, userId);
         service.notifyBalanceBelowThreshold(userId, "blau");
     }
-
     @Test
-    void testRegisterAndRemoveObservers() {
+    public void testRegisterObservers() {
         SessionStatusService.PositionObserver positionObserver = mock(SessionStatusService.PositionObserver.class);
         SessionStatusService.BalanceObserver balanceObserver = mock(SessionStatusService.BalanceObserver.class);
         SessionStatusService.PlayersTurnObserver playersTurnObserver = mock(SessionStatusService.PlayersTurnObserver.class);
@@ -101,6 +100,19 @@ class SessionStatusServiceTests {
         assertTrue(service.getBalanceObservers().contains(balanceObserver));
         assertTrue(service.getPlayersTurnObservers().contains(playersTurnObserver));
         assertTrue(service.getBalanceBelowThresholdObservers().contains(balanceBelowThresholdObserver));
+    }
+
+    @Test
+    public void testRemoveObservers() {
+        SessionStatusService.PositionObserver positionObserver = mock(SessionStatusService.PositionObserver.class);
+        SessionStatusService.BalanceObserver balanceObserver = mock(SessionStatusService.BalanceObserver.class);
+        SessionStatusService.PlayersTurnObserver playersTurnObserver = mock(SessionStatusService.PlayersTurnObserver.class);
+        SessionStatusService.BalanceBelowThresholdObserver balanceBelowThresholdObserver = mock(SessionStatusService.BalanceBelowThresholdObserver.class);
+
+        service.registerObserver(positionObserver);
+        service.registerObserver(balanceObserver);
+        service.registerObserver(playersTurnObserver);
+        service.registerObserver(balanceBelowThresholdObserver);
 
         service.removeObserver(positionObserver);
         service.removeObserver(balanceObserver);
