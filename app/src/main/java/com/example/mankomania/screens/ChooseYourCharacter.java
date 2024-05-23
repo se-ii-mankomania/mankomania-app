@@ -160,7 +160,7 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
             case "Blau": return Color.BLUE;
             case "Rot":return Color.RED;
             case "Grün":return Color.GREEN;
-            case "Lila":return Color.PURPLE;
+            case "Lila":return Color.LILA;
             default: return null;
         }
     }

@@ -144,7 +144,7 @@ public class SessionStatusService extends Service {
         switch(color){
             case BLUE: return "blau";
             case RED: return "rot";
-            case PURPLE: return "lila";
+            case LILA: return "lila";
             case GREEN: return "grün";
             default: return "";
         }

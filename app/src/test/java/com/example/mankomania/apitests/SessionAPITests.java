@@ -31,7 +31,7 @@ class SessionAPITests {
         assertEquals(Color.BLUE, SessionAPI.convertToEnums("blue"));
         assertEquals(Color.RED, SessionAPI.convertToEnums("red"));
         assertEquals(Color.GREEN, SessionAPI.convertToEnums("green"));
-        assertEquals(Color.PURPLE, SessionAPI.convertToEnums("lila"));
+        assertEquals(Color.LILA, SessionAPI.convertToEnums("lila"));
 
         assertNull(SessionAPI.convertToEnums("invalid_color"));
     }
@@ -135,7 +135,7 @@ class SessionAPITests {
         assertEquals(Color.BLUE, colors.get(0));
         assertEquals(Color.RED, colors.get(1));
         assertEquals(Color.GREEN, colors.get(2));
-        assertEquals(Color.PURPLE, colors.get(3));
+        assertEquals(Color.LILA, colors.get(3));
     }
 
     @Test

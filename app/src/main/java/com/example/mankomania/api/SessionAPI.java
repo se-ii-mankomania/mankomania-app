@@ -140,17 +140,10 @@ public class SessionAPI {
      * @return accoring Color object
      */
     public static Color convertToEnums(String color) {
-        switch (color) {
-            case "blue":
-                return Color.BLUE;
-            case "red":
-                return Color.RED;
-            case "green":
-                return Color.GREEN;
-            case "lila":
-                return Color.PURPLE;
-            default:
-                return null;
+        try {
+            return Color.valueOf(color.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return null;
         }
     }
 

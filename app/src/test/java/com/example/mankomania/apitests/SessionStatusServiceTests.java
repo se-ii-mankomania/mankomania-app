@@ -28,7 +28,7 @@ class SessionStatusServiceTests {
         SessionStatusService sessionStatusService=SessionStatusService.getInstance();
         assertEquals("blau", sessionStatusService.convertEnumToStringColor(Color.BLUE));
         assertEquals("rot", sessionStatusService.convertEnumToStringColor(Color.RED));
-        assertEquals("lila", sessionStatusService.convertEnumToStringColor(Color.PURPLE));
+        assertEquals("lila", sessionStatusService.convertEnumToStringColor(Color.LILA));
         assertEquals("grün", sessionStatusService.convertEnumToStringColor(Color.GREEN));
     }
 

@@ -230,7 +230,7 @@ public class Board extends AppCompatActivity {
             case GREEN:
                 viewId = R.id.player_green;
                 break;
-            case PURPLE:
+            case LILA:
                 viewId = R.id.player_purple;
                 break;
         }
