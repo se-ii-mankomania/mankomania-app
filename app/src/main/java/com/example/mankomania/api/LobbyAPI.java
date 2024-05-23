@@ -252,23 +252,23 @@ public class LobbyAPI {
 
         switch (jsonLobby.getString("status")) {
             case "open":
-                status = Status.open;
+                status = Status.OPEN;
                 break;
 
             case "starting":
-                status = Status.starting;
+                status = Status.STARTING;
                 break;
 
             case "inGame":
-                status = Status.inGame;
+                status = Status.IN_GAME;
                 break;
 
             case "finished":
-                status = Status.finished;
+                status = Status.FINISHED;
                 break;
 
             case "closed":
-                status = Status.closed;
+                status = Status.CLOSED;
                 break;
 
             default:
