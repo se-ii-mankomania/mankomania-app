@@ -119,7 +119,7 @@ class LobbyAPITests {
         assertEquals(JSONObject.NULL, jsonLobby.get("password"));
         assertEquals(isPrivate, jsonLobby.getBoolean("isPrivate"));
         assertEquals(maxPlayers, jsonLobby.getInt("maxPlayers"));
-        assertEquals(status, jsonLobby.get("status"));
+        assertEquals(status.toString().toLowerCase(), jsonLobby.get("status"));
     }
 
     @Test
@@ -140,7 +140,7 @@ class LobbyAPITests {
         assertEquals(password, jsonLobby.getString("password"));
         assertEquals(isPrivate, jsonLobby.getBoolean("isPrivate"));
         assertEquals(maxPlayers, jsonLobby.getInt("maxPlayers"));
-        assertEquals(status, jsonLobby.get("status"));
+        assertEquals(status.toString().toLowerCase(), jsonLobby.get("status"));
     }
 
     @Test
