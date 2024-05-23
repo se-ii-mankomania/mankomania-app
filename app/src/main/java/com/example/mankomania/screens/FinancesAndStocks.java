@@ -36,8 +36,6 @@ public class FinancesAndStocks extends AppCompatActivity implements SessionAPI.G
     private UUID lobbyid;
     private UUID userId;
 
-    private HashMap<UUID,Session> currentSessions;
-
     private TextView bills5k;
     private TextView bills10k;
     private TextView bills50k;
@@ -54,9 +52,6 @@ public class FinancesAndStocks extends AppCompatActivity implements SessionAPI.G
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_finances_and_stocks);
-
-        PlayerViewModel playerViewModel = new ViewModelProvider(this).get(PlayerViewModel.class);
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -113,8 +108,7 @@ public class FinancesAndStocks extends AppCompatActivity implements SessionAPI.G
 
     @Override
     public void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions) {
-        this.currentSessions =sessions;
-        for (Map.Entry<UUID, Session> entry : currentSessions.entrySet()) {
+        for (Map.Entry<UUID, Session> entry : sessions.entrySet()) {
             if(entry.getKey().equals(userId)){
                 setTextsForTextVies(entry.getValue());
             }
