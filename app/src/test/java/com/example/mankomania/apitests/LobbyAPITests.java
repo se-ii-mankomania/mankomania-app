@@ -154,7 +154,7 @@ class LobbyAPITests {
         Request request = LobbyAPI.createGetRequest(token, path, status);
 
         // verify
-        assertEquals("http://10.0.2.2:3000/api/lobby/getByStatus/open", request.url().toString());
+        assertEquals("http://10.0.2.2:3000/api/lobby/getByStatus/OPEN", request.url().toString());
     }
 
     @Test
