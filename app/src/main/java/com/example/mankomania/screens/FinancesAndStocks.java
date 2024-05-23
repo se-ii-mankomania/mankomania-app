@@ -56,6 +56,43 @@ public class FinancesAndStocks extends AppCompatActivity implements SessionAPI.G
             return insets;
         });
 
+        initSharedPreferences();
+
+        SessionAPI.getStatusByLobby(token, lobbyid,this);
+
+        initializeViews();
+
+        setButtonFunctionalities();
+    }
+
+    private void setButtonFunctionalities() {
+        Button toBoard = findViewById(R.id.FinancesStocks_BackToBoard);
+        toBoard.setOnClickListener((View v) -> {
+            Intent switchToBoard = new Intent(FinancesAndStocks.this, Board.class);
+            startActivity(switchToBoard);
+        });
+
+        Button logout = findViewById(R.id.FinancesStocks_LogoutButton);
+        logout.setOnClickListener((View v) -> {
+            Intent fromFinancesAndStocksToLogin = new Intent(FinancesAndStocks.this, MainActivityLogin.class);
+            startActivity(fromFinancesAndStocksToLogin);
+        });
+    }
+
+    private void initializeViews() {
+        bills5k=findViewById(R.id.Finances_5kbillsAnswer);
+        bills10k=findViewById(R.id.Finances_10kbillsAnswer);
+        bills50k=findViewById(R.id.Finances_50kbillsAnswer);
+        bills100k=findViewById(R.id.Finances_100kbillsAnswer);
+        balance=findViewById(R.id.Finances_totalAnswer);
+
+        bruchstahlAG=findViewById(R.id.Stocks_BruchstahlAGAnswer);
+        trockenoelAG=findViewById(R.id.Stocks_TrockenoelAGAnswer);
+        kurzschlussAG=findViewById(R.id.Stocks_KurzschulssAGAnswer);
+        numberStocks=findViewById(R.id.Stocks_totalAnswer);
+    }
+
+    private void initSharedPreferences() {
         try {
             MasterKey masterKey = new MasterKey.Builder(this)
                     .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -77,31 +114,6 @@ public class FinancesAndStocks extends AppCompatActivity implements SessionAPI.G
         } catch (GeneralSecurityException | IOException ignored) {
             Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
         }
-
-        SessionAPI.getStatusByLobby(token, lobbyid,this);
-
-        bills5k=findViewById(R.id.Finances_5kbillsAnswer);
-        bills10k=findViewById(R.id.Finances_10kbillsAnswer);
-        bills50k=findViewById(R.id.Finances_50kbillsAnswer);
-        bills100k=findViewById(R.id.Finances_100kbillsAnswer);
-        balance=findViewById(R.id.Finances_totalAnswer);
-
-        bruchstahlAG=findViewById(R.id.Stocks_BruchstahlAGAnswer);
-        trockenoelAG=findViewById(R.id.Stocks_TrockenoelAGAnswer);
-        kurzschlussAG=findViewById(R.id.Stocks_KurzschulssAGAnswer);
-        numberStocks=findViewById(R.id.Stocks_totalAnswer);
-
-        Button toBoard = findViewById(R.id.FinancesStocks_BackToBoard);
-            toBoard.setOnClickListener((View v) -> {
-            Intent switchToBoard = new Intent(FinancesAndStocks.this, Board.class);
-            startActivity(switchToBoard);
-        });
-
-        Button logout = findViewById(R.id.FinancesStocks_LogoutButton);
-            logout.setOnClickListener((View v) -> {
-            Intent fromFinancesAndStocksToLogin = new Intent(FinancesAndStocks.this, MainActivityLogin.class);
-            startActivity(fromFinancesAndStocksToLogin);
-        });
     }
 
     @Override
