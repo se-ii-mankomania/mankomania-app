@@ -94,7 +94,7 @@ public class StockExchange extends AppCompatActivity implements SensorEventListe
     }
 
     private void changeStockPrices() {
-        //TODO API-Anbindung einfügen & Back-Button unblocken
+        //TODO API-Anbindung einfügen & Back-Button unblocken & Consequences hinschreiben
     }
 
 
