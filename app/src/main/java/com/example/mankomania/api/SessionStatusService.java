@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ public class SessionStatusService extends Service {
     private final Set<PlayersTurnObserver> playersTurnObservers = new HashSet<>();
     private final Set<BalanceBelowThresholdObserver> balanceBelowThresholdObservers = new HashSet<>();
 
+    private HandlerThread handlerThread;
     private Handler handler;
     private Runnable runnable;
     private String token;
@@ -65,7 +67,11 @@ public class SessionStatusService extends Service {
             Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
         }
 
-        handler = new Handler();
+        handlerThread = new HandlerThread("SessionStatusServiceThread");
+        handlerThread.start();
+
+        handler = new Handler(handlerThread.getLooper());
+
         runnable = new Runnable() {
             @Override
             public void run() {
@@ -85,6 +91,10 @@ public class SessionStatusService extends Service {
     public void onDestroy() {
         super.onDestroy();
         stopRepeatingTask();
+
+        if (handlerThread != null) {
+            handlerThread.quit();
+        }
     }
 
     @Nullable
