@@ -145,10 +145,10 @@ public class Board extends AppCompatActivity {
     private void registerObservers(UUID userId, Button rollDice){
         SessionStatusService sessionStatusService = SessionStatusService.getInstance();
 
-        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> runOnUiThread(() -> {
-            rollDice.setEnabled(newTurn && userid.equals(userId));
+        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> runOnUiThread(() ->
+            rollDice.setEnabled(newTurn && userid.equals(userId))
 
-        }));
+        ));
 
         sessionStatusService.registerObserver((SessionStatusService.PositionObserver) session -> runOnUiThread(() ->
                 updatePlayerPosition(session)
