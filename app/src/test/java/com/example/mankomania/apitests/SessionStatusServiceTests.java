@@ -42,7 +42,7 @@ class SessionStatusServiceTests {
 
     @Test
     void testConvertEnumToStringColor() {
-        SessionStatusService sessionStatusService=new SessionStatusService();
+        SessionStatusService sessionStatusService=SessionStatusService.getInstance();
         assertEquals("blau", sessionStatusService.convertEnumToStringColor(Color.BLUE));
         assertEquals("rot", sessionStatusService.convertEnumToStringColor(Color.RED));
         assertEquals("lila", sessionStatusService.convertEnumToStringColor(Color.PURPLE));
@@ -55,7 +55,7 @@ class SessionStatusServiceTests {
 
         when(handlerMock.postDelayed(any(Runnable.class), eq(5000L))).thenReturn(true);
 
-        SessionStatusService sessionStatusService = new SessionStatusService();
+        SessionStatusService sessionStatusService = SessionStatusService.getInstance();
         sessionStatusService.setHandler(handlerMock);
 
         int expectedResult = Service.START_STICKY;

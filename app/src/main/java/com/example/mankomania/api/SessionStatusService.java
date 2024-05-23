@@ -32,13 +32,24 @@ public class SessionStatusService extends Service {
     private String token;
     private UUID lobbyId;
 
-    private static SessionStatusService instance;
+    public enum Singleton {
+        INSTANCE;
 
-    public static SessionStatusService getInstance() {
-        if (instance == null) {
+        private final SessionStatusService instance;
+
+        Singleton() {
             instance = new SessionStatusService();
         }
-        return instance;
+
+        public SessionStatusService getInstance() {
+            return instance;
+        }
+    }
+
+    private SessionStatusService() {}
+
+    public static SessionStatusService getInstance() {
+        return Singleton.INSTANCE.getInstance();
     }
 
     @Override
