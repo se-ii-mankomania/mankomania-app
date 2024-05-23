@@ -107,7 +107,7 @@ public class LobbyAPI {
 
             jsonLobby.put("isPrivate", isPrivate);
             jsonLobby.put("maxPlayers", maxPlayer);
-            jsonLobby.put("status", status);
+            jsonLobby.put("status", status.toString().toLowerCase());
         } catch (JSONException ignored) {
 
         }

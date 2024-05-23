@@ -54,10 +54,11 @@ public class CreateNewLobby extends AppCompatActivity implements LobbyAPI.AddLob
 
         onlyAllowPasswordIfLobbyIsPrivate();
 
-        addButtonFunctionalityForCreateLobby();
+        addButtonFunctionalitiesForCreateLobby();
+
     }
 
-    private void addButtonFunctionalityForCreateLobby() {
+    private void addButtonFunctionalitiesForCreateLobby() {
         createLobbyButton.setOnClickListener(v -> {
             String lobbyName = nameInput.getText().toString();
             String lobbyPassword = passwordInput.getText().toString();
