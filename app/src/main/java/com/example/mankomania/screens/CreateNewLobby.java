@@ -46,34 +46,18 @@ public class CreateNewLobby extends AppCompatActivity implements LobbyAPI.AddLob
             return insets;
         });
 
-        // bind elements
-        nameInput = findViewById(R.id.nameEditText);
-        passwordInput = findViewById(R.id.passwortEditText);
-        privateLobbySwitch = findViewById(R.id.privateLobbySwitch);
-        maxPlayerSpinner = findViewById(R.id.maxSpielerSpinner);
-        createLobbyButton = findViewById(R.id.createLobbyButton);
+        bindElements();
 
-        // deactivate password at first
-        passwordInput.setEnabled(false);
-        passwordInput.setFocusable(false);
-        passwordInput.setFocusableInTouchMode(false);
+        deactivatePassword();
 
-        // options for maxPlayerSpinner
-        String[] options = { "2", "3", "4"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, options);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        maxPlayerSpinner.setAdapter(adapter);
+        setOptionsForMayPlayerSpinner();
 
-        // only allow a password if the lobby is private
-        privateLobbySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            passwordInput.setEnabled(isChecked);
-            passwordInput.setFocusable(isChecked);
-            passwordInput.setFocusableInTouchMode(isChecked);
-            if (!isChecked) {
-                passwordInput.setText("");
-            }
-        });
+        onlyAllowPasswordIfLobbyIsPrivate();
 
+        addButtonFunctionalityForCreateLobby();
+    }
+
+    private void addButtonFunctionalityForCreateLobby() {
         createLobbyButton.setOnClickListener(v -> {
             String lobbyName = nameInput.getText().toString();
             String lobbyPassword = passwordInput.getText().toString();
@@ -106,6 +90,41 @@ public class CreateNewLobby extends AppCompatActivity implements LobbyAPI.AddLob
                 Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void onlyAllowPasswordIfLobbyIsPrivate() {
+        // only allow a password if the lobby is private
+        privateLobbySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            passwordInput.setEnabled(isChecked);
+            passwordInput.setFocusable(isChecked);
+            passwordInput.setFocusableInTouchMode(isChecked);
+            if (!isChecked) {
+                passwordInput.setText("");
+            }
+        });
+    }
+
+    private void setOptionsForMayPlayerSpinner() {
+        // options for maxPlayerSpinner
+        String[] options = { "2", "3", "4"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, options);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        maxPlayerSpinner.setAdapter(adapter);
+    }
+
+    private void deactivatePassword() {
+        // deactivate password at first
+        passwordInput.setEnabled(false);
+        passwordInput.setFocusable(false);
+        passwordInput.setFocusableInTouchMode(false);
+    }
+
+    private void bindElements() {
+        nameInput = findViewById(R.id.nameEditText);
+        passwordInput = findViewById(R.id.passwortEditText);
+        privateLobbySwitch = findViewById(R.id.privateLobbySwitch);
+        maxPlayerSpinner = findViewById(R.id.maxSpielerSpinner);
+        createLobbyButton = findViewById(R.id.createLobbyButton);
     }
 
     @Override
