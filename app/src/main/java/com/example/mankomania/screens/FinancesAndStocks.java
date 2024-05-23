@@ -13,14 +13,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
 import com.example.mankomania.R;
 import com.example.mankomania.api.Session;
 import com.example.mankomania.api.SessionAPI;
-import com.example.mankomania.logik.aktien.StockTypes;
 import com.example.mankomania.logik.geldboerse.NoteTypes;
 import com.example.mankomania.logik.geldboerse.Wallet;
 
