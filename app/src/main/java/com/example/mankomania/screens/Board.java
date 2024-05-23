@@ -69,16 +69,12 @@ public class Board extends AppCompatActivity {
             userId=UUID.fromString(useridString);
 
             sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> runOnUiThread(() -> {
-                if(newTurn && userid.equals(userId)){
-                    rollDice.setEnabled(true);
-                }else{
-                    rollDice.setEnabled(false);
-                }
+                rollDice.setEnabled(newTurn && userid.equals(userId));
             }));
 
-            sessionStatusService.registerObserver((SessionStatusService.PositionObserver) (session) -> runOnUiThread(() -> {
-                updatePlayerPosition(session);
-            }));
+            sessionStatusService.registerObserver((SessionStatusService.PositionObserver) session -> runOnUiThread(() ->
+                updatePlayerPosition(session)
+            ));
 
         } catch (GeneralSecurityException | IOException ignored) {
             Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
