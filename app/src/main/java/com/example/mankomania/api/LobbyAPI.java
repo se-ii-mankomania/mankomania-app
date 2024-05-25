@@ -260,7 +260,7 @@ public class LobbyAPI {
                 break;
 
             case "inGame":
-                status = Status.IN_GAME;
+                status = Status.INGAME;
                 break;
 
             case "finished":
