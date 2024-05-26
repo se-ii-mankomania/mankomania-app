@@ -5,23 +5,24 @@ import com.example.mankomania.logik.aktien.StockInitializer;
 import com.example.mankomania.logik.aktien.StockTypes;
 import com.example.mankomania.logik.geldboerse.Wallet;
 
+import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Player {
+public class Player implements Serializable {
 
     private GameboardField currentField;
-    private int id;
-    private String username;
-    private Color color;
-    private Wallet wallet;
-    private Map<String, Integer> stocks ;
+    private final int id;
+    private final String username;
+    private final Color color;
+    private final transient Wallet wallet; //wird für die Serialisierbarkeit derzeit nicht benötigt
+    private final Map<String, Integer> stocks ;
     private int position;
-    private SecureRandom random = new SecureRandom();
 
 
     public Player(String username, Color color) {
+        SecureRandom random = new SecureRandom();
         this.id = random.nextInt(10000);
         this.username = username;
         this.color = color;

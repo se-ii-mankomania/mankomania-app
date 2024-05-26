@@ -27,9 +27,9 @@ import okhttp3.ResponseBody;
 public class SessionAPI {
     private static final String SERVER = HttpClient.getServer();
     private static final int PORT = HttpClient.getPort();
-    private static final String responseFailureMessage = "Fehler beim Lesen der Response: ";
-   private static final String jsonResponseMessageKey = "message";
-   private static final String headerAuthorizationKey = "Authorization";
+    private static final String RESPONSE_FAILURE_MESSAGE = "Fehler beim Lesen der Response: ";
+   private static final String JSON_RESPONSE_MESSAGE_KEY = "message";
+   private static final String HEADER_AUTHORIZATION_KEY = "Authorization";
 
     public interface UpdatePositionCallback {
         void onUpdateSuccess(String message);
@@ -49,7 +49,7 @@ public class SessionAPI {
     }
 
     public interface GetStatusByLobbyCallback {
-        void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions);
+        void onGetStatusByLobbySuccess(HashMap<UUID, PlayerSession> sessions);
 
         void onGetStatusByLobbyFailure(String errorMessage);
     }
@@ -140,17 +140,10 @@ public class SessionAPI {
      * @return accoring Color object
      */
     public static Color convertToEnums(String color) {
-        switch (color) {
-            case "blue":
-                return Color.BLUE;
-            case "red":
-                return Color.RED;
-            case "green":
-                return Color.GREEN;
-            case "lila":
-                return Color.PURPLE;
-            default:
-                return null;
+        try {
+            return Color.valueOf(color.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return null;
         }
     }
 
@@ -179,8 +172,8 @@ public class SessionAPI {
      * @return HashMap containing sessions, mapped by userID
      * @throws JSONException when JSONObject handling goes wrong
      */
-    public static HashMap<UUID, Session> createSessions(JSONArray responseArray) throws JSONException {
-        HashMap<UUID, Session> sessions = new HashMap<>();
+    public static HashMap<UUID, PlayerSession> createSessions(JSONArray responseArray) throws JSONException {
+        HashMap<UUID, PlayerSession> sessions = new HashMap<>();
         for (int i = 0; i < responseArray.length(); i++) {
             JSONObject jsonSession = responseArray.getJSONObject(i);
             UUID userid = UUID.fromString(jsonSession.getString("userid"));
@@ -192,10 +185,10 @@ public class SessionAPI {
             boolean isPlayersTurn = jsonSession.getBoolean("isplayersturn");
 
             if(color!=null) {
-                Session session = new Session(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
-                sessions.put(userid, session);
+                PlayerSession playerSession = new PlayerSession(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
+                sessions.put(userid, playerSession);
                 SessionStatusService sessionStatusService = SessionStatusService.getInstance();
-                sessionStatusService.notifyUpdatesInSession(session, userid);
+                sessionStatusService.notifyUpdatesInSession(playerSession, userid);
             }
         }
         return sessions;
@@ -261,7 +254,7 @@ public class SessionAPI {
     public static Request createGetRequest(String token, String path) {
         return new Request.Builder()
                 .url(SERVER + ":" + PORT + path)
-                .header(headerAuthorizationKey, token)
+                .header(HEADER_AUTHORIZATION_KEY, token)
                 .build();
     }
 
@@ -276,7 +269,7 @@ public class SessionAPI {
         RequestBody requestBody = RequestBody.create(jsonRequest.toString(), MediaType.parse("application/json"));
         return new Request.Builder()
                 .url(SERVER + ":" + PORT + path)
-                .header(headerAuthorizationKey, token)
+                .header(HEADER_AUTHORIZATION_KEY, token)
                 .post(requestBody)
                 .build();
     }
@@ -304,10 +297,10 @@ public class SessionAPI {
                         JSONObject jsonResponse = new JSONObject(responseBody);
 
                         // return the message
-                        String successMessage = jsonResponse.getString(jsonResponseMessageKey);
+                        String successMessage = jsonResponse.getString(JSON_RESPONSE_MESSAGE_KEY);
                         callback.onJoinSessionSuccess(successMessage);
                     } catch (JSONException e) {
-                        callback.onJoinSessionFailure(responseFailureMessage + e.getMessage());
+                        callback.onJoinSessionFailure(RESPONSE_FAILURE_MESSAGE + e.getMessage());
                     }
                 } else {
                     callback.onJoinSessionFailure(response.message());
@@ -340,7 +333,7 @@ public class SessionAPI {
                             callback.onGetUnavailableColorsByLobbyFailure("Response Body ist leer!");
                         }
                     } catch (JSONException e) {
-                        callback.onGetUnavailableColorsByLobbyFailure(responseFailureMessage + e.getMessage());
+                        callback.onGetUnavailableColorsByLobbyFailure(RESPONSE_FAILURE_MESSAGE + e.getMessage());
                     }
                 } else {
                     callback.onGetUnavailableColorsByLobbyFailure(response.message());
@@ -367,13 +360,13 @@ public class SessionAPI {
                 try (ResponseBody responseBody = response.body()) {
                     if (response.isSuccessful() && responseBody != null) {
                         JSONArray responseArray = new JSONArray(responseBody.string());
-                        HashMap<UUID, Session> sessions = createSessions(responseArray);
+                        HashMap<UUID, PlayerSession> sessions = createSessions(responseArray);
                         callback.onGetStatusByLobbySuccess(sessions);
                     } else {
                         callback.onGetStatusByLobbyFailure(response.message());
                     }
                 } catch (JSONException e) {
-                    callback.onGetStatusByLobbyFailure(responseFailureMessage + e.getMessage());
+                    callback.onGetStatusByLobbyFailure(RESPONSE_FAILURE_MESSAGE + e.getMessage());
                 }
             }
         });
@@ -402,10 +395,10 @@ public class SessionAPI {
                         JSONObject jsonResponse = new JSONObject(responseBody);
 
                         // return the message
-                        String successMessage = jsonResponse.getString(jsonResponseMessageKey);
+                        String successMessage = jsonResponse.getString(JSON_RESPONSE_MESSAGE_KEY);
                         callback.onSetColorSuccess(successMessage);
                     } catch (JSONException e) {
-                        callback.onSetColorFailure(responseFailureMessage + e.getMessage());
+                        callback.onSetColorFailure(RESPONSE_FAILURE_MESSAGE + e.getMessage());
                     }
                 } else {
                     callback.onSetColorFailure(response.message());
@@ -431,10 +424,10 @@ public class SessionAPI {
                         JSONObject jsonResponse = new JSONObject(responseBody);
 
                         // extract message from response
-                        String message = jsonResponse.getString("message");
+                        String message = jsonResponse.getString(JSON_RESPONSE_MESSAGE_KEY);
                         callback.onUpdateSuccess(message);
                     } catch (JSONException e) {
-                        callback.onUpdateFailure("Fehler beim Lesen der Response!");
+                        callback.onUpdateFailure(RESPONSE_FAILURE_MESSAGE);
                     }
                 } else {
                     callback.onUpdateFailure("Aktualisierung fehlgeschlagen, Antwortcode: " + response.code());

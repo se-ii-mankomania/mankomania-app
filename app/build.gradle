@@ -83,4 +83,5 @@ dependencies {
     testImplementation libs.junit.jupiter.params
     testImplementation libs.mockito.core
     implementation libs.security.crypto
+    testImplementation libs.mockito.junit.jupiter
 }

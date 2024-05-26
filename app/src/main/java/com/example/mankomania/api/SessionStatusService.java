@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ public class SessionStatusService extends Service {
     private final Set<PlayersTurnObserver> playersTurnObservers = new HashSet<>();
     private final Set<BalanceBelowThresholdObserver> balanceBelowThresholdObservers = new HashSet<>();
 
+    private HandlerThread handlerThread;
     private Handler handler;
     private Runnable runnable;
     private String token;
@@ -65,7 +67,11 @@ public class SessionStatusService extends Service {
             Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
         }
 
-        handler = new Handler();
+        handlerThread = new HandlerThread("SessionStatusServiceThread");
+        handlerThread.start();
+
+        handler = new Handler(handlerThread.getLooper());
+
         runnable = new Runnable() {
             @Override
             public void run() {
@@ -85,6 +91,10 @@ public class SessionStatusService extends Service {
     public void onDestroy() {
         super.onDestroy();
         stopRepeatingTask();
+
+        if (handlerThread != null) {
+            handlerThread.quit();
+        }
     }
 
     @Nullable
@@ -105,7 +115,7 @@ public class SessionStatusService extends Service {
         if (lobbyId != null) {
             SessionAPI.getStatusByLobby(token, lobbyId, new SessionAPI.GetStatusByLobbyCallback() {
                 @Override
-                public void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions) {
+                public void onGetStatusByLobbySuccess(HashMap<UUID, PlayerSession> sessions) {
                     // brauchi no was?
                 }
 
@@ -119,20 +129,14 @@ public class SessionStatusService extends Service {
         }
     }
 
-    public void notifyUpdatesInSession(Session newSession,UUID userId){
+    public void notifyUpdatesInSession(PlayerSession newPlayerSession, UUID userId){
+        notifyPositionChanged(newPlayerSession);
 
-        notifyPositionChanged(newSession);
-        /*if(formerSession==null || !Objects.equals(formerSession.getCurrentPosition(), newSession.getCurrentPosition())){
-            notifyPositionChanged(userId,newSession.getCurrentPosition());
+        if(newPlayerSession.getIsPlayersTurn()){
+            notifyTurnChanged(convertEnumToStringColor(newPlayerSession.getColor()), newPlayerSession.getIsPlayersTurn(),userId);
         }
-        if(formerSession==null || !Objects.equals(formerSession.getBalance(), newSession.getBalance())){
-            notifyBalanceChanged(userId,newSession.getBalance());
-        }*/
-        if(newSession.getIsPlayersTurn()){
-            notifyTurnChanged(convertEnumToStringColor(newSession.getColor()),newSession.getIsPlayersTurn(),userId);
-        }
-        if(newSession.getBalance()<=0){
-            notifyBalanceBelowThreshold(userId,convertEnumToStringColor(newSession.getColor()));
+        if(newPlayerSession.getBalance()<=0){
+            notifyBalanceBelowThreshold(userId,convertEnumToStringColor(newPlayerSession.getColor()));
         }
     }
 
@@ -140,7 +144,7 @@ public class SessionStatusService extends Service {
         switch(color){
             case BLUE: return "blau";
             case RED: return "rot";
-            case PURPLE: return "lila";
+            case LILA: return "lila";
             case GREEN: return "grün";
             default: return "";
         }
@@ -149,7 +153,7 @@ public class SessionStatusService extends Service {
         void onBalanceBelowThreshold(UUID userId,String color);
     }
     public interface PositionObserver {
-        void onPositionChanged(Session session);
+        void onPositionChanged(PlayerSession playerSession);
     }
     public interface BalanceObserver{
         void onBalanceChanged(UUID userId, int newBalance);
@@ -180,9 +184,9 @@ public class SessionStatusService extends Service {
         playersTurnObservers.remove(observer);
     }
 
-    public void notifyPositionChanged(Session session) {
+    public void notifyPositionChanged(PlayerSession playerSession) {
         for (SessionStatusService.PositionObserver observer : positionObservers) {
-            observer.onPositionChanged(session);
+            observer.onPositionChanged(playerSession);
         }
     }
 
@@ -225,10 +229,6 @@ public class SessionStatusService extends Service {
 
     public Set<BalanceBelowThresholdObserver> getBalanceBelowThresholdObservers() {
         return balanceBelowThresholdObservers;
-    }
-
-    public Handler getHandler() {
-        return handler;
     }
 
     public Runnable getRunnable() {

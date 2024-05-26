@@ -13,14 +13,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
 import com.example.mankomania.R;
-import com.example.mankomania.api.Session;
+import com.example.mankomania.api.PlayerSession;
 import com.example.mankomania.api.SessionAPI;
-import com.example.mankomania.logik.aktien.StockTypes;
 import com.example.mankomania.logik.geldboerse.NoteTypes;
 import com.example.mankomania.logik.geldboerse.Wallet;
 
@@ -35,8 +33,6 @@ public class FinancesAndStocks extends AppCompatActivity implements SessionAPI.G
     private String token;
     private UUID lobbyid;
     private UUID userId;
-
-    private HashMap<UUID,Session> currentSessions;
 
     private TextView bills5k;
     private TextView bills10k;
@@ -54,15 +50,49 @@ public class FinancesAndStocks extends AppCompatActivity implements SessionAPI.G
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_finances_and_stocks);
-
-        PlayerViewModel playerViewModel = new ViewModelProvider(this).get(PlayerViewModel.class);
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        initSharedPreferences();
+
+        SessionAPI.getStatusByLobby(token, lobbyid,this);
+
+        initializeViews();
+
+        setButtonFunctionalities();
+    }
+
+    private void setButtonFunctionalities() {
+        Button toBoard = findViewById(R.id.FinancesStocks_BackToBoard);
+        toBoard.setOnClickListener((View v) -> {
+            Intent switchToBoard = new Intent(FinancesAndStocks.this, Board.class);
+            startActivity(switchToBoard);
+        });
+
+        Button logout = findViewById(R.id.FinancesStocks_LogoutButton);
+        logout.setOnClickListener((View v) -> {
+            Intent fromFinancesAndStocksToLogin = new Intent(FinancesAndStocks.this, MainActivityLogin.class);
+            startActivity(fromFinancesAndStocksToLogin);
+        });
+    }
+
+    private void initializeViews() {
+        bills5k=findViewById(R.id.Finances_5kbillsAnswer);
+        bills10k=findViewById(R.id.Finances_10kbillsAnswer);
+        bills50k=findViewById(R.id.Finances_50kbillsAnswer);
+        bills100k=findViewById(R.id.Finances_100kbillsAnswer);
+        balance=findViewById(R.id.Finances_totalAnswer);
+
+        bruchstahlAG=findViewById(R.id.Stocks_BruchstahlAGAnswer);
+        trockenoelAG=findViewById(R.id.Stocks_TrockenoelAGAnswer);
+        kurzschlussAG=findViewById(R.id.Stocks_KurzschulssAGAnswer);
+        numberStocks=findViewById(R.id.Stocks_totalAnswer);
+    }
+
+    private void initSharedPreferences() {
         try {
             MasterKey masterKey = new MasterKey.Builder(this)
                     .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -84,45 +114,19 @@ public class FinancesAndStocks extends AppCompatActivity implements SessionAPI.G
         } catch (GeneralSecurityException | IOException ignored) {
             Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
         }
-
-        SessionAPI.getStatusByLobby(token, lobbyid,this);
-
-        bills5k=findViewById(R.id.Finances_5kbillsAnswer);
-        bills10k=findViewById(R.id.Finances_10kbillsAnswer);
-        bills50k=findViewById(R.id.Finances_50kbillsAnswer);
-        bills100k=findViewById(R.id.Finances_100kbillsAnswer);
-        balance=findViewById(R.id.Finances_totalAnswer);
-
-        bruchstahlAG=findViewById(R.id.Stocks_BruchstahlAGAnswer);
-        trockenoelAG=findViewById(R.id.Stocks_TrockenoelAGAnswer);
-        kurzschlussAG=findViewById(R.id.Stocks_KurzschulssAGAnswer);
-        numberStocks=findViewById(R.id.Stocks_totalAnswer);
-
-        Button toBoard = findViewById(R.id.FinancesStocks_BackToBoard);
-            toBoard.setOnClickListener((View v) -> {
-            Intent switchToBoard = new Intent(FinancesAndStocks.this, Board.class);
-            startActivity(switchToBoard);
-        });
-
-        Button logout = findViewById(R.id.FinancesStocks_LogoutButton);
-            logout.setOnClickListener((View v) -> {
-            Intent fromFinancesAndStocksToLogin = new Intent(FinancesAndStocks.this, MainActivityLogin.class);
-            startActivity(fromFinancesAndStocksToLogin);
-        });
     }
 
     @Override
-    public void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions) {
-        this.currentSessions =sessions;
-        for (Map.Entry<UUID, Session> entry : currentSessions.entrySet()) {
+    public void onGetStatusByLobbySuccess(HashMap<UUID, PlayerSession> sessions) {
+        for (Map.Entry<UUID, PlayerSession> entry : sessions.entrySet()) {
             if(entry.getKey().equals(userId)){
                 setTextsForTextVies(entry.getValue());
             }
         }
     }
 
-    private void setTextsForTextVies(Session session) {
-        int currentBalance=session.getBalance();
+    private void setTextsForTextVies(PlayerSession playerSession) {
+        int currentBalance= playerSession.getBalance();
         balance.setText(String.valueOf(currentBalance));
 
         Wallet wallet=new Wallet();
@@ -132,10 +136,10 @@ public class FinancesAndStocks extends AppCompatActivity implements SessionAPI.G
         bills50k.setText(String.valueOf(wallet.getNoteCount(NoteTypes.FIFTYTHOUSAND)));
         bills100k.setText(String.valueOf(wallet.getNoteCount(NoteTypes.HUNDREDTHOUSAND)));
 
-        bruchstahlAG.setText(String.valueOf(session.getAmountBShares()));
-        trockenoelAG.setText(String.valueOf(session.getAmountTShares()));
-        kurzschlussAG.setText(String.valueOf(session.getAmountKVShares()));
-        int numberOfStocks=session.getAmountBShares()+session.getAmountKVShares()+session.getAmountTShares();
+        bruchstahlAG.setText(String.valueOf(playerSession.getAmountBShares()));
+        trockenoelAG.setText(String.valueOf(playerSession.getAmountTShares()));
+        kurzschlussAG.setText(String.valueOf(playerSession.getAmountKVShares()));
+        int numberOfStocks= playerSession.getAmountBShares()+ playerSession.getAmountKVShares()+ playerSession.getAmountTShares();
         numberStocks.setText(String.valueOf(numberOfStocks));
     }
 

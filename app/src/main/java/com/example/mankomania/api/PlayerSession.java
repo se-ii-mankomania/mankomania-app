@@ -6,7 +6,7 @@ import com.example.mankomania.logik.spieler.Color;
 
 import java.util.UUID;
 
-public class Session {
+public class PlayerSession {
     private final UUID userId;
     private final String email;
     private final Color color;
@@ -17,7 +17,7 @@ public class Session {
     private final int amountBShares;
     private final boolean isPlayersTurn;
 
-    public Session(UUID userId, String email, Color color, int currentPosition, int balance, int amountKVShares, int amountTShares, int amountBShares, boolean isPlayersTurn) {
+    public PlayerSession(UUID userId, String email, Color color, int currentPosition, int balance, int amountKVShares, int amountTShares, int amountBShares, boolean isPlayersTurn) {
         this.userId = userId;
         this.email=email;
         this.color = color;

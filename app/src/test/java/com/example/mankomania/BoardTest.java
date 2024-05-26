@@ -51,7 +51,7 @@ import org.junit.jupiter.api.Test;
         playergreen.setCurrentField(fieldsHandler.getField(49));
         Player playerred = new Player("RED", Color.RED);
         playerred.setCurrentField(fieldsHandler.getField(50));
-        Player playerpurple = new Player("PURPLE",Color.PURPLE);
+        Player playerpurple = new Player("PURPLE",Color.LILA);
         playerpurple.setCurrentField(fieldsHandler.getField(51));
 
         fieldsHandler.movePlayer(playerblue, 7);
@@ -81,7 +81,7 @@ import org.junit.jupiter.api.Test;
         playergreen.setCurrentField(fieldsHandler.getField(45));
         Player playerred = new Player("RED", Color.RED);
         playerred.setCurrentField(fieldsHandler.getField(46));
-        Player playerpurple = new Player("PURPLE",Color.PURPLE);
+        Player playerpurple = new Player("PURPLE",Color.LILA);
         playerpurple.setCurrentField(fieldsHandler.getField(47));
 
         fieldsHandler.movePlayer(playerblue, 5);
@@ -96,7 +96,7 @@ import org.junit.jupiter.api.Test;
     }
     @Test
      void caseStartLeftBottomMoveBy12(){
-        Player playerpurple = new Player("PURPLE",Color.PURPLE);
+        Player playerpurple = new Player("PURPLE",Color.LILA);
         playerpurple.setCurrentField(fieldsHandler.getField(51));
 
         fieldsHandler.movePlayer(playerpurple, 12);
@@ -105,7 +105,7 @@ import org.junit.jupiter.api.Test;
     }
     @Test
      void caseStartAtCasinoMoveByMoreThan8(){
-        Player playerpurple = new Player("PURPLE",Color.PURPLE);
+        Player playerpurple = new Player("PURPLE",Color.LILA);
         playerpurple.setCurrentField(fieldsHandler.getField(47));
 
         fieldsHandler.movePlayer(playerpurple, 9);
@@ -115,7 +115,7 @@ import org.junit.jupiter.api.Test;
 
     @Test
      void caseStartAtAuctionHouseMoveByLessThan4(){
-        Player playerpurple = new Player("PURPLE",Color.PURPLE);
+        Player playerpurple = new Player("PURPLE",Color.LILA);
         playerpurple.setCurrentField(fieldsHandler.getField(44));
 
         fieldsHandler.movePlayer(playerpurple, 3);
@@ -124,7 +124,7 @@ import org.junit.jupiter.api.Test;
     }
     @Test
     void testMoveWithinGameBoardFieldsInvalidID(){
-       Player playerpurple = new Player("PURPLE",Color.PURPLE);
+       Player playerpurple = new Player("PURPLE",Color.LILA);
        playerpurple.setCurrentField(new GameboardField(1,2, -1));
 
        IndexOutOfBoundsException indexOutOfBoundsException = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {fieldsHandler.movePlayer(playerpurple, 3);});

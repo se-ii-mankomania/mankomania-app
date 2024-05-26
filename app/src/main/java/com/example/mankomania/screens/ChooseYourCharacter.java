@@ -130,25 +130,18 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
      * anfänglichen Zustand zurückgesetzt wird. Jeder Button ist auswählbar.
      */
     private void restoreRadioButtons(){
-        RadioButton purple=findViewById(R.id.ChooseYourCharacter_PurplePlayer);
-        purple.setEnabled(true);
-        purple.setTextColor(ContextCompat.getColor(this,R.color.purplePlayer));
-        purple.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.purplePlayer)));
+        restoreButton(R.id.ChooseYourCharacter_PurplePlayer,R.color.purplePlayer);
+        restoreButton(R.id.ChooseYourCharacter_GreenPlayer,R.color.greenPlayer);
+        restoreButton(R.id.ChooseYourCharacter_RedPlayer,R.color.redPlayer);
+        restoreButton(R.id.ChooseYourCharacter_BluePlayer,R.color.bluePlayer);
+    }
 
-        RadioButton green=findViewById(R.id.ChooseYourCharacter_GreenPlayer);
-        green.setEnabled(true);
-        green.setTextColor(ContextCompat.getColor(this,R.color.greenPlayer));
-        green.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.greenPlayer)));
+    private void restoreButton(int viewId, int colorId) {
+        RadioButton radioButton=findViewById(viewId);
+        radioButton.setEnabled(true);
+        radioButton.setTextColor(ContextCompat.getColor(this,colorId));
+        radioButton.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(this,colorId)));
 
-        RadioButton red=findViewById(R.id.ChooseYourCharacter_RedPlayer);
-        red.setEnabled(true);
-        red.setTextColor(ContextCompat.getColor(this,R.color.redPlayer));
-        red.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.redPlayer)));
-
-        RadioButton blue=findViewById(R.id.ChooseYourCharacter_BluePlayer);
-        blue.setEnabled(true);
-        blue.setTextColor(ContextCompat.getColor(this,R.color.bluePlayer));
-        blue.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.bluePlayer)));
     }
 
     /**
@@ -167,7 +160,7 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
             case "Blau": return Color.BLUE;
             case "Rot":return Color.RED;
             case "Grün":return Color.GREEN;
-            case "Lila":return Color.PURPLE;
+            case "Lila":return Color.LILA;
             default: return null;
         }
     }

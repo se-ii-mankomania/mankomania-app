@@ -3,12 +3,12 @@ package com.example.mankomania.apitests;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.example.mankomania.api.Session;
+import com.example.mankomania.api.PlayerSession;
 import com.example.mankomania.logik.spieler.Color;
 
 import java.util.UUID;
 
-class SessionTests {
+class PlayerSessionTests {
 
     @Test
     void testToString() {
@@ -24,7 +24,7 @@ class SessionTests {
         boolean isPlayersTurn = true;
 
         // create session
-        Session session = new Session(userId, email, color, currentPosition, balance, amountKVShares, amountTShares, amountBShares, isPlayersTurn);
+        PlayerSession playerSession = new PlayerSession(userId, email, color, currentPosition, balance, amountKVShares, amountTShares, amountBShares, isPlayersTurn);
 
         // get string
         String expectedToString = "Session{" +
@@ -40,7 +40,7 @@ class SessionTests {
                 '}';
 
         // assert
-        assertEquals(expectedToString, session.toString());
+        assertEquals(expectedToString, playerSession.toString());
     }
 
     @Test
@@ -57,17 +57,17 @@ class SessionTests {
         boolean isPlayersTurn = true;
 
         // create session
-        Session session = new Session(userId, email, color, currentPosition, balance, amountKVShares, amountTShares, amountBShares, isPlayersTurn);
+        PlayerSession playerSession = new PlayerSession(userId, email, color, currentPosition, balance, amountKVShares, amountTShares, amountBShares, isPlayersTurn);
 
         // assert
-        assertEquals(userId, session.getUserId());
-        assertEquals(email, session.getEmail());
-        assertEquals(color, session.getColor());
-        assertEquals(currentPosition, session.getCurrentPosition());
-        assertEquals(balance, session.getBalance());
-        assertEquals(amountKVShares, session.getAmountKVShares());
-        assertEquals(amountTShares, session.getAmountTShares());
-        assertEquals(amountBShares, session.getAmountBShares());
-        assertEquals(isPlayersTurn, session.getIsPlayersTurn());
+        assertEquals(userId, playerSession.getUserId());
+        assertEquals(email, playerSession.getEmail());
+        assertEquals(color, playerSession.getColor());
+        assertEquals(currentPosition, playerSession.getCurrentPosition());
+        assertEquals(balance, playerSession.getBalance());
+        assertEquals(amountKVShares, playerSession.getAmountKVShares());
+        assertEquals(amountTShares, playerSession.getAmountTShares());
+        assertEquals(amountBShares, playerSession.getAmountBShares());
+        assertEquals(isPlayersTurn, playerSession.getIsPlayersTurn());
     }
 }

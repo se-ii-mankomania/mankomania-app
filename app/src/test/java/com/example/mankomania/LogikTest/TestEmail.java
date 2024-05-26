@@ -1,4 +1,4 @@
-package com.example.mankomania;
+package com.example.mankomania.LogikTest;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
