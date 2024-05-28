@@ -55,7 +55,7 @@ public class StockExchangeAPI {
                 if (response.isSuccessful()) {
                     try (ResponseBody responseBody = response.body()) {
                         if (responseBody != null) {
-                            String stockChanges = getColors(responseBody.string());
+                            String stockChanges = getStockChanges(responseBody.string());
                             callback.onGetStockChangesSuccess(stockChanges);
                         } else {
                             callback.onGetStockChangesFailure("Response Body ist leer!");
@@ -71,7 +71,7 @@ public class StockExchangeAPI {
     }
 
     @NonNull
-    public static String getColors(String responseBodyString) throws JSONException {
+    public static String getStockChanges(String responseBodyString) throws JSONException {
         JSONArray responseArray = new JSONArray(responseBodyString);
         String stockChanges = "";
         for (int i = 0; i < responseArray.length(); i++) {
