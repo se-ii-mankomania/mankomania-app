@@ -9,7 +9,7 @@
     tools:context=".screens.StockExchange">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/StockExchange_ImageView"
         android:layout_width="398dp"
         android:layout_height="114dp"
         android:layout_marginBottom="30dp"
@@ -42,7 +42,7 @@
         android:layout_marginBottom="9dp"
         android:text="@string/StockExchange_Explanation"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintBottom_toTopOf="@+id/StockExchange_ImageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,6 +56,6 @@
         android:layout_marginBottom="36dp"
         android:text="@string/StockExchange_ShakeButton"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintEnd_toEndOf="@+id/StockExchange_ImageView"
+        app:layout_constraintTop_toBottomOf="@+id/StockExchange_ImageView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
