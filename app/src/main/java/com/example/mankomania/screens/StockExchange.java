@@ -1,12 +1,17 @@
 package com.example.mankomania.screens;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -15,11 +20,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
 
 import com.example.mankomania.R;
+import com.example.mankomania.api.StockExchangeAPI;
 
-public class StockExchange extends AppCompatActivity implements SensorEventListener {
-    
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.UUID;
+
+public class StockExchange extends AppCompatActivity implements SensorEventListener, StockExchangeAPI.GetStockChangesCallback {
+
+    private String token;
+    private UUID lobbyid;
     int basc;
     int bdesc;
     int tasc;
@@ -28,11 +42,14 @@ public class StockExchange extends AppCompatActivity implements SensorEventListe
     int kdesc;
     int sonderzeichen;
 
+    private ImageView stockExchangeImageView;
+
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private boolean backPressedBlocked;
 
     private static final int SENSIBILITY_BORDER_FOR_SENSOR =10;
+    private static final int DELAY_MILLIS_BACK_TO_BOARD=4000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +63,11 @@ public class StockExchange extends AppCompatActivity implements SensorEventListe
             return insets;
         });
 
+        initSharedPreferences();
+
         initializeDrawables();
+
+        stockExchangeImageView=findViewById(R.id.StockExchange_ImageView);
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -66,7 +87,7 @@ public class StockExchange extends AppCompatActivity implements SensorEventListe
         getOnBackPressedDispatcher().addCallback(this, callback);
 
         Button changeStockPricesButton=findViewById(R.id.StockExchange_ShakeButton);
-        changeStockPricesButton.setOnClickListener(v -> changeStockPrices());
+        changeStockPricesButton.setOnClickListener(v -> StockExchangeAPI.getStockChangesByLobbyID(token,lobbyid,this));
     }
     @Override
     protected void onResume() {
@@ -88,13 +109,9 @@ public class StockExchange extends AppCompatActivity implements SensorEventListe
             float z = event.values[2];
             if ((Math.abs(x) > SENSIBILITY_BORDER_FOR_SENSOR || Math.abs(y) > SENSIBILITY_BORDER_FOR_SENSOR || Math.abs(z) > SENSIBILITY_BORDER_FOR_SENSOR)) {
                 //Wenn geschüttelt => Aktienkurs ändern
-                changeStockPrices();
+                StockExchangeAPI.getStockChangesByLobbyID(token,lobbyid,this);
             }
         }
-    }
-
-    private void changeStockPrices() {
-        //TODO API-Anbindung einfügen & Back-Button unblocken & Consequences hinschreiben
     }
 
 
@@ -117,5 +134,46 @@ public class StockExchange extends AppCompatActivity implements SensorEventListe
         kasc=R.drawable.kasc;
         kdesc=R.drawable.kdes;
         sonderzeichen=R.drawable.sonderzeichen;
+    }
+
+    @Override
+    public void onGetStockChangesSuccess(String stockChanges) {
+        stockExchangeImageView.setImageResource(Integer.parseInt(stockChanges));
+        navigateBackToBoard();
+    }
+
+    @Override
+    public void onGetStockChangesFailure(String errorMessage) {
+        runOnUiThread(() ->Toast.makeText(StockExchange.this, "Fehler:"+errorMessage, Toast.LENGTH_SHORT).show());
+    }
+
+    private void initSharedPreferences() {
+        try {
+            MasterKey masterKey = new MasterKey.Builder(this)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
+
+            SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
+                    this,
+                    "MyPrefs",
+                    masterKey,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+
+            token = sharedPreferences.getString("token", null);
+            String lobbyidString = sharedPreferences.getString("lobbyid", null);
+            lobbyid=UUID.fromString(lobbyidString);
+        } catch (GeneralSecurityException | IOException ignored) {
+            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void navigateBackToBoard(){
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            Intent backToBoard = new Intent(StockExchange.this, Board.class);
+            startActivity(backToBoard);
+            //BackButton kann wieder freigegeben werden
+            unblockBackButton();
+        }, DELAY_MILLIS_BACK_TO_BOARD);
     }
 }
