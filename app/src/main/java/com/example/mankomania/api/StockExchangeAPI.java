@@ -22,13 +22,13 @@ public class StockExchangeAPI {
     private static final String RESPONSE_FAILURE_MESSAGE = "Fehler beim Lesen der Response: ";
     private static final String HEADER_AUTHORIZATION_KEY = "Authorization";
 
-    public interface GetStockChanges {
+    public interface GetStockChangesCallback {
         void onGetStockChangesSuccess(String stockChanges);
 
         void onGetStockChangesFailure(String errorMessage);
     }
 
-    public static void getStockChangesByLobbyID(String token, UUID lobbyid, final StockExchangeAPI.GetStockChanges callback) {
+    public static void getStockChangesByLobbyID(String token, UUID lobbyid, final StockExchangeAPI.GetStockChangesCallback callback) {
         // create request
         Request request = createGetRequest(token, "/api/stockexchange/getStockChanges/" + lobbyid.toString());
 
@@ -43,7 +43,7 @@ public class StockExchangeAPI {
                 .build();
     }
 
-    public static void executeRequest(OkHttpClient okHttpClient, Request request, final StockExchangeAPI.GetStockChanges callback) {
+    public static void executeRequest(OkHttpClient okHttpClient, Request request, final StockExchangeAPI.GetStockChangesCallback callback) {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
