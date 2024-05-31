@@ -42,7 +42,7 @@ public class StockExchange extends AppCompatActivity implements SensorEventListe
     private boolean backPressedBlocked;
 
     private static final int SENSIBILITY_BORDER_FOR_SENSOR =10;
-    private static final int DELAY_MILLIS_BACK_TO_BOARD=4000;
+    private static final int DELAY_MILLIS_BACK_TO_BOARD=2500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
