@@ -78,7 +78,7 @@ class LobbyAPITests {
         return new Object[][] {
                 { "open", Status.OPEN},
                 { "starting", Status.STARTING},
-                { "inGame", Status.IN_GAME},
+                { "inGame", Status.INGAME},
                 { "finished", Status.FINISHED},
                 { "closed", Status.CLOSED}
         };

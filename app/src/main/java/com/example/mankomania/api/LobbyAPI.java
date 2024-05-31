@@ -249,30 +249,10 @@ public class LobbyAPI {
         boolean isPrivate = jsonLobby.getBoolean("isprivate");
         int maxPlayers = jsonLobby.getInt("maxplayers");
         Status status;
-
-        switch (jsonLobby.getString("status")) {
-            case "open":
-                status = Status.OPEN;
-                break;
-
-            case "starting":
-                status = Status.STARTING;
-                break;
-
-            case "inGame":
-                status = Status.IN_GAME;
-                break;
-
-            case "finished":
-                status = Status.FINISHED;
-                break;
-
-            case "closed":
-                status = Status.CLOSED;
-                break;
-
-            default:
-                throw new IllegalArgumentException("Ungültiger Status!");
+        try {
+            status = Status.valueOf(jsonLobby.getString("status").toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Ungültiger Status!", e);
         }
 
         Lobby lobby = new Lobby(id, name, password, isPrivate, maxPlayers, status);
