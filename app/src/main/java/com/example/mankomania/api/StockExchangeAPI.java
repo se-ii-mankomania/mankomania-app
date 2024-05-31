@@ -2,7 +2,6 @@ package com.example.mankomania.api;
 
 import androidx.annotation.NonNull;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -72,13 +71,8 @@ public class StockExchangeAPI {
 
     @NonNull
     public static String getStockChanges(String responseBodyString) throws JSONException {
-        JSONArray responseArray = new JSONArray(responseBodyString);
-        String stockChanges = "";
-        for (int i = 0; i < responseArray.length(); i++) {
-            JSONObject jsonSession = responseArray.getJSONObject(i);
-            stockChanges = jsonSession.getString("stockChange");
-        }
-        return stockChanges;
+        JSONObject stockchange=new JSONObject(responseBodyString);
+        return stockchange.getString("stockChange");
     }
 
 }
