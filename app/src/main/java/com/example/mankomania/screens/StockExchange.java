@@ -34,13 +34,6 @@ public class StockExchange extends AppCompatActivity implements SensorEventListe
 
     private String token;
     private UUID lobbyid;
-    int basc;
-    int bdesc;
-    int tasc;
-    int tdesc;
-    int kasc;
-    int kdesc;
-    int sonderzeichen;
 
     private ImageView stockExchangeImageView;
 
@@ -64,8 +57,6 @@ public class StockExchange extends AppCompatActivity implements SensorEventListe
         });
 
         initSharedPreferences();
-
-        initializeDrawables();
 
         stockExchangeImageView=findViewById(R.id.StockExchange_ImageView);
 
@@ -126,20 +117,31 @@ public class StockExchange extends AppCompatActivity implements SensorEventListe
         this.backPressedBlocked=true;
     }
 
-    private void initializeDrawables(){
-        basc =R.drawable.basc;
-        bdesc=R.drawable.bdes;
-        tasc=R.drawable.tasc;
-        tdesc=R.drawable.tdes;
-        kasc=R.drawable.kasc;
-        kdesc=R.drawable.kdes;
-        sonderzeichen=R.drawable.sonderzeichen;
+    private int getDrawableId(String stockChanges){
+        switch(stockChanges){
+            case "basc": return R.drawable.basc;
+            case "bdesc": return R.drawable.bdes;
+            case "tasc": return R.drawable.tasc;
+            case "tdesc": return R.drawable.tdes;
+            case "kasc": return R.drawable.kasc;
+            case "kdesc": return R.drawable.kdes;
+            case "sonderzeichen": return R.drawable.sonderzeichen;
+            default: return -1;
+        }
     }
 
     @Override
     public void onGetStockChangesSuccess(String stockChanges) {
-        stockExchangeImageView.setImageResource(Integer.parseInt(stockChanges));
-        navigateBackToBoard();
+        stockChanges=stockChanges.trim();
+        int imageViewId=getDrawableId(stockChanges);
+        if(imageViewId!=-1) {
+            runOnUiThread(() -> {
+                stockExchangeImageView.setImageResource(imageViewId);
+                navigateBackToBoard();
+            });
+        }else{
+            runOnUiThread(() ->Toast.makeText(StockExchange.this, "Fehler:///", Toast.LENGTH_SHORT).show());
+        }
     }
 
     @Override
