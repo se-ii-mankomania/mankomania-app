@@ -64,7 +64,7 @@ sonar {
               "**/Event_RollDice,**/FinancesAndStocks.java,**/GameScore.java," +
                 "**/MainActivityLogin.java, **/PlayerViewModel.java," +
                 "**/Register.java, **/ToolbarFunctionalities.java, **/EventRollDice.java," +
-                "**/StockExchange.java, **/StockExchangeAPI.java,"+
+                "**/StockExchange.java, **/StockExchangeAPI.java, **/SwipeGestureListener.java,"+
                 "**/CreateNewLobby.java, **/Status.java, **/ZoomLayout.java, **/EndWinner.java"
 
     }
