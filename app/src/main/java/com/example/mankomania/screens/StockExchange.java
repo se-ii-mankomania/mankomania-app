@@ -1,16 +1,12 @@
 package com.example.mankomania.screens;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.Button;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -30,18 +26,15 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.UUID;
 
-public class StockExchange extends AppCompatActivity implements SensorEventListener, StockExchangeAPI.GetStockChangesCallback {
+public class StockExchange extends AppCompatActivity implements StockExchangeAPI.GetStockChangesCallback,SwipeGestureListener.OnSwipeListener {
 
     private String token;
     private UUID lobbyid;
 
     private ImageView stockExchangeImageView;
 
-    private SensorManager sensorManager;
-    private Sensor accelerometer;
-    private boolean backPressedBlocked;
-
-    private static final int SENSIBILITY_BORDER_FOR_SENSOR =10;
+    private boolean backButtonblocked;
+    private GestureDetector gestureDetector;
     private static final int DELAY_MILLIS_BACK_TO_BOARD=2500;
 
     @Override
@@ -60,14 +53,13 @@ public class StockExchange extends AppCompatActivity implements SensorEventListe
 
         stockExchangeImageView=findViewById(R.id.StockExchange_ImageView);
 
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        gestureDetector = new GestureDetector(this, new SwipeGestureListener(this));
 
         //den BackButton blockieren, damit Würfeln nicht abgebrochen werden kann
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if (backPressedBlocked) {
+                if (backButtonblocked) {
                     Toast.makeText(StockExchange.this, "Bringe zuerst den Aktienkurs in Schwung!", Toast.LENGTH_SHORT).show();
                 } else {
                     this.setEnabled(false);
@@ -76,45 +68,19 @@ public class StockExchange extends AppCompatActivity implements SensorEventListe
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
-
-        Button changeStockPricesButton=findViewById(R.id.StockExchange_ShakeButton);
-        changeStockPricesButton.setOnClickListener(v -> StockExchangeAPI.getStockChangesByLobbyID(token,lobbyid,this));
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        sensorManager.unregisterListener(this);
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
-            if ((Math.abs(x) > SENSIBILITY_BORDER_FOR_SENSOR || Math.abs(y) > SENSIBILITY_BORDER_FOR_SENSOR || Math.abs(z) > SENSIBILITY_BORDER_FOR_SENSOR)) {
-                //Wenn geschüttelt => Aktienkurs ändern
-                StockExchangeAPI.getStockChangesByLobbyID(token,lobbyid,this);
-            }
-        }
-    }
-
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        //muss nicht überschrieben werden, ist aber notwendig, um BackButton zu blockieren
-    }
     private void unblockBackButton() {
-        this.backPressedBlocked=false;
+        this.backButtonblocked =false;
     }
     private void blockBackButton(){
-        this.backPressedBlocked=true;
+        this.backButtonblocked =true;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
     }
 
     private int getDrawableId(String stockChanges){
@@ -177,5 +143,10 @@ public class StockExchange extends AppCompatActivity implements SensorEventListe
             //BackButton kann wieder freigegeben werden
             unblockBackButton();
         }, DELAY_MILLIS_BACK_TO_BOARD);
+    }
+
+    @Override
+    public void onSwipeUp() {
+        StockExchangeAPI.getStockChangesByLobbyID(token,lobbyid,this);
     }
 }

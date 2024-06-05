@@ -8,54 +8,40 @@
     android:contentDescription="@string/StockExchange_Header"
     tools:context=".screens.StockExchange">
 
-    <ImageView
-        android:id="@+id/StockExchange_ImageView"
-        android:layout_width="398dp"
-        android:layout_height="114dp"
-        android:layout_marginBottom="30dp"
-        android:background="#92E5E9EA"
-        android:importantForAccessibility="no"
-        app:layout_constraintBottom_toTopOf="@+id/StockExchange_ShakeButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/StockExchange_Description" />
-
-    <TextView
-        android:id="@+id/StockExchange_Header"
-        android:layout_width="337dp"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginBottom="11dp"
-        android:text="@string/StockExchange_Header"
-        android:textSize="60sp"
-        app:layout_constraintBottom_toTopOf="@+id/StockExchange_Description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/StockExchange_Description"
-        android:layout_width="585dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="153dp"
-        android:layout_marginEnd="153dp"
-        android:layout_marginBottom="9dp"
-        android:text="@string/StockExchange_Explanation"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/StockExchange_ImageView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/StockExchange_Header" />
-
-    <Button
-        android:id="@+id/StockExchange_ShakeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="68dp"
-        android:layout_marginBottom="36dp"
-        android:text="@string/StockExchange_ShakeButton"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/StockExchange_ImageView"
-        app:layout_constraintTop_toBottomOf="@+id/StockExchange_ImageView" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/StockExchange_Header"
+            android:layout_width="337dp"
+            android:layout_height="95dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/StockExchange_Header"
+            android:textSize="60sp" />
+
+        <TextView
+            android:id="@+id/StockExchange_Description"
+            android:layout_width="553dp"
+            android:layout_height="38dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/StockExchange_Explanation"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/StockExchange_ImageView"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="398dp"
+            android:layout_height="114dp"
+            android:background="#92E5E9EA"
+            android:importantForAccessibility="no" />
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
