@@ -44,6 +44,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
     private boolean backPressedBlocked;
 
     private static final int SENSIBILITY_BORDER_FOR_SENSOR =10;
+    private static final int DELAY_MILLIS_BACK_TO_BOARD=2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,7 +221,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
             startActivity(backToBoard);
             //BackButton kann wieder freigegeben werden
             unblockBackButton();
-        }, 2000);
+        }, DELAY_MILLIS_BACK_TO_BOARD);
     }
 
     public static int getResId(String resName, Class<?> c) {

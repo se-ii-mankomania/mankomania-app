@@ -103,4 +103,7 @@
     <string name="RollDice_Explanation">Schütteln um zu Würfeln</string>
     <string name="dice">dice</string>
     <string name="gewonnen_hat">Gewonnen hat:</string>
+    <string name="StockExchange_Header">Aktienbörse</string>
+    <string name="StockExchange_Explanation">Swipe nach oben, um den Aktienkurs in Schwung zu bringen!</string>
+    <string name="StockExchange_ShakeButton">verändere den Aktienkurs</string>
 </resources>
