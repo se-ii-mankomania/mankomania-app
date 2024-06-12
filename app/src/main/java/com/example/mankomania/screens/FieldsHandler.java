@@ -20,8 +20,8 @@ public class FieldsHandler implements Serializable {
     }
 
 
-    public void movePlayer(Player player, int diceNr) {
-        int currentId = player.getCurrentField().getId();
+    public int movePlayer(Player player, int diceNr) {
+        int currentId=player.getCurrentField().getId();;
 
         //links oben Startposition
         if (currentId == 49) {
@@ -62,6 +62,15 @@ public class FieldsHandler implements Serializable {
         else{
             throw new IndexOutOfBoundsException("Invalid ID");
         }
+        int fieldIdGoToField;
+        GameboardField newField=player.getCurrentField();
+        if(newField instanceof GoToField){
+            fieldIdGoToField=newField.getId();
+            player.setCurrentField(((GoToField) newField).getTargetField());
+        }else {
+            fieldIdGoToField=-1;
+        }
+        return fieldIdGoToField;
     }
 
     private void moveFromStartTopLeft(Player player, int diceNr) {
