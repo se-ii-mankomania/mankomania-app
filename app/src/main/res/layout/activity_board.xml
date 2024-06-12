@@ -24,7 +24,7 @@
                     android:layout_width="240dp"
                     android:layout_height="240dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/gameboard">
+                    android:src="@drawable/mankomaniamitboeser1">
                 </ImageView>
 
                 <ImageView
