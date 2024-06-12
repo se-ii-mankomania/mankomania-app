@@ -30,11 +30,15 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.UUID;
 
-public class Board extends AppCompatActivity {
+public class Board extends AppCompatActivity implements ToolbarFunctionalities.OnPlayerScoresClickListener{
 
     FieldsHandler fieldsHandler = new FieldsHandler();
 
     Cellposition[][] cellPositions = new Cellposition[14][14];
+    private boolean isFragmentDisplayed = false;
+    private static final String FRAGMENT_TAG = "SCORES_FRAGMENT";
+
+    private PlayerScoreDialogFragment scoresDialogFragment;
 
 
     @Override
@@ -61,7 +65,6 @@ public class Board extends AppCompatActivity {
         UUID userId = initSharedPreferences();
 
         registerObservers(userId, rollDice);
-
 
     }
 
@@ -100,9 +103,30 @@ public class Board extends AppCompatActivity {
         });
     }
     private void setupToolbar(){
+        ToolbarFunctionalities.setOnPlayerScoresClickListener(this);
         ToolbarFunctionalities.setUpToolbar(this);
     }
+    @Override
+    public void onPlayerScoresClicked() {
+        if (isFragmentDisplayed) {
+            closeScoresFragment();
+        } else {
+            showScoresFragment();
+        }
+    }
 
+    private void showScoresFragment() {
+        scoresDialogFragment = new PlayerScoreDialogFragment();
+        scoresDialogFragment.show(getSupportFragmentManager(), FRAGMENT_TAG);
+        isFragmentDisplayed = true;
+    }
+
+    private void closeScoresFragment() {
+        if (scoresDialogFragment != null) {
+            scoresDialogFragment.dismiss();
+            isFragmentDisplayed = false;
+        }
+    }
     private void setupBackButton(){
         //Wenn der Back-Button betätigt wird, wird der Polling-Service für den Status gestoppt
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {

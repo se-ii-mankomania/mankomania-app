@@ -106,4 +106,5 @@
     <string name="StockExchange_Header">Aktienbörse</string>
     <string name="StockExchange_Explanation">Swipe nach oben, um den Aktienkurs in Schwung zu bringen, wenn du drann bist!</string>
     <string name="StockExchange_ShakeButton">verändere den Aktienkurs</string>
+    <string name="playerScores">Spielerstände</string>
 </resources>

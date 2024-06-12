@@ -14,6 +14,15 @@ import com.example.mankomania.api.SessionStatusService;
  */
 public class ToolbarFunctionalities {
 
+    public interface OnPlayerScoresClickListener {
+        void onPlayerScoresClicked();
+    }
+    private static OnPlayerScoresClickListener playerScoresClickListener;
+
+    public static void setOnPlayerScoresClickListener(OnPlayerScoresClickListener listener) {
+        playerScoresClickListener = listener;
+    }
+
     private ToolbarFunctionalities() {}
 
     public static void setUpToolbar(Context context){
@@ -24,6 +33,13 @@ public class ToolbarFunctionalities {
         financesAndStocks.setOnClickListener((View v) -> {
             Intent switchToFinancesAndStocks=new Intent(activity, FinancesAndStocks.class);
             context.startActivity(switchToFinancesAndStocks);
+        });
+
+        Button playerScores = toolbar.findViewById(R.id.Board_PlayerScores);
+        playerScores.setOnClickListener(v -> {
+            if (playerScoresClickListener != null) {
+                playerScoresClickListener.onPlayerScoresClicked();
+            }
         });
 
         Button logout=activity.findViewById(R.id.Board_LogoutButton);

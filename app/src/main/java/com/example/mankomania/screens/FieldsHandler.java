@@ -21,7 +21,7 @@ public class FieldsHandler implements Serializable {
 
 
     public int movePlayer(Player player, int diceNr) {
-        int currentId=player.getCurrentField().getId();;
+        int currentId=player.getCurrentField().getId();
 
         //links oben Startposition
         if (currentId == 49) {
