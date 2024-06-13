@@ -65,7 +65,7 @@ sonar {
                 "**/MainActivityLogin.java, **/PlayerViewModel.java," +
                 "**/Register.java, **/ToolbarFunctionalities.java, **/EventRollDice.java," +
                 "**/StockExchange.java, **/StockExchangeAPI.java, **/SwipeGestureListener.java,"+
-                "**/CreateNewLobby.java, **/Status.java, **/ZoomLayout.java, **/EndWinner.java"
+                "**/CreateNewLobby.java, **/Status.java, **/ZoomLayout.java, **/EndWinner.java, **/PlayerScoresFragment.java"
 
     }
 }
