@@ -26,7 +26,11 @@ import java.util.UUID;
 
 public class PlayerScoresFragment extends Fragment implements SessionAPI.GetStatusByLobbyCallback {
 
-    private TextView scoreLila, scoreGreen, scoreBlue, scoreRed, currentPlayer;
+    private TextView scoreLila;
+    private TextView scoreGreen;
+    private TextView scoreBlue;
+    private TextView scoreRed;
+    private TextView currentPlayer;
 
     @Nullable
     @Override
