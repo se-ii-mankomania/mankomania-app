@@ -248,6 +248,7 @@ public class LobbyAPI {
         String password = jsonLobby.getString("password");
         boolean isPrivate = jsonLobby.getBoolean("isprivate");
         int maxPlayers = jsonLobby.getInt("maxplayers");
+        String stockTrend= jsonLobby.getString("stocktrend");
         Status status;
         try {
             status = Status.valueOf(jsonLobby.getString("status").toUpperCase());
@@ -255,7 +256,7 @@ public class LobbyAPI {
             throw new IllegalArgumentException("Ungültiger Status!", e);
         }
 
-        Lobby lobby = new Lobby(id, name, password, isPrivate, maxPlayers, status);
+        Lobby lobby = new Lobby(id, name, password, isPrivate, maxPlayers, status,stockTrend);
         list.add(lobby);
     }
 
