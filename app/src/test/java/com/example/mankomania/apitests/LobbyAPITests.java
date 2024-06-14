@@ -111,9 +111,10 @@ class LobbyAPITests {
         boolean isPrivate = false;
         int maxPlayers = 4;
         Status status = Status.OPEN;
+        String stocktrend="basc";
 
         // call method
-        JSONObject jsonLobby = LobbyAPI.createJSONLobby(name, password, isPrivate, maxPlayers, status);
+        JSONObject jsonLobby = LobbyAPI.createJSONLobby(name, password, isPrivate, maxPlayers, status,stocktrend);
 
         // verify
         assertNotNull(jsonLobby);
@@ -132,9 +133,10 @@ class LobbyAPITests {
         boolean isPrivate = true;
         int maxPlayers = 2;
         Status status = Status.OPEN;
+        String stockTrend="basc";
 
         // call method
-        JSONObject jsonLobby = LobbyAPI.createJSONLobby(name, password, isPrivate, maxPlayers, status);
+        JSONObject jsonLobby = LobbyAPI.createJSONLobby(name, password, isPrivate, maxPlayers, status, stockTrend);
 
         // verify
         assertNotNull(jsonLobby);
