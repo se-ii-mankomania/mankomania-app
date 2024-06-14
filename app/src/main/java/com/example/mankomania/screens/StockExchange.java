@@ -29,7 +29,7 @@ import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class StockExchange extends AppCompatActivity implements StockExchangeAPI.GetStockChangesCallback,SwipeGestureListener.OnSwipeListener,SessionAPI.GetStatusByLobbyCallback {
+public class StockExchange extends AppCompatActivity implements StockExchangeAPI.GetStockChangesCallback,StockExchangeAPI.GetStockTrendCallback,StockExchangeAPI.SetStockTrendCallback,SwipeGestureListener.OnSwipeListener,SessionAPI.GetStatusByLobbyCallback {
 
     private String token;
     private UUID lobbyid;
@@ -46,7 +46,7 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        blockBackButton();
+        //blockBackButton();
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_stock_exchange);
 
@@ -68,7 +68,7 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
         gestureDetector = new GestureDetector(this, new SwipeGestureListener(this));
 
         //den BackButton blockieren, damit Würfeln nicht abgebrochen werden kann
-        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+        /*OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 if (backButtonblocked) {
@@ -79,7 +79,7 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
                 }
             }
         };
-        getOnBackPressedDispatcher().addCallback(this, callback);
+        getOnBackPressedDispatcher().addCallback(this, callback);*/
     }
 
     private void startRepeatingStockTrendUpdates() {handler.postDelayed(runnable, DELAY_MILLIS_STOCK_TREND_UPDATE);}
@@ -93,7 +93,7 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            //TODO API-CALL
+            StockExchangeAPI.getStockTrendByLobbyID(token,lobbyid,StockExchange.this);
             handler.postDelayed(this, DELAY_MILLIS_STOCK_TREND_UPDATE);
         }
     };
@@ -126,16 +126,8 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
 
     @Override
     public void onGetStockChangesSuccess(String stockChanges) {
-        stockChanges=stockChanges.trim();
-        int imageViewId=getDrawableId(stockChanges);
-        if(imageViewId!=-1) {
-            runOnUiThread(() -> {
-                stockExchangeImageView.setImageResource(imageViewId);
-                navigateBackToBoard();
-            });
-        }else{
-            runOnUiThread(() ->Toast.makeText(StockExchange.this, "Fehler:///", Toast.LENGTH_SHORT).show());
-        }
+        updateView(stockChanges);
+        StockExchangeAPI.setStockTrend(token,lobbyid,stockChanges,this);
     }
 
     @Override
@@ -195,5 +187,37 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
     @Override
     public void onGetStatusByLobbyFailure(String errorMessage) {
         isPlayersTurn=false;
+    }
+
+    private void updateView(String stockChanges){
+        stockChanges=stockChanges.trim();
+        int imageViewId=getDrawableId(stockChanges);
+        if(imageViewId!=-1) {
+            runOnUiThread(() -> {
+                stockExchangeImageView.setImageResource(imageViewId);
+            });
+        }else{
+            runOnUiThread(() ->Toast.makeText(StockExchange.this, "Fehler:", Toast.LENGTH_SHORT).show());
+        }
+    }
+
+    @Override
+    public void onSetStockTrendSuccess(String successMessage) {
+        runOnUiThread(() ->Toast.makeText(StockExchange.this, "Der Aktienkurs hat sich geändert", Toast.LENGTH_SHORT).show());
+    }
+
+    @Override
+    public void onSetStockTrendFailure(String errorMessage) {
+        runOnUiThread(() ->Toast.makeText(StockExchange.this, "Fehler:"+errorMessage, Toast.LENGTH_SHORT).show());
+    }
+
+    @Override
+    public void onGetStockTrendSuccess(String stocktrend) {
+        updateView(stocktrend);
+    }
+
+    @Override
+    public void onGetStockTrendFailure(String errorMessage) {
+        runOnUiThread(() ->Toast.makeText(StockExchange.this, "Fehler:"+errorMessage, Toast.LENGTH_SHORT).show());
     }
 }
