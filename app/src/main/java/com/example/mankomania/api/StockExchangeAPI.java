@@ -41,7 +41,18 @@ public class StockExchangeAPI {
         void onSetStockTrendFailure(String errorMessage);
     }
 
-    public static void getStockChangesByLobbyID(String token, UUID lobbyid, final StockExchangeAPI.GetStockChangesCallback callback) {
+    public interface StartStockExchangeCallback {
+        void onStartStockExchangeSuccess(String successMessage);
+
+        void onStartStockExchangeFailure(String errorMessage);
+    }
+    public interface StopStockExchangeCallback {
+        void onStopStockExchangeSuccess(String successMessage);
+
+        void onStopStockExchangeFailure(String errorMessage);
+    }
+
+    public static void getStockChangesByLobbyID(String token, UUID lobbyid, final GetStockChangesCallback callback) {
         // create request
         Request request = createGetRequest(token, "/api/stockexchange/getStockChanges/" + lobbyid.toString());
 
@@ -49,13 +60,30 @@ public class StockExchangeAPI {
         executeRequest(HttpClient.getHttpClient(), request, callback);
     }
 
-    public static void getStockTrendByLobbyID(String token, UUID lobbyid, final StockExchangeAPI.GetStockTrendCallback callback) {
+    public static void getStockTrendByLobbyID(String token, UUID lobbyid, final GetStockTrendCallback callback) {
         // create request
         Request request = createGetRequest(token, "/api/stockexchange/getStockTrendByLobbyID/" + lobbyid.toString());
 
         // execute request
         executeRequest(HttpClient.getHttpClient(), request, callback);
     }
+
+    public static void startStockExchange(String token, UUID lobbyid, final StartStockExchangeCallback callback) {
+        // create request
+        Request request = createGetRequest(token, "/api/stockexchange/startStockExchange/" + lobbyid.toString());
+
+        // execute request
+        executeRequest(HttpClient.getHttpClient(), request, callback);
+    }
+    public static void stopStockExchange(String token, UUID lobbyid, final StopStockExchangeCallback callback) {
+        // create request
+        Request request = createGetRequest(token, "/api/stockexchange/stopStockExchange/" + lobbyid.toString());
+
+        // execute request
+        executeRequest(HttpClient.getHttpClient(), request, callback);
+    }
+
+
 
     public static Request createGetRequest(String token, String path) {
         return new Request.Builder()
@@ -64,7 +92,7 @@ public class StockExchangeAPI {
                 .build();
     }
 
-    public static void executeRequest(OkHttpClient okHttpClient, Request request, final StockExchangeAPI.GetStockChangesCallback callback) {
+    public static void executeRequest(OkHttpClient okHttpClient, Request request, final GetStockChangesCallback callback) {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -90,7 +118,7 @@ public class StockExchangeAPI {
             }
         });
     }
-    public static void executeRequest(OkHttpClient okHttpClient, Request request, final StockExchangeAPI.GetStockTrendCallback callback) {
+    public static void executeRequest(OkHttpClient okHttpClient, Request request, final GetStockTrendCallback callback) {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -117,6 +145,57 @@ public class StockExchangeAPI {
         });
     }
 
+    public static void executeRequest(OkHttpClient okHttpClient, Request request, final StartStockExchangeCallback callback) {
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                callback.onStartStockExchangeFailure("Keine Antwort!");
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseBody = response.body() != null ? response.body().string() : null;
+                    try {
+                        JSONObject jsonResponse = new JSONObject(responseBody);
+
+                        String message = jsonResponse.getString(JSON_RESPONSE_MESSAGE_KEY);
+                        callback.onStartStockExchangeSuccess(message);
+                    } catch (JSONException e) {
+                        callback.onStartStockExchangeFailure(RESPONSE_FAILURE_MESSAGE + e.getMessage());
+                    }
+                } else {
+                    callback.onStartStockExchangeFailure(response.message());
+                }
+            }
+        });
+    }
+    public static void executeRequest(OkHttpClient okHttpClient, Request request, final StopStockExchangeCallback callback) {
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                callback.onStopStockExchangeFailure("Keine Antwort!");
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseBody = response.body() != null ? response.body().string() : null;
+                    try {
+                        JSONObject jsonResponse = new JSONObject(responseBody);
+
+                        String message = jsonResponse.getString(JSON_RESPONSE_MESSAGE_KEY);
+                        callback.onStopStockExchangeSuccess(message);
+                    } catch (JSONException e) {
+                        callback.onStopStockExchangeSuccess(RESPONSE_FAILURE_MESSAGE + e.getMessage());
+                    }
+                } else {
+                    callback.onStopStockExchangeFailure(response.message());
+                }
+            }
+        });
+    }
+
     @NonNull
     public static String getStockTrend(String responseBodyString) throws JSONException {
         JSONObject stocktrend=new JSONObject(responseBodyString);
@@ -129,7 +208,7 @@ public class StockExchangeAPI {
         return stockchange.getString("stockChange");
     }
 
-    public static void setStockTrend(String token, UUID lobbyid, String stockTrend, final StockExchangeAPI.SetStockTrendCallback callback) {
+    public static void setStockTrend(String token, UUID lobbyid, String stockTrend, final SetStockTrendCallback callback) {
         // create JSONObject that holds color
         JSONObject jsonRequest = createJSONObject(stockTrend);
 
@@ -160,7 +239,7 @@ public class StockExchangeAPI {
                 .build();
     }
 
-    public static void executeSetStockTrendRequest(OkHttpClient okHttpClient, Request request, StockExchangeAPI.SetStockTrendCallback callback) {
+    public static void executeSetStockTrendRequest(OkHttpClient okHttpClient, Request request, SetStockTrendCallback callback) {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {

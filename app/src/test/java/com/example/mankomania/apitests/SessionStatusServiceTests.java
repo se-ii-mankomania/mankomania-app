@@ -98,7 +98,7 @@ class SessionStatusServiceTests {
         service.removeObserver(positionObserver);
         service.removeObserver(balanceObserver);
         service.removeObserver(playersTurnObserver);
-        service.unregisterObserver(balanceBelowThresholdObserver);
+        service.removeObserver(balanceBelowThresholdObserver);
 
         assertFalse(service.getPositionObservers().contains(positionObserver));
         assertFalse(service.getBalanceObservers().contains(balanceObserver));

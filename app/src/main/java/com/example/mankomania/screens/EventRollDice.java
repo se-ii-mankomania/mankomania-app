@@ -26,6 +26,7 @@ import androidx.security.crypto.MasterKey;
 import com.example.mankomania.R;
 import com.example.mankomania.api.PlayerSession;
 import com.example.mankomania.api.SessionAPI;
+import com.example.mankomania.api.StockExchangeAPI;
 import com.example.mankomania.gameboardfields.GameboardField;
 import com.example.mankomania.logik.spieler.Dice;
 import com.example.mankomania.logik.spieler.Player;
@@ -37,11 +38,14 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
-public class EventRollDice extends AppCompatActivity implements SensorEventListener{
+public class EventRollDice extends AppCompatActivity implements SensorEventListener,StockExchangeAPI.StartStockExchangeCallback{
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private boolean backPressedBlocked;
+
+    private String token;
+    private String lobbyId;
 
     private static final int SENSIBILITY_BORDER_FOR_SENSOR =10;
     private static final int DELAY_MILLIS_BACK_TO_BOARD=2000;
@@ -170,8 +174,8 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
 
     private void updateUserPosition(SharedPreferences sharedPreferences, int [] randomNumber, FieldsHandler fieldshandler){
         String userId = sharedPreferences.getString("userId", null);
-        String token = sharedPreferences.getString("token", null);
-        String lobbyId = sharedPreferences.getString("lobbyid", null);
+        token = sharedPreferences.getString("token", null);
+        lobbyId = sharedPreferences.getString("lobbyid", null);
 
         SessionAPI.getStatusByLobby(token, UUID.fromString(lobbyId), new SessionAPI.GetStatusByLobbyCallback() {
 
@@ -194,6 +198,8 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
                     toastFieldDescription(player,0);
                 }
 
+                checkIfRedirectingIsNecessary(player.getCurrentField());
+
                 SessionAPI.updatePlayerPosition(token, userId, player.getCurrentField().getId(), lobbyId, new SessionAPI.UpdatePositionCallback() {
                     @Override
                     public void onUpdateSuccess(String message) {
@@ -211,6 +217,20 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
                 Toast.makeText(getApplicationContext(), "could not get lobbyStatus", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void checkIfRedirectingIsNecessary(GameboardField field) {
+        switch (field.getId()){
+            case 46:
+                //TODO add Start-Call for Pferderennen
+                break;
+            case 47:
+                StockExchangeAPI.startStockExchange(token, UUID.fromString(lobbyId),this);
+                break;
+            case 48:
+                //TODO add Start-Call for Casino
+                break;
+        }
     }
 
     private void toastFieldDescription(Player player, int delayMillis){
@@ -263,5 +283,13 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
             default:
                 return R.drawable.dice;
         }
+    }
+
+    @Override
+    public void onStartStockExchangeSuccess(String successMessage) {}
+
+    @Override
+    public void onStartStockExchangeFailure(String errorMessage) {
+        runOnUiThread(() ->Toast.makeText(EventRollDice.this, "Fehler:"+errorMessage, Toast.LENGTH_SHORT).show());
     }
 }
