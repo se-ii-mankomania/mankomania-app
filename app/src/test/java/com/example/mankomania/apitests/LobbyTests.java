@@ -25,7 +25,8 @@ class LobbyTests {
                 "Password: " + password + "\n" +
                 "Private: " + isPrivate + "\n" +
                 "Max. Players: " + maxPlayers + "\n" +
-                "Status: " + status;
+                "Status: " + status+"\n"+
+                "Stock Trend: basc";
 
         assertEquals(expectedToString, lobby.toString());
     }
