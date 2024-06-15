@@ -184,7 +184,6 @@ public class SessionAPI {
             int balance = jsonSession.getInt("balance");
             boolean isPlayersTurn = jsonSession.getBoolean("isplayersturn");
             int minigame=jsonSession.getInt("minigame");
-            // test int minigame = 47;
 
             if (color != null) {
                 PlayerSession playerSession = new PlayerSession(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);

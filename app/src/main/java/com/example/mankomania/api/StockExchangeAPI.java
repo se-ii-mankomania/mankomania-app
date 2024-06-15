@@ -190,7 +190,7 @@ public class StockExchangeAPI {
                         String message = jsonResponse.getString(JSON_RESPONSE_MESSAGE_KEY);
                         callback.onStopStockExchangeSuccess(message);
                     } catch (JSONException e) {
-                        callback.onStopStockExchangeSuccess(RESPONSE_FAILURE_MESSAGE + e.getMessage());
+                        callback.onStopStockExchangeFailure(RESPONSE_FAILURE_MESSAGE + e.getMessage());
                     }
                 } else {
                     callback.onStopStockExchangeFailure(response.message());

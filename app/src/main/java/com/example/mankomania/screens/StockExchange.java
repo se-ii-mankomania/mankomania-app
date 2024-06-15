@@ -141,9 +141,9 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
 
     @Override
     public void onGetStockChangesSuccess(String stockChanges) {
-        updateView(stockChanges);
         StockExchangeAPI.setStockTrend(token,lobbyid,stockChanges,this);
         StockExchangeAPI.stopStockExchange(token,lobbyid,this);
+        updateView(stockChanges);
     }
 
     @Override

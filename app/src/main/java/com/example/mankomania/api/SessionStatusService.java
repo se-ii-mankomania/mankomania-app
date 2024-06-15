@@ -51,7 +51,6 @@ public class SessionStatusService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        formerMiniGameID=0;
         try {
             MasterKey masterKey = new MasterKey.Builder(this)
                     .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -89,6 +88,7 @@ public class SessionStatusService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         startRepeatingTask();
+        formerMiniGameID=0;
         return START_STICKY;
     }
 
