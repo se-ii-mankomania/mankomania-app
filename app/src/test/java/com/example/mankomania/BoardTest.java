@@ -69,8 +69,8 @@ import org.junit.jupiter.api.Test;
         Player playerblue = new Player("BLUE", Color.BLUE);
         playerblue.setCurrentField(fieldsHandler.getField(40));
 
-        fieldsHandler.movePlayer(playerblue, 5);
-        assertEquals(fieldsHandler.getField(1).getId(), playerblue.getCurrentField().getId());
+        fieldsHandler.movePlayer(playerblue, 6);
+        assertEquals(fieldsHandler.getField(2).getId(), playerblue.getCurrentField().getId());
     }
 
     @Test
@@ -89,28 +89,28 @@ import org.junit.jupiter.api.Test;
         fieldsHandler.movePlayer(playerred, 5);
         fieldsHandler.movePlayer(playerpurple, 5);
 
-        assertEquals(fieldsHandler.getField(1).getId(), playerblue.getCurrentField().getId());
-        assertEquals(fieldsHandler.getField(18).getId(), playergreen.getCurrentField().getId());
+        assertEquals(fieldsHandler.getField(45).getId(), playerblue.getCurrentField().getId());
+        assertEquals(fieldsHandler.getField(47).getId(), playergreen.getCurrentField().getId());
         assertEquals(fieldsHandler.getField(23).getId(), playerred.getCurrentField().getId());
         assertEquals(fieldsHandler.getField(40).getId(), playerpurple.getCurrentField().getId());
     }
     @Test
      void caseStartLeftBottomMoveBy12(){
         Player playerpurple = new Player("PURPLE",Color.LILA);
-        playerpurple.setCurrentField(fieldsHandler.getField(51));
+        playerpurple.setCurrentField(fieldsHandler.getField(3));
 
         fieldsHandler.movePlayer(playerpurple, 12);
 
-        assertEquals(fieldsHandler.getField(0).getId(), playerpurple.getCurrentField().getId());
+        assertEquals(fieldsHandler.getField(15).getId(), playerpurple.getCurrentField().getId());
     }
     @Test
      void caseStartAtCasinoMoveByMoreThan8(){
         Player playerpurple = new Player("PURPLE",Color.LILA);
         playerpurple.setCurrentField(fieldsHandler.getField(47));
 
-        fieldsHandler.movePlayer(playerpurple, 9);
+        fieldsHandler.movePlayer(playerpurple, 11);
 
-        assertEquals(fieldsHandler.getField(0).getId(), playerpurple.getCurrentField().getId());
+        assertEquals(fieldsHandler.getField(2).getId(), playerpurple.getCurrentField().getId());
     }
 
     @Test

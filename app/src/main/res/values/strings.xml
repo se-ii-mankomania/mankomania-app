@@ -104,6 +104,13 @@
     <string name="dice">dice</string>
     <string name="gewonnen_hat">Gewonnen hat:</string>
     <string name="StockExchange_Header">Aktienbörse</string>
-    <string name="StockExchange_Explanation">Swipe nach oben, um den Aktienkurs in Schwung zu bringen!</string>
+    <string name="StockExchange_Explanation">Swipe nach oben, um den Aktienkurs in Schwung zu bringen, wenn du drann bist!</string>
     <string name="StockExchange_ShakeButton">verändere den Aktienkurs</string>
+    <string name="playerScores">Spielerstände</string>
+    <string name="lila">lila:</string>
+    <string name="green">grün:</string>
+    <string name="blau">blau:</string>
+    <string name="rot">rot:</string>
+    <string name="derzeit_and_der_reihe">derzeit and der Reihe:</string>
+    <string name="noch_niemand">noch niemand</string>
 </resources>

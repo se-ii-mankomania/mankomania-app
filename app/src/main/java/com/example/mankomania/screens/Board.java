@@ -30,12 +30,10 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.UUID;
 
-public class Board extends AppCompatActivity {
-
+public class Board extends AppCompatActivity{
     FieldsHandler fieldsHandler = new FieldsHandler();
 
     Cellposition[][] cellPositions = new Cellposition[14][14];
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +59,6 @@ public class Board extends AppCompatActivity {
         UUID userId = initSharedPreferences();
 
         registerObservers(userId, rollDice);
-
-
     }
 
     private Button setupViews(){
@@ -102,7 +98,6 @@ public class Board extends AppCompatActivity {
     private void setupToolbar(){
         ToolbarFunctionalities.setUpToolbar(this);
     }
-
     private void setupBackButton(){
         //Wenn der Back-Button betätigt wird, wird der Polling-Service für den Status gestoppt
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {

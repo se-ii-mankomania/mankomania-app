@@ -187,19 +187,17 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
                 Player player = new Player("", Objects.requireNonNull(userPlayerSession).getColor());
                 GameboardField field = Objects.requireNonNull(fieldshandler).getField(userPlayerSession.getCurrentPosition()-1);
                 player.setCurrentField(field);
-                fieldshandler.movePlayer(player, randomNumber[0] + randomNumber[1]);
+
+                int goToFieldId=fieldshandler.movePlayer(player, randomNumber[0] + randomNumber[1]);
+
+                if(goToFieldId!=-1){
+                    toastFieldDescription(player,0);
+                }
 
                 SessionAPI.updatePlayerPosition(token, userId, player.getCurrentField().getId(), lobbyId, new SessionAPI.UpdatePositionCallback() {
                     @Override
                     public void onUpdateSuccess(String message) {
-                        runOnUiThread(() -> {
-                            int resource = getResId("field_" + player.getCurrentField().getId()+ "_description", R.string.class);
-                            if(resource == -1) {
-                                Toast.makeText(getApplicationContext(), "Field description could not be found", Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(getApplicationContext(), getString(resource), Toast.LENGTH_LONG).show();
-                            }
-                        });
+                        toastFieldDescription(player,1000);
                     }
 
                     @Override
@@ -213,6 +211,17 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
                 Toast.makeText(getApplicationContext(), "could not get lobbyStatus", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void toastFieldDescription(Player player, int delayMillis){
+        new Handler(Looper.getMainLooper()).postDelayed(() -> runOnUiThread(() -> {
+            int resource = getResId("field_" + player.getCurrentField().getId() + "_description", R.string.class);
+            if (resource == -1) {
+                Toast.makeText(getApplicationContext(), "Field description could not be found", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), getString(resource), Toast.LENGTH_LONG).show();
+            }
+        }), delayMillis);
     }
 
     private void navigateBackToBoard(){

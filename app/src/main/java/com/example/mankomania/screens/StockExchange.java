@@ -20,22 +20,28 @@ import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
 import com.example.mankomania.R;
+import com.example.mankomania.api.PlayerSession;
+import com.example.mankomania.api.SessionAPI;
 import com.example.mankomania.api.StockExchangeAPI;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.HashMap;
 import java.util.UUID;
 
-public class StockExchange extends AppCompatActivity implements StockExchangeAPI.GetStockChangesCallback,SwipeGestureListener.OnSwipeListener {
+public class StockExchange extends AppCompatActivity implements StockExchangeAPI.GetStockChangesCallback,SwipeGestureListener.OnSwipeListener,SessionAPI.GetStatusByLobbyCallback {
 
     private String token;
     private UUID lobbyid;
 
+    private Handler handler;
     private ImageView stockExchangeImageView;
 
     private boolean backButtonblocked;
+    private boolean isPlayersTurn;
     private GestureDetector gestureDetector;
     private static final int DELAY_MILLIS_BACK_TO_BOARD=2500;
+    private static final int DELAY_MILLIS_STOCK_TREND_UPDATE=1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,12 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
         blockBackButton();
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_stock_exchange);
+
+        isPlayersTurn=false;
+
+        handler = new Handler(Looper.getMainLooper());
+        startRepeatingStockTrendUpdates();
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -69,6 +81,22 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
     }
+
+    private void startRepeatingStockTrendUpdates() {handler.postDelayed(runnable, DELAY_MILLIS_STOCK_TREND_UPDATE);}
+    private void stopRepeatingStockTrendUpdates() {handler.removeCallbacks(runnable);}
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopRepeatingStockTrendUpdates();
+    }
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            //TODO API-CALL
+            handler.postDelayed(this, DELAY_MILLIS_STOCK_TREND_UPDATE);
+        }
+    };
 
     private void unblockBackButton() {
         this.backButtonblocked =false;
@@ -147,6 +175,25 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
 
     @Override
     public void onSwipeUp() {
-        StockExchangeAPI.getStockChangesByLobbyID(token,lobbyid,this);
+        if(isPlayersTurn()) {
+            StockExchangeAPI.getStockChangesByLobbyID(token, lobbyid, this);
+        }else{
+            runOnUiThread(()-> Toast.makeText(getApplicationContext(),"Du bist nicht an der Reihe!",Toast.LENGTH_SHORT).show());
+        }
+    }
+
+    private boolean isPlayersTurn() {
+        SessionAPI.getStatusByLobby(token,lobbyid,this);
+        return isPlayersTurn;
+    }
+
+    @Override
+    public void onGetStatusByLobbySuccess(HashMap<UUID, PlayerSession> sessions) {
+        isPlayersTurn=true;
+    }
+
+    @Override
+    public void onGetStatusByLobbyFailure(String errorMessage) {
+        isPlayersTurn=false;
     }
 }
