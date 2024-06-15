@@ -183,7 +183,7 @@ public class SessionAPI {
             int currentPosition = jsonSession.getInt("currentposition");
             int balance = jsonSession.getInt("balance");
             boolean isPlayersTurn = jsonSession.getBoolean("isplayersturn");
-            int minigame=Integer.parseInt(jsonSession.getString("minigame"));
+            int minigame=jsonSession.getInt("minigame");
             // test int minigame = 47;
 
             if (color != null) {
