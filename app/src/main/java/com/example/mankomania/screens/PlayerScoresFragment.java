@@ -81,7 +81,7 @@ public class PlayerScoresFragment extends Fragment implements SessionAPI.GetStat
                 setBalanceViewForColor(color, balance);
 
                 if (session.getIsPlayersTurn()) {
-                    currentPlayer.setText(String.format("%s%s", getString(R.string.derzeit_and_der_reihe), colorString));
+                    currentPlayer.setText(colorString);
                 }
             }
         });
