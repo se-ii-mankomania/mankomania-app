@@ -40,6 +40,7 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
     private boolean isPlayersTurn;
     private GestureDetector gestureDetector;
     private static final int DELAY_MILLIS_STOCK_TREND_UPDATE=1000;
+    private static final String ERROR_MESSAGE_INTRODUCTORY_STATEMENT="Fehler:";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +148,7 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
 
     @Override
     public void onGetStockChangesFailure(String errorMessage) {
-        runOnUiThread(() ->Toast.makeText(StockExchange.this, "Fehler:"+errorMessage, Toast.LENGTH_SHORT).show());
+        runOnUiThread(() ->Toast.makeText(StockExchange.this, ERROR_MESSAGE_INTRODUCTORY_STATEMENT+errorMessage, Toast.LENGTH_SHORT).show());
     }
 
     private void initSharedPreferences() {
@@ -189,7 +190,7 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
         if(imageViewId!=-1) {
             runOnUiThread(() -> stockExchangeImageView.setImageResource(imageViewId));
         }else{
-            runOnUiThread(() ->Toast.makeText(StockExchange.this, "Fehler:", Toast.LENGTH_SHORT).show());
+            runOnUiThread(() ->Toast.makeText(StockExchange.this, ERROR_MESSAGE_INTRODUCTORY_STATEMENT, Toast.LENGTH_SHORT).show());
         }
     }
 
@@ -200,7 +201,7 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
 
     @Override
     public void onSetStockTrendFailure(String errorMessage) {
-        runOnUiThread(() ->Toast.makeText(StockExchange.this, "Fehler:"+errorMessage, Toast.LENGTH_SHORT).show());
+        runOnUiThread(() ->Toast.makeText(StockExchange.this, ERROR_MESSAGE_INTRODUCTORY_STATEMENT+errorMessage, Toast.LENGTH_SHORT).show());
     }
 
     @Override
@@ -210,14 +211,16 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
 
     @Override
     public void onGetStockTrendFailure(String errorMessage) {
-        runOnUiThread(() ->Toast.makeText(StockExchange.this, "Fehler:"+errorMessage, Toast.LENGTH_SHORT).show());
+        runOnUiThread(() ->Toast.makeText(StockExchange.this, ERROR_MESSAGE_INTRODUCTORY_STATEMENT+errorMessage, Toast.LENGTH_SHORT).show());
     }
 
     @Override
-    public void onStopStockExchangeSuccess(String successMessage) {}
+    public void onStopStockExchangeSuccess(String successMessage) {
+        //toasting this information would be again ruining the user experience
+    }
 
     @Override
     public void onStopStockExchangeFailure(String errorMessage) {
-        runOnUiThread(() ->Toast.makeText(StockExchange.this, "Fehler:"+errorMessage, Toast.LENGTH_SHORT).show());
+        runOnUiThread(() ->Toast.makeText(StockExchange.this, ERROR_MESSAGE_INTRODUCTORY_STATEMENT+errorMessage, Toast.LENGTH_SHORT).show());
     }
 }

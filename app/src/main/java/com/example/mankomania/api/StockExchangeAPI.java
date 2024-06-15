@@ -1,5 +1,7 @@
 package com.example.mankomania.api;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import org.json.JSONException;
@@ -24,6 +26,7 @@ public class StockExchangeAPI {
     private static final String RESPONSE_FAILURE_MESSAGE = "Fehler beim Lesen der Response: ";
     private static final String HEADER_AUTHORIZATION_KEY = "Authorization";
     private static final String JSON_RESPONSE_MESSAGE_KEY = "message";
+    private static final String NO_RESPONE="Keine Antwort!";
 
     public interface GetStockChangesCallback {
         void onGetStockChangesSuccess(String stockChanges);
@@ -96,7 +99,7 @@ public class StockExchangeAPI {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onGetStockChangesFailure("Keine Antwort!");
+                callback.onGetStockChangesFailure(NO_RESPONE);
             }
 
             @Override
@@ -122,7 +125,7 @@ public class StockExchangeAPI {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onGetStockTrendFailure("Keine Antwort!");
+                callback.onGetStockTrendFailure(NO_RESPONE);
             }
 
             @Override
@@ -149,7 +152,7 @@ public class StockExchangeAPI {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onStartStockExchangeFailure("Keine Antwort!");
+                callback.onStartStockExchangeFailure(NO_RESPONE);
             }
 
             @Override
@@ -174,7 +177,7 @@ public class StockExchangeAPI {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onStopStockExchangeFailure("Keine Antwort!");
+                callback.onStopStockExchangeFailure(NO_RESPONE);
             }
 
             @Override
@@ -218,13 +221,13 @@ public class StockExchangeAPI {
         // execute request
         executeSetStockTrendRequest(HttpClient.getHttpClient(), request, callback);
     }
-    public static JSONObject createJSONObject(String stocktrend) {
+    public static JSONObject createJSONObject(String stocktrend){
         JSONObject jsonRequest = new JSONObject();
         try {
             jsonRequest.put("stocktrend", stocktrend);
 
         } catch (JSONException ignored) {
-
+            Log.e("Json","JsonRequest failed.");
         }
 
         return jsonRequest;
@@ -243,7 +246,7 @@ public class StockExchangeAPI {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onSetStockTrendFailure("Keine Antwort!");
+                callback.onSetStockTrendFailure(NO_RESPONE);
             }
 
             @Override

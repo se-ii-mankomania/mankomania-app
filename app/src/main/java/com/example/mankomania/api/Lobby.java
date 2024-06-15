@@ -11,7 +11,7 @@ public class Lobby {
     private boolean isPrivate;
     private int maxPlayers;
     private Status status;
-    private String stockTrend;
+    private final String stockTrend;
 
     public Lobby(UUID id, String name, String password, boolean isPrivate, int maxPlayers, Status status, String stockTrend) {
         this.id = id;
@@ -33,6 +33,7 @@ public class Lobby {
         string += "\nPrivate: " + this.isPrivate;
         string += "\nMax. Players: " + this.maxPlayers;
         string += "\nStatus: " + this.status;
+        string+= "\nStock Trend: "+this.stockTrend;
 
         return string;
     }

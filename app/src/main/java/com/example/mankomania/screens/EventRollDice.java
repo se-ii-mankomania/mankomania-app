@@ -230,6 +230,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
             case 48:
                 //TODO add Start-Call for Casino
                 break;
+            default:
         }
     }
 
@@ -286,7 +287,9 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
     }
 
     @Override
-    public void onStartStockExchangeSuccess(String successMessage) {}
+    public void onStartStockExchangeSuccess(String successMessage) {
+        //toast of this information would rather interfere with the user experience
+    }
 
     @Override
     public void onStartStockExchangeFailure(String errorMessage) {

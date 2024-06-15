@@ -171,7 +171,7 @@ public class Board extends AppCompatActivity{
         sessionStatusService.removeObserver((color, newTurn, userid) -> {
             //Könnte Ausgabe enthalten, ist aber nicht nötig
         });
-        sessionStatusService.removeObserver((session)->{});
+        sessionStatusService.removeObserver(session->{});
         sessionStatusService.removeObserver((SessionStatusService.BalanceBelowThresholdObserver)(userIdWinner, colorWinner)->{});
         sessionStatusService.removeObserver((SessionStatusService.ToStockExchangeObserver)()->{});
 
