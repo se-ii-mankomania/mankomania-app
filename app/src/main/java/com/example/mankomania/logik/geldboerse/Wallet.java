@@ -39,11 +39,11 @@ public class Wallet {
         }
         int total = totalAmount();
 
-        if (total <= amount){
+        if (total < amount){
             throw new IllegalArgumentException("Der zu entfernende Betrag übersteigt das verfügabre Guthaben");
         }
         removeAmount(amount);
-        if(totalAmount() == 0){
+        if(totalAmount() <= 0){
             isEmpty = true;
         }
   }
@@ -66,7 +66,7 @@ public class Wallet {
             }
         }
         if(amount > 0){
-            changeNotes(amount)
+            changeNotes(amount);
         }
     }
 
