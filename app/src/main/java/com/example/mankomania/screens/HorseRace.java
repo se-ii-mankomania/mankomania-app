@@ -1,29 +1,35 @@
 package com.example.mankomania.screens;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
 
 import com.example.mankomania.R;
+import com.example.mankomania.api.HorseRaceAPI;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.TreeMap;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.UUID;
 
 public class HorseRace extends AppCompatActivity {
     private ImageView horse1, horse2, horse3, horse4;
     private Button startRace;
     private TextView resultTextView;
+    private String token;
+    private UUID lobbyid;
+    private String userId;
 
     private Button chooseHorse1, chooseHorse2, chooseHorse3, chooseHorse4;
 
@@ -33,6 +39,8 @@ public class HorseRace extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_horserace);
+
+        initSharedPreferences();
 
         horse1 = findViewById(R.id.horse1);
         horse2 = findViewById(R.id.horse2);
@@ -54,8 +62,19 @@ public class HorseRace extends AppCompatActivity {
                 chooseHorse.setVisibility(View.INVISIBLE);
                 chooseBetAmount.setVisibility(View.INVISIBLE);
                 chooseBetAmountText.setVisibility(View.INVISIBLE);
-                startRace(new int[]{2, 3, 1, 4});
 
+
+                HorseRaceAPI.startHorseRace(token, lobbyid, userId, 33000, 1, new HorseRaceAPI.GetHorseRaceResultsCallback() {
+                    @Override
+                    public void onGetHorseRaceResultsSuccess(int[] horsePlaces) {
+                        startRace(horsePlaces);
+                    }
+
+                    @Override
+                    public void onGetHorseRaceResultsFailure(String errorMessage) {
+                        Toast.makeText(HorseRace.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }
@@ -92,5 +111,28 @@ public class HorseRace extends AppCompatActivity {
         animation.setDuration(duration);
         animation.setFillAfter(true);
         horse.startAnimation(animation);
+    }
+
+    private void initSharedPreferences() {
+        try {
+            MasterKey masterKey = new MasterKey.Builder(this)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
+
+            SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
+                    this,
+                    "MyPrefs",
+                    masterKey,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+
+            token = sharedPreferences.getString("token", null);
+            String lobbyidString = sharedPreferences.getString("lobbyid", null);
+            lobbyid= UUID.fromString(lobbyidString);
+            userId = sharedPreferences.getString("userId", null);
+        } catch (GeneralSecurityException | IOException ignored) {
+            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+        }
     }
 }
