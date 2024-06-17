@@ -25,13 +25,17 @@ import java.util.UUID;
 
 public class HorseRace extends AppCompatActivity {
     private ImageView horse1, horse2, horse3, horse4;
-    private Button startRace;
+    private Button startRaceButton;
     private TextView resultTextView;
     private String token;
     private UUID lobbyid;
     private String userId;
 
     private Button chooseHorse1, chooseHorse2, chooseHorse3, chooseHorse4;
+    private int selectedHorse;
+    private int selectedBetId ;
+    private int selectedHorseId;
+    private int selectedBetAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,23 +52,54 @@ public class HorseRace extends AppCompatActivity {
         horse4 = findViewById(R.id.horse4);
 
 
-        startRace = findViewById(R.id.startRaceButton);
+        startRaceButton = findViewById(R.id.startRaceButton);
         resultTextView = findViewById(R.id.textView);
 
         RadioGroup chooseHorse = findViewById(R.id.horseRadioGroup);
         RadioGroup chooseBetAmount = findViewById(R.id.betRadioGroup);
         TextView chooseBetAmountText = findViewById(R.id.betAmount);
 
-        startRace.setOnClickListener(new View.OnClickListener() {
+        startRaceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 resultTextView.setVisibility(View.INVISIBLE);
+                selectedHorseId  = chooseHorse.getCheckedRadioButtonId();
+                if (selectedHorseId == -1) {
+                    Toast.makeText(HorseRace.this, "Bitte wähle ein Pferd aus.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                selectedHorse = -1;
+                if (selectedHorseId  == R.id.horse1Radio) {
+                    selectedHorse = 1;
+                } else if (selectedHorseId  == R.id.horse2Radio) {
+                    selectedHorse = 2;
+                } else if (selectedHorseId  == R.id.horse3Radio) {
+                    selectedHorse = 3;
+                } else if (selectedHorseId  == R.id.horse4Radio) {
+                    selectedHorse = 4;
+                }
+                selectedBetId  = chooseBetAmount.getCheckedRadioButtonId();
+                if (selectedBetId == -1) {
+                    Toast.makeText(HorseRace.this, "Bitte wähle deinen Geldeinsatz aus.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                selectedBetAmount = -1;
+
+                if (selectedBetId  == R.id.bet5000Radio) {
+                    selectedBetAmount = 5000;
+                } else if (selectedBetId  == R.id.bet10000Radio) {
+                    selectedBetAmount = 10000;
+                } else if (selectedBetId  == R.id.bet20000Radio) {
+                    selectedBetAmount = 20000;
+                }
+
                 chooseHorse.setVisibility(View.INVISIBLE);
                 chooseBetAmount.setVisibility(View.INVISIBLE);
                 chooseBetAmountText.setVisibility(View.INVISIBLE);
+                startRaceButton.setVisibility(View.INVISIBLE);
 
-
-                HorseRaceAPI.startHorseRace(token, lobbyid, userId, 33000, 1, new HorseRaceAPI.GetHorseRaceResultsCallback() {
+                HorseRaceAPI.startHorseRace(token, lobbyid, userId, selectedBetAmount, selectedHorse, new HorseRaceAPI.GetHorseRaceResultsCallback() {
                     @Override
                     public void onGetHorseRaceResultsSuccess(int[] horsePlaces) {
                         startRace(horsePlaces);
@@ -85,11 +120,26 @@ public class HorseRace extends AppCompatActivity {
             durations[horsePlaces[i]-1] = (i + 1) * 1000;
         }
 
-        StringBuilder resultBuilder = new StringBuilder();
-
+        // Ermittlung des Platzes des ausgewählten Pferdes
+        String horseMessage = "Dein Pferd hat den";
+        int platz = -1;
         for (int i = 0; i < horsePlaces.length; i++) {
-            resultBuilder.append(i+1).append(". Platz: ").append(horsePlaces[i]).append("\n");
+            if (horsePlaces[i] == selectedHorse) {
+                platz = i + 1;
+                break;
+            }
         }
+        if (platz != -1) {
+            horseMessage += " " + platz + ". Platz belegt!";
+        } else {
+            horseMessage = "Dein Pferd hat das Rennen nicht beendet.";
+        }
+        StringBuilder resultBuilder = new StringBuilder();
+        resultBuilder.append(horseMessage).append("\n");
+        for (int i = 0; i < horsePlaces.length; i++) {
+            resultBuilder.append(i+1).append(". Platz: Pferd ").append(horsePlaces[i]).append("\n");
+        }
+
 
         animateHorse(horse1, durations[0]);
         animateHorse(horse2, durations[1]);
