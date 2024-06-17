@@ -24,7 +24,7 @@ import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
 import com.example.mankomania.R;
-import com.example.mankomania.api.Session;
+import com.example.mankomania.api.PlayerSession;
 import com.example.mankomania.api.SessionAPI;
 import com.example.mankomania.gameboardfields.GameboardField;
 import com.example.mankomania.logik.spieler.Dice;
@@ -44,6 +44,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
     private boolean backPressedBlocked;
 
     private static final int SENSIBILITY_BORDER_FOR_SENSOR =10;
+    private static final int DELAY_MILLIS_BACK_TO_BOARD=2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,30 +176,28 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
         SessionAPI.getStatusByLobby(token, UUID.fromString(lobbyId), new SessionAPI.GetStatusByLobbyCallback() {
 
             @Override
-            public void onGetStatusByLobbySuccess(HashMap<UUID, Session> sessions) {
-                Session userSession = null;
-                for(Session session: sessions.values()){
-                    if(session.getUserId().equals(UUID.fromString(userId))){
-                        userSession = session;
+            public void onGetStatusByLobbySuccess(HashMap<UUID, PlayerSession> sessions) {
+                PlayerSession userPlayerSession = null;
+                for(PlayerSession playerSession : sessions.values()){
+                    if(playerSession.getUserId().equals(UUID.fromString(userId))){
+                        userPlayerSession = playerSession;
                         break;
                     }
                 }
-                Player player = new Player("", Objects.requireNonNull(userSession).getColor());
-                GameboardField field = Objects.requireNonNull(fieldshandler).getField(userSession.getCurrentPosition()-1);
+                Player player = new Player("", Objects.requireNonNull(userPlayerSession).getColor());
+                GameboardField field = Objects.requireNonNull(fieldshandler).getField(userPlayerSession.getCurrentPosition()-1);
                 player.setCurrentField(field);
-                fieldshandler.movePlayer(player, randomNumber[0] + randomNumber[1]);
+
+                int goToFieldId=fieldshandler.movePlayer(player, randomNumber[0] + randomNumber[1]);
+
+                if(goToFieldId!=-1){
+                    toastFieldDescription(player,0);
+                }
 
                 SessionAPI.updatePlayerPosition(token, userId, player.getCurrentField().getId(), lobbyId, new SessionAPI.UpdatePositionCallback() {
                     @Override
                     public void onUpdateSuccess(String message) {
-                        runOnUiThread(() -> {
-                            int resource = getResId("field_" + player.getCurrentField().getId()+ "_description", R.string.class);
-                            if(resource == -1) {
-                                Toast.makeText(getApplicationContext(), "Field description could not be found", Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(getApplicationContext(), getString(resource), Toast.LENGTH_LONG).show();
-                            }
-                        });
+                        toastFieldDescription(player,1000);
                     }
 
                     @Override
@@ -214,13 +213,24 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
         });
     }
 
+    private void toastFieldDescription(Player player, int delayMillis){
+        new Handler(Looper.getMainLooper()).postDelayed(() -> runOnUiThread(() -> {
+            int resource = getResId("field_" + player.getCurrentField().getId() + "_description", R.string.class);
+            if (resource == -1) {
+                Toast.makeText(getApplicationContext(), "Field description could not be found", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), getString(resource), Toast.LENGTH_LONG).show();
+            }
+        }), delayMillis);
+    }
+
     private void navigateBackToBoard(){
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent backToBoard = new Intent(EventRollDice.this, Board.class);
             startActivity(backToBoard);
             //BackButton kann wieder freigegeben werden
             unblockBackButton();
-        }, 2000);
+        }, DELAY_MILLIS_BACK_TO_BOARD);
     }
 
     public static int getResId(String resName, Class<?> c) {

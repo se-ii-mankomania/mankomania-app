@@ -20,7 +20,7 @@ import androidx.security.crypto.MasterKey;
 import com.example.mankomania.R;
 
 import com.example.mankomania.api.SessionStatusService;
-import com.example.mankomania.api.Session;
+import com.example.mankomania.api.PlayerSession;
 import com.example.mankomania.gameboardfields.GameboardField;
 
 import android.animation.ObjectAnimator;
@@ -30,12 +30,10 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.UUID;
 
-public class Board extends AppCompatActivity {
-
+public class Board extends AppCompatActivity{
     FieldsHandler fieldsHandler = new FieldsHandler();
 
     Cellposition[][] cellPositions = new Cellposition[14][14];
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +59,6 @@ public class Board extends AppCompatActivity {
         UUID userId = initSharedPreferences();
 
         registerObservers(userId, rollDice);
-
-
     }
 
     private Button setupViews(){
@@ -102,7 +98,6 @@ public class Board extends AppCompatActivity {
     private void setupToolbar(){
         ToolbarFunctionalities.setUpToolbar(this);
     }
-
     private void setupBackButton(){
         //Wenn der Back-Button betätigt wird, wird der Polling-Service für den Status gestoppt
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
@@ -145,10 +140,10 @@ public class Board extends AppCompatActivity {
     private void registerObservers(UUID userId, Button rollDice){
         SessionStatusService sessionStatusService = SessionStatusService.getInstance();
 
-        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> runOnUiThread(() -> {
-            rollDice.setEnabled(newTurn && userid.equals(userId));
+        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> runOnUiThread(() ->
+            rollDice.setEnabled(newTurn && userid.equals(userId))
 
-        }));
+        ));
 
         sessionStatusService.registerObserver((SessionStatusService.PositionObserver) session -> runOnUiThread(() ->
                 updatePlayerPosition(session)
@@ -218,9 +213,9 @@ public class Board extends AppCompatActivity {
         animatorY.start();
     }
 
-    private void updatePlayerPosition(Session session) {
+    private void updatePlayerPosition(PlayerSession playerSession) {
         int viewId = 0;
-        switch (session.getColor()) {
+        switch (playerSession.getColor()) {
             case BLUE:
                 viewId = R.id.player_blue;
                 break;
@@ -230,13 +225,13 @@ public class Board extends AppCompatActivity {
             case GREEN:
                 viewId = R.id.player_green;
                 break;
-            case PURPLE:
+            case LILA:
                 viewId = R.id.player_purple;
                 break;
         }
         if (viewId != 0) {
             ImageView playerView = findViewById(viewId);
-            GameboardField gameboardField = fieldsHandler.getField(session.getCurrentPosition() - 1);
+            GameboardField gameboardField = fieldsHandler.getField(playerSession.getCurrentPosition() - 1);
             if(playerView.getVisibility() == View.VISIBLE) {
                 animateMove(playerView, playerView.getX(), playerView.getY(),
                         gameboardField.getX(), gameboardField.getY());

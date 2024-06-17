@@ -1,54 +1,34 @@
 package com.example.mankomania.apitests;
 
 import android.app.Service;
-import android.content.SharedPreferences;
 import android.os.Handler;
 
-import androidx.security.crypto.EncryptedSharedPreferences;
-import androidx.security.crypto.MasterKey;
-
-import com.example.mankomania.api.Session;
+import com.example.mankomania.api.PlayerSession;
 import com.example.mankomania.api.SessionStatusService;
 import com.example.mankomania.logik.spieler.Color;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class SessionStatusServiceTests {
     @InjectMocks
     private SessionStatusService service;
 
-    @Mock
-    private SharedPreferences sharedPreferences;
-
-
-    @BeforeEach
-    public void setUp() throws GeneralSecurityException, IOException {
-        MockitoAnnotations.initMocks(this);
-
-        sharedPreferences = mock(EncryptedSharedPreferences.class);
-        when(sharedPreferences.getString("token", null)).thenReturn("dummyToken");
-        when(sharedPreferences.getString("lobbyid", null)).thenReturn("dummy-lobby-id");
-    }
-
     @Test
     void testConvertEnumToStringColor() {
-        SessionStatusService sessionStatusService=new SessionStatusService();
+        SessionStatusService sessionStatusService=SessionStatusService.getInstance();
         assertEquals("blau", sessionStatusService.convertEnumToStringColor(Color.BLUE));
         assertEquals("rot", sessionStatusService.convertEnumToStringColor(Color.RED));
-        assertEquals("lila", sessionStatusService.convertEnumToStringColor(Color.PURPLE));
+        assertEquals("lila", sessionStatusService.convertEnumToStringColor(Color.LILA));
         assertEquals("grün", sessionStatusService.convertEnumToStringColor(Color.GREEN));
     }
 
@@ -56,9 +36,7 @@ class SessionStatusServiceTests {
     void testOnStartCommand() {
         Handler handlerMock=mock(Handler.class);
 
-        when(handlerMock.postDelayed(any(Runnable.class), eq(5000L))).thenReturn(true);
-
-        SessionStatusService sessionStatusService = new SessionStatusService();
+        SessionStatusService sessionStatusService = SessionStatusService.getInstance();
         sessionStatusService.setHandler(handlerMock);
 
         int expectedResult = Service.START_STICKY;
@@ -75,21 +53,20 @@ class SessionStatusServiceTests {
 
     @Test
     void testNotifyUpdatesInSession() {
-        Session session = mock(Session.class);
+        PlayerSession playerSession = mock(PlayerSession.class);
         UUID userId = UUID.randomUUID();
 
-        when(session.getIsPlayersTurn()).thenReturn(true);
-        when(session.getBalance()).thenReturn(0);
-        when(session.getColor()).thenReturn(Color.BLUE);
+        when(playerSession.getIsPlayersTurn()).thenReturn(true);
+        when(playerSession.getBalance()).thenReturn(0);
+        when(playerSession.getColor()).thenReturn(Color.BLUE);
 
-        service.notifyUpdatesInSession(session, userId);
+        service.notifyUpdatesInSession(playerSession, userId);
 
         service.notifyTurnChanged("blau", true, userId);
         service.notifyBalanceBelowThreshold(userId, "blau");
     }
-
     @Test
-    void testRegisterAndRemoveObservers() {
+    void testRegisterObservers() {
         SessionStatusService.PositionObserver positionObserver = mock(SessionStatusService.PositionObserver.class);
         SessionStatusService.BalanceObserver balanceObserver = mock(SessionStatusService.BalanceObserver.class);
         SessionStatusService.PlayersTurnObserver playersTurnObserver = mock(SessionStatusService.PlayersTurnObserver.class);
@@ -104,6 +81,19 @@ class SessionStatusServiceTests {
         assertTrue(service.getBalanceObservers().contains(balanceObserver));
         assertTrue(service.getPlayersTurnObservers().contains(playersTurnObserver));
         assertTrue(service.getBalanceBelowThresholdObservers().contains(balanceBelowThresholdObserver));
+    }
+
+    @Test
+    void testRemoveObservers() {
+        SessionStatusService.PositionObserver positionObserver = mock(SessionStatusService.PositionObserver.class);
+        SessionStatusService.BalanceObserver balanceObserver = mock(SessionStatusService.BalanceObserver.class);
+        SessionStatusService.PlayersTurnObserver playersTurnObserver = mock(SessionStatusService.PlayersTurnObserver.class);
+        SessionStatusService.BalanceBelowThresholdObserver balanceBelowThresholdObserver = mock(SessionStatusService.BalanceBelowThresholdObserver.class);
+
+        service.registerObserver(positionObserver);
+        service.registerObserver(balanceObserver);
+        service.registerObserver(playersTurnObserver);
+        service.registerObserver(balanceBelowThresholdObserver);
 
         service.removeObserver(positionObserver);
         service.removeObserver(balanceObserver);
@@ -123,7 +113,7 @@ class SessionStatusServiceTests {
         int newBalance = 100;
         String color = "blau";
         boolean newTurn = true;
-        Session session=new Session(userId,"email",Color.BLUE,newPosition,newBalance,0,0,0,newTurn);
+        PlayerSession playerSession =new PlayerSession(userId,"email",Color.BLUE,newPosition,newBalance,0,0,0,newTurn);
 
         SessionStatusService.PositionObserver positionObserver = mock(SessionStatusService.PositionObserver.class);
         SessionStatusService.BalanceObserver balanceObserver = mock(SessionStatusService.BalanceObserver.class);
@@ -135,8 +125,8 @@ class SessionStatusServiceTests {
         service.registerObserver(playersTurnObserver);
         service.registerObserver(balanceBelowThresholdObserver);
 
-        service.notifyPositionChanged(session);
-        verify(positionObserver, times(1)).onPositionChanged(session);
+        service.notifyPositionChanged(playerSession);
+        verify(positionObserver, times(1)).onPositionChanged(playerSession);
 
         service.notifyBalanceChanged(userId, newBalance);
         verify(balanceObserver, times(1)).onBalanceChanged(userId, newBalance);

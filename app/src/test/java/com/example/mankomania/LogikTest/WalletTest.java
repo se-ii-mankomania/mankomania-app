@@ -14,6 +14,14 @@ import org.junit.jupiter.api.Test;
 class WalletTest {
     private Wallet wallet = new Wallet();
 
+    @Test
+    void testStartingCount(){
+        assertEquals(0, wallet.getNoteCount(NoteTypes.FIVETHOUSAND));
+        assertEquals(0, wallet.getNoteCount(NoteTypes.TENTHOUSAND));
+        assertEquals(0, wallet.getNoteCount(NoteTypes.FIFTYTHOUSAND));
+        assertEquals(0, wallet.getNoteCount(NoteTypes.HUNDREDTHOUSAND));
+    }
+
     //Stellt sicher, dass das hinzufügen funktioniert und der Gesamtbetrag aktualisiert wird
     @Test
     void testAddMoneyIncreasesTotalAmount() {
@@ -63,6 +71,29 @@ class WalletTest {
     }
 
     @Test
+    void testRemoveMoreMoneyThanYouHave(){
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> wallet.removeMoney(5000));
+        assertEquals("Der zu entfernende Betrag übersteigt das verfügabre Guthaben", exception.getMessage());
+
+    }
+    @Test
+    void testWithoutChange(){
+        wallet.addMoney(50000);
+        assertEquals(1, wallet.getNoteCount(NoteTypes.FIFTYTHOUSAND));
+        wallet.removeMoney(50000);
+        assertEquals(0, wallet.getNoteCount(NoteTypes.FIFTYTHOUSAND));
+        assertTrue(wallet.isEmpty());
+    }
+
+    @Test
+    void testRemoveMoneyWithChange(){
+        wallet.addMoney(50000);
+        assertEquals(1, wallet.getNoteCount(NoteTypes.FIFTYTHOUSAND));
+        wallet.removeMoney(30000);
+        assertEquals(2, wallet.getNoteCount(NoteTypes.TENTHOUSAND));
+    }
+
+    @Test
     void testRemoveMoneyRemovesNotetypes(){
         wallet.addMoney(30000);
         wallet.removeMoney(20000);
@@ -70,8 +101,30 @@ class WalletTest {
     }
 
     @Test
+    void testWithChange(){
+        wallet.addMoney(50000);
+        assertEquals(1, wallet.getNoteCount(NoteTypes.FIFTYTHOUSAND));
+        wallet.removeMoney(30000);
+        assertEquals(2, wallet.getNoteCount(NoteTypes.TENTHOUSAND));
+    }
+
+    @Test
+    public void testRemoveMoneyUsingSmallerNotes() {
+        wallet.addMoney(20000);
+        wallet.addMoney(45000);
+        assertEquals(6, wallet.getNoteCount(NoteTypes.TENTHOUSAND));
+        assertEquals(1, wallet.getNoteCount(NoteTypes.FIVETHOUSAND));
+        wallet.removeMoney(15000);
+        assertEquals(5, wallet.getNoteCount(NoteTypes.TENTHOUSAND));
+        assertEquals(0, wallet.getNoteCount(NoteTypes.FIVETHOUSAND));
+    }
+
+    @Test
     void testIsEmpty(){
-        wallet.removeMoney(1000000);
+        wallet.addMoney(100000);
+        assertEquals(1, wallet.getNoteCount(NoteTypes.HUNDREDTHOUSAND));
+        wallet.removeMoney(100000);
+        assertEquals(0, wallet.getNoteCount(NoteTypes.HUNDREDTHOUSAND));
         assertTrue(wallet.isEmpty());
     }
 

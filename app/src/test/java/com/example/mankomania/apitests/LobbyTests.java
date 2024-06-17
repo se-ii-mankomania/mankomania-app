@@ -17,7 +17,7 @@ class LobbyTests {
         String password = "password123";
         boolean isPrivate = true;
         int maxPlayers = 4;
-        Status status = Status.open;
+        Status status = Status.OPEN;
         Lobby lobby = new Lobby(id, name, password, isPrivate, maxPlayers, status);
 
         String expectedToString = "ID: " + id.toString() + "\n" +
@@ -37,7 +37,7 @@ class LobbyTests {
         String password = "password";
         boolean isPrivate = true;
         int maxPlayers = 4;
-        Status status = Status.open;
+        Status status = Status.OPEN;
 
         Lobby lobby = new Lobby(id, name, password, isPrivate, maxPlayers, status);
 
@@ -52,14 +52,14 @@ class LobbyTests {
     @Test
     void testSetters() {
         UUID id = UUID.randomUUID();
-        Lobby lobby = new Lobby(id, "Test Lobby", "", false, 2, Status.open);
+        Lobby lobby = new Lobby(id, "Test Lobby", "", false, 2, Status.OPEN);
 
         UUID newId = UUID.randomUUID();
         String newName = "New Lobby";
         String newPassword = "newPassword";
         boolean newIsPrivate = true;
         int newMaxPlayers = 3;
-        Status newStatus = Status.closed;
+        Status newStatus = Status.CLOSED;
 
         lobby.setId(newId);
         lobby.setName(newName);
