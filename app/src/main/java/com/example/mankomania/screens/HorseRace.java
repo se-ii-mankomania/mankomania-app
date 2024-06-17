@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -23,6 +25,8 @@ public class HorseRace extends AppCompatActivity {
     private Button startRace;
     private TextView resultTextView;
 
+    private Button chooseHorse1, chooseHorse2, chooseHorse3, chooseHorse4;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -39,37 +43,33 @@ public class HorseRace extends AppCompatActivity {
         startRace = findViewById(R.id.startRaceButton);
         resultTextView = findViewById(R.id.textView);
 
+        RadioGroup chooseHorse = findViewById(R.id.horseRadioGroup);
+        RadioGroup chooseBetAmount = findViewById(R.id.betRadioGroup);
+        TextView chooseBetAmountText = findViewById(R.id.betAmount);
 
         startRace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 resultTextView.setVisibility(View.INVISIBLE);
-                startRace();
+                chooseHorse.setVisibility(View.INVISIBLE);
+                chooseBetAmount.setVisibility(View.INVISIBLE);
+                chooseBetAmountText.setVisibility(View.INVISIBLE);
+                startRace(new int[]{2, 3, 1, 4});
+
             }
         });
     }
-    private void startRace(){
-        Random random = new Random();
+    private void startRace(int[] horsePlaces){
         int [] durations = new int[4];
-
-        for (int i = 0; i < 4; i++) {
-            durations[i] = random.nextInt(15000) + 2000;
+        //plaetze der pferde auf sekunden mappen
+        for (int i = 0; i < horsePlaces.length; i++) {
+            durations[horsePlaces[i]-1] = (i + 1) * 1000;
         }
 
-        Map<Integer, String> horseDurationMap = new HashMap<>();
-        horseDurationMap.put(durations[0], "Pferd 1");
-        horseDurationMap.put(durations[1], "Pferd 2");
-        horseDurationMap.put(durations[2], "Pferd 3");
-        horseDurationMap.put(durations[3], "Pferd 4");
-
-        //sortieren nach zeit der pferde
-        Map<Integer, String> sortedHorseDurationMap = new TreeMap<>(horseDurationMap);
-
         StringBuilder resultBuilder = new StringBuilder();
-        int place = 1;
-        for (Map.Entry<Integer, String> entry : sortedHorseDurationMap.entrySet()) {
-            resultBuilder.append(place).append(". Platz: ").append(entry.getValue()).append("\n");
-            place++;
+
+        for (int i = 0; i < horsePlaces.length; i++) {
+            resultBuilder.append(i+1).append(". Platz: ").append(horsePlaces[i]).append("\n");
         }
 
         animateHorse(horse1, durations[0]);
