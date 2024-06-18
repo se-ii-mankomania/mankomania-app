@@ -51,8 +51,6 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
 
         isPlayersTurn=false;
         initSharedPreferences();
-        registerObserver();
-
 
         handler = new Handler(Looper.getMainLooper());
         startRepeatingStockTrendUpdates();
@@ -80,6 +78,8 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
+
+        registerObserver();
     }
 
     private void registerObserver() {
@@ -142,8 +142,8 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
     @Override
     public void onGetStockChangesSuccess(String stockChanges) {
         StockExchangeAPI.setStockTrend(token,lobbyid,stockChanges,this);
-        StockExchangeAPI.stopStockExchange(token,lobbyid,this);
         updateView(stockChanges);
+        new Handler(Looper.getMainLooper()).postDelayed(() -> StockExchangeAPI.stopStockExchange(token, lobbyid, this), 5000);
     }
 
     @Override

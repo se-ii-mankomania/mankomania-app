@@ -22,7 +22,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class SessionStatusService extends Service {
-    private static final long INTERVAL_MS = 5000; // 5 Sekunden
+    private static final long INTERVAL_MS = 3500; // 3.5 Sekunden
     private final Set<PositionObserver> positionObservers = new HashSet<>();
     private final Set<BalanceObserver> balanceObservers = new HashSet<>();
     private final Set<PlayersTurnObserver> playersTurnObservers = new HashSet<>();

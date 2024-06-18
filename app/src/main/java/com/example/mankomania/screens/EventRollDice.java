@@ -49,6 +49,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
 
     private static final int SENSIBILITY_BORDER_FOR_SENSOR =10;
     private static final int DELAY_MILLIS_BACK_TO_BOARD=2000;
+    private Player player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,7 +189,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
                         break;
                     }
                 }
-                Player player = new Player("", Objects.requireNonNull(userPlayerSession).getColor());
+                player = new Player("", Objects.requireNonNull(userPlayerSession).getColor());
                 GameboardField field = Objects.requireNonNull(fieldshandler).getField(userPlayerSession.getCurrentPosition()-1);
                 player.setCurrentField(field);
 
@@ -197,8 +198,6 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
                 if(goToFieldId!=-1){
                     toastFieldDescription(player,0);
                 }
-
-                checkIfRedirectingIsNecessary(player.getCurrentField());
 
                 SessionAPI.updatePlayerPosition(token, userId, player.getCurrentField().getId(), lobbyId, new SessionAPI.UpdatePositionCallback() {
                     @Override
@@ -251,6 +250,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
             startActivity(backToBoard);
             //BackButton kann wieder freigegeben werden
             unblockBackButton();
+            checkIfRedirectingIsNecessary(player.getCurrentField());
         }, DELAY_MILLIS_BACK_TO_BOARD);
     }
 

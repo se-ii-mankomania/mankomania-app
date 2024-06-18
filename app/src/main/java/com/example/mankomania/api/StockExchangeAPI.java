@@ -178,6 +178,7 @@ public class StockExchangeAPI {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 callback.onStopStockExchangeFailure(NO_RESPONE);
+
             }
 
             @Override
