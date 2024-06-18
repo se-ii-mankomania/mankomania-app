@@ -47,7 +47,7 @@ class SessionStatusServiceTests {
         ArgumentCaptor<Runnable> runnableCaptor = ArgumentCaptor.forClass(Runnable.class);
         ArgumentCaptor<Long> delayCaptor = ArgumentCaptor.forClass(Long.class);
         verify(handlerMock, times(1)).postDelayed(runnableCaptor.capture(), delayCaptor.capture());
-        assertEquals(5000L, delayCaptor.getValue());
+        assertEquals(3500L, delayCaptor.getValue());
         assertEquals(sessionStatusService.getRunnable(), runnableCaptor.getValue());
     }
     @Test
