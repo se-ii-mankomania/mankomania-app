@@ -1,7 +1,5 @@
 package com.example.mankomania.api;
 
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 
 import org.json.JSONArray;

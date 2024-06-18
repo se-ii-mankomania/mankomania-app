@@ -1,5 +1,6 @@
 package com.example.mankomania.screens;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -31,7 +32,7 @@ public class HorseRace extends AppCompatActivity {
     private UUID lobbyid;
     private String userId;
 
-    private Button chooseHorse1, chooseHorse2, chooseHorse3, chooseHorse4;
+    private Button returnButton;
     private int selectedHorse;
     private int selectedBetId ;
     private int selectedHorseId;
@@ -51,6 +52,7 @@ public class HorseRace extends AppCompatActivity {
         horse3 = findViewById(R.id.horse3);
         horse4 = findViewById(R.id.horse4);
 
+        returnButton = findViewById(R.id.returnButton);
 
         startRaceButton = findViewById(R.id.startRaceButton);
         resultTextView = findViewById(R.id.textView);
@@ -58,6 +60,16 @@ public class HorseRace extends AppCompatActivity {
         RadioGroup chooseHorse = findViewById(R.id.horseRadioGroup);
         RadioGroup chooseBetAmount = findViewById(R.id.betRadioGroup);
         TextView chooseBetAmountText = findViewById(R.id.betAmount);
+
+        returnButton.setVisibility(View.INVISIBLE);
+
+        returnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent backToBoard = new Intent(HorseRace.this, Board.class);
+                startActivity(backToBoard);
+            }
+        });
 
         startRaceButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,6 +164,7 @@ public class HorseRace extends AppCompatActivity {
             public void run() {
                 resultTextView.setText(resultBuilder.toString());
                 resultTextView.setVisibility(View.VISIBLE);
+                returnButton.setVisibility(View.VISIBLE);
             }
         }, Math.max(durations[0], Math.max(durations[1], Math.max(durations[2], durations[3]))));
     }
