@@ -29,7 +29,6 @@ public class SessionStatusService extends Service {
     private final Set<BalanceBelowThresholdObserver> balanceBelowThresholdObservers = new HashSet<>();
     private final Set<ToBoardObserver> toBoardObservers = new HashSet<>();
     private final Set<ToStockExchangeObserver> toStockExchangeObservers = new HashSet<>();
-    private final Set<ToPferderennenObserver> toPferderennenObservers = new HashSet<>();
     private final Set<ToCasinoObserver> toCasinoObservers = new HashSet<>();
 
     private HandlerThread handlerThread;
@@ -37,13 +36,14 @@ public class SessionStatusService extends Service {
     private Runnable runnable;
     private String token;
     private UUID lobbyId;
-    private int formerMiniGameID;
+    private static int formerMiniGameID;
 
     private static SessionStatusService instance;
 
     public static SessionStatusService getInstance() {
         if (instance == null) {
             instance = new SessionStatusService();
+            formerMiniGameID=0;
         }
         return instance;
     }
@@ -51,6 +51,24 @@ public class SessionStatusService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        sharedPreferencesInit();
+
+        handlerThread = new HandlerThread("SessionStatusServiceThread");
+        handlerThread.start();
+
+        handler = new Handler(handlerThread.getLooper());
+
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                sendStatusRequest();
+                handler.postDelayed(this, INTERVAL_MS);
+            }
+        };
+    }
+
+    public void sharedPreferencesInit(){
         try {
             MasterKey masterKey = new MasterKey.Builder(this)
                     .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -70,25 +88,11 @@ public class SessionStatusService extends Service {
         } catch (GeneralSecurityException | IOException ignored) {
             Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
         }
-
-        handlerThread = new HandlerThread("SessionStatusServiceThread");
-        handlerThread.start();
-
-        handler = new Handler(handlerThread.getLooper());
-
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                sendStatusRequest();
-                handler.postDelayed(this, INTERVAL_MS);
-            }
-        };
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         startRepeatingTask();
-        formerMiniGameID=0;
         return START_STICKY;
     }
 
@@ -162,9 +166,6 @@ public class SessionStatusService extends Service {
                 case 0:
                     notifyToBoard();
                     break;
-                case 46:
-                    notifyToPferderennen();
-                    break;
                 case 47:
                     notifyToStockExchange();
                     break;
@@ -187,9 +188,6 @@ public class SessionStatusService extends Service {
     }
     public interface ToCasinoObserver {
         void onToCasino();
-    }
-    public interface ToPferderennenObserver {
-        void onToPferderennen();
     }
     public interface BalanceBelowThresholdObserver {
         void onBalanceBelowThreshold(UUID userId,String color);
@@ -226,13 +224,6 @@ public class SessionStatusService extends Service {
     public void removeObserver(SessionStatusService.ToCasinoObserver observer) {
         toCasinoObservers.remove(observer);
     }
-    public void registerObserver(SessionStatusService.ToPferderennenObserver observer) {
-        toPferderennenObservers.add(observer);
-    }
-
-    public void removeObserver(SessionStatusService.ToPferderennenObserver observer) {
-        toPferderennenObservers.remove(observer);
-    }
     public void registerObserver(SessionStatusService.PositionObserver observer) {
         positionObservers.add(observer);
     }
@@ -267,11 +258,6 @@ public class SessionStatusService extends Service {
     public void notifyToCasino() {
         for (SessionStatusService.ToCasinoObserver observer : toCasinoObservers) {
             observer.onToCasino();
-        }
-    }
-    public void notifyToPferderennen() {
-        for (SessionStatusService.ToPferderennenObserver observer : toPferderennenObservers) {
-            observer.onToPferderennen();
         }
     }
     public void notifyPositionChanged(PlayerSession playerSession) {

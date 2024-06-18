@@ -166,7 +166,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
             );
 
         } catch (GeneralSecurityException | IOException ignored) {
-            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+            runOnUiThread(() ->Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show());
         }
         return sharedPreferences;
 
@@ -208,13 +208,13 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
 
                     @Override
                     public void onUpdateFailure(String errorMessage) {
-                        Toast.makeText(getApplicationContext(), "Error while updating positions", Toast.LENGTH_SHORT).show();
+                        runOnUiThread(() ->Toast.makeText(getApplicationContext(), "Error while updating positions", Toast.LENGTH_SHORT).show());
                     }
                 });
             }
             @Override
             public void onGetStatusByLobbyFailure(String errorMessage) {
-                Toast.makeText(getApplicationContext(), "could not get lobbyStatus", Toast.LENGTH_SHORT).show();
+                runOnUiThread(() ->Toast.makeText(getApplicationContext(), "could not get lobbyStatus", Toast.LENGTH_SHORT).show());
             }
         });
     }
