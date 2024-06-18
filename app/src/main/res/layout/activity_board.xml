@@ -6,9 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".screens.Board">
+
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:id="@+id/relativeLayout4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.example.mankomania.screens.ZoomLayout
             android:id="@+id/zoom_linear_layout"
@@ -24,35 +30,31 @@
                     android:layout_width="240dp"
                     android:layout_height="240dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/gameboard">
-                </ImageView>
+                    android:src="@drawable/gameboard"></ImageView>
 
                 <ImageView
                     android:id="@+id/player_blue"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:src="@drawable/spielfigurblau">
-                </ImageView>
+                    android:src="@drawable/spielfigurblau"></ImageView>
+
                 <ImageView
                     android:id="@+id/player_green"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:src="@drawable/spielfigurgruen">
-                </ImageView>
+                    android:src="@drawable/spielfigurgruen"></ImageView>
 
                 <ImageView
                     android:id="@+id/player_purple"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:src="@drawable/spielfigurlila">
-                </ImageView>
+                    android:src="@drawable/spielfigurlila"></ImageView>
 
                 <ImageView
                     android:id="@+id/player_red"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:src="@drawable/spielfigurrot">
-                </ImageView>
+                    android:src="@drawable/spielfigurrot"></ImageView>
 
             </FrameLayout>
         </com.example.mankomania.screens.ZoomLayout>
@@ -69,8 +71,6 @@
             android:text="@string/RollDice"
             app:layout_constraintBottom_toTopOf="@id/zoom_linear_layout"
             tools:ignore="RelativeOverlap" />
-        <!--Überlappen wird vorübergehend ignoriert, da der Button später wegkommt-->
-
 
         <TextView
             android:id="@+id/Board_Messages"
@@ -81,5 +81,15 @@
             android:visibility="gone" />
 
     </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="660dp"
+        android:layout_height="378dp"
+        android:layout_below="@id/bottom_navigation"
+        android:layout_marginTop="3dp"
+        app:layout_constraintStart_toStartOf="@+id/relativeLayout4"
+        app:layout_constraintTop_toTopOf="@+id/relativeLayout4" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

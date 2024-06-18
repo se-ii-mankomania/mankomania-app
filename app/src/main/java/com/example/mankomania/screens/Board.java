@@ -30,13 +30,10 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.UUID;
 
-public class Board extends AppCompatActivity {
-
+public class Board extends AppCompatActivity{
     FieldsHandler fieldsHandler = new FieldsHandler();
 
     Cellposition[][] cellPositions = new Cellposition[14][14];
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -61,8 +58,6 @@ public class Board extends AppCompatActivity {
         UUID userId = initSharedPreferences();
 
         registerObservers(userId, rollDice);
-
-
     }
 
     private Button setupViews(){
@@ -102,7 +97,6 @@ public class Board extends AppCompatActivity {
     private void setupToolbar(){
         ToolbarFunctionalities.setUpToolbar(this);
     }
-
     private void setupBackButton(){
         //Wenn der Back-Button betätigt wird, wird der Polling-Service für den Status gestoppt
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
@@ -145,12 +139,12 @@ public class Board extends AppCompatActivity {
     private void registerObservers(UUID userId, Button rollDice){
         SessionStatusService sessionStatusService = SessionStatusService.getInstance();
 
-        sessionStatusService.registerObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> runOnUiThread(() ->
+        sessionStatusService.registerObserver((color, newTurn, userid) -> runOnUiThread(() ->
             rollDice.setEnabled(newTurn && userid.equals(userId))
 
         ));
 
-        sessionStatusService.registerObserver((SessionStatusService.PositionObserver) session -> runOnUiThread(() ->
+        sessionStatusService.registerObserver(session -> runOnUiThread(() ->
                 updatePlayerPosition(session)
         ));
 
@@ -161,16 +155,27 @@ public class Board extends AppCompatActivity {
             startActivity(toEndWinner);
             finish();
         }));
+
+        sessionStatusService.registerObserver((SessionStatusService.ToStockExchangeObserver)()-> runOnUiThread(() -> {
+            Intent toStockExchange=new Intent(Board.this, StockExchange.class);
+            startActivity(toStockExchange);
+        }));
+
+        //TODO register Observers to your MiniGame
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         SessionStatusService sessionStatusService = SessionStatusService.getInstance();
-        sessionStatusService.removeObserver((SessionStatusService.PlayersTurnObserver) (color, newTurn,userid) -> {
+        sessionStatusService.removeObserver((color, newTurn, userid) -> {
             //Könnte Ausgabe enthalten, ist aber nicht nötig
         });
+        sessionStatusService.removeObserver(session->{});
+        sessionStatusService.removeObserver((SessionStatusService.BalanceBelowThresholdObserver)(userIdWinner, colorWinner)->{});
+        sessionStatusService.removeObserver((SessionStatusService.ToStockExchangeObserver)()->{});
 
+        //TODO remove Observer you registered
     }
 
 

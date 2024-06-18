@@ -18,14 +18,15 @@ class LobbyTests {
         boolean isPrivate = true;
         int maxPlayers = 4;
         Status status = Status.OPEN;
-        Lobby lobby = new Lobby(id, name, password, isPrivate, maxPlayers, status);
+        Lobby lobby = new Lobby(id, name, password, isPrivate, maxPlayers, status,"basc");
 
         String expectedToString = "ID: " + id.toString() + "\n" +
                 "Name: " + name + "\n" +
                 "Password: " + password + "\n" +
                 "Private: " + isPrivate + "\n" +
                 "Max. Players: " + maxPlayers + "\n" +
-                "Status: " + status;
+                "Status: " + status+"\n"+
+                "Stock Trend: basc";
 
         assertEquals(expectedToString, lobby.toString());
     }
@@ -39,7 +40,7 @@ class LobbyTests {
         int maxPlayers = 4;
         Status status = Status.OPEN;
 
-        Lobby lobby = new Lobby(id, name, password, isPrivate, maxPlayers, status);
+        Lobby lobby = new Lobby(id, name, password, isPrivate, maxPlayers, status,"basc");
 
         assertEquals(id, lobby.getId());
         assertEquals(name, lobby.getName());
@@ -52,7 +53,7 @@ class LobbyTests {
     @Test
     void testSetters() {
         UUID id = UUID.randomUUID();
-        Lobby lobby = new Lobby(id, "Test Lobby", "", false, 2, Status.OPEN);
+        Lobby lobby = new Lobby(id, "Test Lobby", "", false, 2, Status.OPEN,"basc");
 
         UUID newId = UUID.randomUUID();
         String newName = "New Lobby";

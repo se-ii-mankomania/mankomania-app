@@ -290,44 +290,25 @@
                 android:id="@+id/FinancesStocks_BackToBoard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="6dp"
                 android:text="@string/FinancesStocks_ReturnToBoard" />
 
-            <TextView
-                android:id="@+id/KontostandTxt"
-                android:layout_width="1dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/Kontostand"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/Kontostand"
+            <Button
+                android:id="@+id/FinancesAndStocks_PlayerScores"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/CurrentPlayerQuestion"
-                android:layout_width="7dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/CurrentPlayer"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/CurrentPlayer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="20sp" />
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="6dp"
+                android:text="@string/playerScores"
+                android:enabled="false"/>
 
             <Button
                 android:id="@+id/FinancesStocks_LogoutButton"
-                android:layout_width="0dp"
-                android:layout_height="51dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="5dp"
                 android:text="@string/Logout" />

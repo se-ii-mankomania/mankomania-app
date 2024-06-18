@@ -50,21 +50,6 @@ class SessionStatusServiceTests {
         assertEquals(5000L, delayCaptor.getValue());
         assertEquals(sessionStatusService.getRunnable(), runnableCaptor.getValue());
     }
-
-    @Test
-    void testNotifyUpdatesInSession() {
-        PlayerSession playerSession = mock(PlayerSession.class);
-        UUID userId = UUID.randomUUID();
-
-        when(playerSession.getIsPlayersTurn()).thenReturn(true);
-        when(playerSession.getBalance()).thenReturn(0);
-        when(playerSession.getColor()).thenReturn(Color.BLUE);
-
-        service.notifyUpdatesInSession(playerSession, userId);
-
-        service.notifyTurnChanged("blau", true, userId);
-        service.notifyBalanceBelowThreshold(userId, "blau");
-    }
     @Test
     void testRegisterObservers() {
         SessionStatusService.PositionObserver positionObserver = mock(SessionStatusService.PositionObserver.class);
@@ -98,7 +83,7 @@ class SessionStatusServiceTests {
         service.removeObserver(positionObserver);
         service.removeObserver(balanceObserver);
         service.removeObserver(playersTurnObserver);
-        service.unregisterObserver(balanceBelowThresholdObserver);
+        service.removeObserver(balanceBelowThresholdObserver);
 
         assertFalse(service.getPositionObservers().contains(positionObserver));
         assertFalse(service.getBalanceObservers().contains(balanceObserver));

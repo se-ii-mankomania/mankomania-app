@@ -32,9 +32,9 @@ class LobbyAPITests {
     @Test
     void testGenerateStringArray() {
         List<Lobby> lobbies = new ArrayList<>();
-        lobbies.add(new Lobby(null, "Lobby 1", "password1234", true, 4, Status.OPEN));
-        lobbies.add(new Lobby(null, "Lobby 2", "", false, 2, Status.OPEN));
-        lobbies.add(new Lobby(null, "Lobby 3", "password5678", true, 3, Status.OPEN));
+        lobbies.add(new Lobby(null, "Lobby 1", "password1234", true, 4, Status.OPEN,"basc"));
+        lobbies.add(new Lobby(null, "Lobby 2", "", false, 2, Status.OPEN,"basc"));
+        lobbies.add(new Lobby(null, "Lobby 3", "password5678", true, 3, Status.OPEN,"basc"));
 
         String[] expectedArray = {
                 "P | x/4 | Lobby 1",
@@ -58,6 +58,7 @@ class LobbyAPITests {
         jsonLobby.put("isprivate", true);
         jsonLobby.put("maxplayers", 4);
         jsonLobby.put("status", statusName);
+        jsonLobby.put("stocktrend","basc");
 
         List<Lobby> lobbyList = new ArrayList<>();
 
@@ -94,6 +95,7 @@ class LobbyAPITests {
         jsonLobby.put("isprivate", true);
         jsonLobby.put("maxplayers", 4);
         jsonLobby.put("status", "invalid");
+        jsonLobby.put("stocktrend","basc");
 
         List<Lobby> lobbyList = new ArrayList<>();
 
@@ -109,9 +111,10 @@ class LobbyAPITests {
         boolean isPrivate = false;
         int maxPlayers = 4;
         Status status = Status.OPEN;
+        String stocktrend="basc";
 
         // call method
-        JSONObject jsonLobby = LobbyAPI.createJSONLobby(name, password, isPrivate, maxPlayers, status);
+        JSONObject jsonLobby = LobbyAPI.createJSONLobby(name, password, isPrivate, maxPlayers, status,stocktrend);
 
         // verify
         assertNotNull(jsonLobby);
@@ -130,9 +133,10 @@ class LobbyAPITests {
         boolean isPrivate = true;
         int maxPlayers = 2;
         Status status = Status.OPEN;
+        String stockTrend="basc";
 
         // call method
-        JSONObject jsonLobby = LobbyAPI.createJSONLobby(name, password, isPrivate, maxPlayers, status);
+        JSONObject jsonLobby = LobbyAPI.createJSONLobby(name, password, isPrivate, maxPlayers, status, stockTrend);
 
         // verify
         assertNotNull(jsonLobby);
@@ -258,7 +262,15 @@ class LobbyAPITests {
 
         // mock successful Response
         ResponseBody responseBody = mock(ResponseBody.class);
-        when(responseBody.string()).thenReturn("[{\"id\":\"23d9eea7-50cf-4b97-a3a0-e5158f4ffec0\",\"name\":\"Test Lobby\",\"password\":\"password\",\"isprivate\":true,\"maxplayers\":4,\"status\":\"open\"}]");
+        when(responseBody.string()).thenReturn(
+                "[{\"id\":\"23d9eea7-50cf-4b97-a3a0-e5158f4ffec0\"," +
+                        "\"name\":\"Test Lobby\"," +
+                        "\"password\":\"password\"," +
+                        "\"isprivate\":true," +
+                        "\"maxplayers\":4," +
+                        "\"status\":\"open\"," +
+                        "\"stocktrend\":\"basc\"}]"
+        );
 
         Response response = mock(Response.class);
         when(response.isSuccessful()).thenReturn(true);

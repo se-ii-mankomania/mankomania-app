@@ -72,9 +72,9 @@ public class LobbyAPI {
      * @param status: status of the lobby
      * @param callback: use AddLobbyCallback
      */
-    public static void addLobby(String token, String name, String password, boolean isPrivate, int maxPlayer, Status status, final AddLobbyCallback callback) {
+    public static void addLobby(String token, String name, String password, boolean isPrivate, int maxPlayer, Status status, String stockTrend, final AddLobbyCallback callback) {
         // create JSONObject for Lobby that should be added
-        JSONObject jsonRequest = createJSONLobby(name, password, isPrivate, maxPlayer, status);
+        JSONObject jsonRequest = createJSONLobby(name, password, isPrivate, maxPlayer, status, stockTrend);
 
         // create request
         Request request = createPostRequest(jsonRequest, token, "/api/lobby/create");
@@ -92,7 +92,7 @@ public class LobbyAPI {
      * @param status: status of the lobby
      * @return JSONObject that represents a lobby to be added into the database
      */
-    public static JSONObject createJSONLobby(String name, String password, boolean isPrivate, int maxPlayer, Status status) {
+    public static JSONObject createJSONLobby(String name, String password, boolean isPrivate, int maxPlayer, Status status, String stockTrend) {
         JSONObject jsonLobby = new JSONObject();
         try {
             jsonLobby.put("name", name);
@@ -108,6 +108,7 @@ public class LobbyAPI {
             jsonLobby.put("isPrivate", isPrivate);
             jsonLobby.put("maxPlayers", maxPlayer);
             jsonLobby.put("status", status.toString().toLowerCase());
+            jsonLobby.put("stocktrend",stockTrend);
         } catch (JSONException ignored) {
 
         }
@@ -248,6 +249,7 @@ public class LobbyAPI {
         String password = jsonLobby.getString("password");
         boolean isPrivate = jsonLobby.getBoolean("isprivate");
         int maxPlayers = jsonLobby.getInt("maxplayers");
+        String stockTrend= jsonLobby.getString("stocktrend");
         Status status;
         try {
             status = Status.valueOf(jsonLobby.getString("status").toUpperCase());
@@ -255,7 +257,7 @@ public class LobbyAPI {
             throw new IllegalArgumentException("Ungültiger Status!", e);
         }
 
-        Lobby lobby = new Lobby(id, name, password, isPrivate, maxPlayers, status);
+        Lobby lobby = new Lobby(id, name, password, isPrivate, maxPlayers, status,stockTrend);
         list.add(lobby);
     }
 

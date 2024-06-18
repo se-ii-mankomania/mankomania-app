@@ -6,4 +6,8 @@ public class GoToField extends GameboardField{
         super(x, y, id);
         this.targetField = targetField;
     }
+
+    public GameboardField getTargetField() {
+        return targetField;
+    }
 }

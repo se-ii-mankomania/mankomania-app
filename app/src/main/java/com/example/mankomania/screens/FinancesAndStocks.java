@@ -120,12 +120,12 @@ public class FinancesAndStocks extends AppCompatActivity implements SessionAPI.G
     public void onGetStatusByLobbySuccess(HashMap<UUID, PlayerSession> sessions) {
         for (Map.Entry<UUID, PlayerSession> entry : sessions.entrySet()) {
             if(entry.getKey().equals(userId)){
-                setTextsForTextVies(entry.getValue());
+                setTextsForTextViews(entry.getValue());
             }
         }
     }
 
-    private void setTextsForTextVies(PlayerSession playerSession) {
+    private void setTextsForTextViews(PlayerSession playerSession) {
         int currentBalance= playerSession.getBalance();
         balance.setText(String.valueOf(currentBalance));
 

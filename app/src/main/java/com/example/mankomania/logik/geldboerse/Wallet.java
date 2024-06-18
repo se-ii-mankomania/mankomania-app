@@ -39,19 +39,21 @@ public class Wallet {
         }
         int total = totalAmount();
 
-        if (total <= amount){
-            isEmpty = true;
+        if (total < amount){
+            throw new IllegalArgumentException("Der zu entfernende Betrag übersteigt das verfügabre Guthaben");
         }
         removeAmount(amount);
+        if(totalAmount() <= 0){
+            isEmpty = true;
+        }
   }
 
   private void removeAmount(int amount){
         NoteTypes[] noteValues = NoteTypes.values();
-        Arrays.sort(noteValues, (a, b) -> Integer.compare(b.getValue(), a.getValue()));
+        Arrays.sort(noteValues, (a, b) -> Integer.compare(b.getValue(), a.getValue())); //Scheine absteigen nach ihrem Wert sortieren
 
         for(NoteTypes note : noteValues){
             if(amount <= 0) break;
-
             int noteValue = note.getValue();
             int noteCount = notes.getOrDefault(note, 0);
 
@@ -61,6 +63,25 @@ public class Wallet {
 
                 notes.put(note, noteCount - maxAmountToUse);
                 amount -= valueToRemove;
+            }
+        }
+        if(amount > 0){
+            changeNotes(amount);
+        }
+    }
+
+    private void changeNotes(int amount){
+        NoteTypes[] noteValues = NoteTypes.values();
+        Arrays.sort(noteValues, (a,b) -> Integer.compare(b.getValue(),a.getValue())); //Scheine absteigend nach ihrem Wert sortieren
+
+        for (int i = noteValues.length - 1; i >= 0; i--){
+            NoteTypes currentNote = noteValues[i];
+            int currentValue = currentNote.getValue();
+            int currentCount = notes.getOrDefault(currentNote, 0);
+            if(currentValue > amount && currentCount > 0){
+                notes.put(currentNote, currentCount - 1);
+                addMoney(currentValue - amount);
+                return;
             }
         }
     }
