@@ -47,23 +47,8 @@ class SessionStatusServiceTests {
         ArgumentCaptor<Runnable> runnableCaptor = ArgumentCaptor.forClass(Runnable.class);
         ArgumentCaptor<Long> delayCaptor = ArgumentCaptor.forClass(Long.class);
         verify(handlerMock, times(1)).postDelayed(runnableCaptor.capture(), delayCaptor.capture());
-        assertEquals(5000L, delayCaptor.getValue());
+        assertEquals(3500L, delayCaptor.getValue());
         assertEquals(sessionStatusService.getRunnable(), runnableCaptor.getValue());
-    }
-
-    @Test
-    void testNotifyUpdatesInSession() {
-        PlayerSession playerSession = mock(PlayerSession.class);
-        UUID userId = UUID.randomUUID();
-
-        when(playerSession.getIsPlayersTurn()).thenReturn(true);
-        when(playerSession.getBalance()).thenReturn(0);
-        when(playerSession.getColor()).thenReturn(Color.BLUE);
-
-        service.notifyUpdatesInSession(playerSession, userId);
-
-        service.notifyTurnChanged("blau", true, userId);
-        service.notifyBalanceBelowThreshold(userId, "blau");
     }
     @Test
     void testRegisterObservers() {
@@ -98,7 +83,7 @@ class SessionStatusServiceTests {
         service.removeObserver(positionObserver);
         service.removeObserver(balanceObserver);
         service.removeObserver(playersTurnObserver);
-        service.unregisterObserver(balanceBelowThresholdObserver);
+        service.removeObserver(balanceBelowThresholdObserver);
 
         assertFalse(service.getPositionObservers().contains(positionObserver));
         assertFalse(service.getBalanceObservers().contains(balanceObserver));

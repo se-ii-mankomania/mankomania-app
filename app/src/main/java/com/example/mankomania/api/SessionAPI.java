@@ -178,17 +178,19 @@ public class SessionAPI {
             JSONObject jsonSession = responseArray.getJSONObject(i);
             UUID userid = UUID.fromString(jsonSession.getString("userid"));
             String email = jsonSession.getString("email");
-            String colorString=jsonSession.getString("color");
+            String colorString = jsonSession.getString("color");
             Color color = convertToEnums(colorString);
             int currentPosition = jsonSession.getInt("currentposition");
             int balance = jsonSession.getInt("balance");
             boolean isPlayersTurn = jsonSession.getBoolean("isplayersturn");
+            int minigame=jsonSession.getInt("minigame");
 
-            if(color!=null) {
+            if (color != null) {
                 PlayerSession playerSession = new PlayerSession(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
                 sessions.put(userid, playerSession);
                 SessionStatusService sessionStatusService = SessionStatusService.getInstance();
                 sessionStatusService.notifyUpdatesInSession(playerSession, userid);
+                sessionStatusService.notifyUpdatesForMiniGames(minigame);
             }
         }
         return sessions;

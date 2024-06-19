@@ -11,14 +11,16 @@ public class Lobby {
     private boolean isPrivate;
     private int maxPlayers;
     private Status status;
+    private final String stockTrend;
 
-    public Lobby(UUID id, String name, String password, boolean isPrivate, int maxPlayers, Status status) {
+    public Lobby(UUID id, String name, String password, boolean isPrivate, int maxPlayers, Status status, String stockTrend) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.isPrivate = isPrivate;
         this.maxPlayers = maxPlayers;
         this.status = status;
+        this.stockTrend=stockTrend;
     }
 
     @NonNull
@@ -31,6 +33,7 @@ public class Lobby {
         string += "\nPrivate: " + this.isPrivate;
         string += "\nMax. Players: " + this.maxPlayers;
         string += "\nStatus: " + this.status;
+        string+= "\nStock Trend: "+this.stockTrend;
 
         return string;
     }
