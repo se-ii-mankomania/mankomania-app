@@ -18,12 +18,12 @@ class HttpClientTests {
 
     @Test
     void testGetServer() {
-        assertEquals("http://10.0.2.2", HttpClient.getServer());
+        assertEquals("http://se2-demo.aau.at", HttpClient.getServer());
     }
 
     @Test
     void testGetPort() {
-        assertEquals(3000, HttpClient.getPort());
+        assertEquals(53214, HttpClient.getPort());
     }
 
     @Test
