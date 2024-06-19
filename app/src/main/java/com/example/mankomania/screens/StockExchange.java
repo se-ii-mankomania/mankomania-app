@@ -20,19 +20,18 @@ import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
 import com.example.mankomania.R;
-import com.example.mankomania.api.PlayerSession;
-import com.example.mankomania.api.SessionAPI;
+import com.example.mankomania.api.SessionStatusService;
 import com.example.mankomania.api.StockExchangeAPI;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.HashMap;
 import java.util.UUID;
 
-public class StockExchange extends AppCompatActivity implements StockExchangeAPI.GetStockChangesCallback,SwipeGestureListener.OnSwipeListener,SessionAPI.GetStatusByLobbyCallback {
+public class StockExchange extends AppCompatActivity implements StockExchangeAPI.GetStockChangesCallback,StockExchangeAPI.GetStockTrendCallback,StockExchangeAPI.SetStockTrendCallback,StockExchangeAPI.StopStockExchangeCallback,SwipeGestureListener.OnSwipeListener {
 
     private String token;
     private UUID lobbyid;
+    private UUID userId;
 
     private Handler handler;
     private ImageView stockExchangeImageView;
@@ -40,8 +39,8 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
     private boolean backButtonblocked;
     private boolean isPlayersTurn;
     private GestureDetector gestureDetector;
-    private static final int DELAY_MILLIS_BACK_TO_BOARD=2500;
     private static final int DELAY_MILLIS_STOCK_TREND_UPDATE=1000;
+    private static final String ERROR_MESSAGE_INTRODUCTORY_STATEMENT="Fehler:";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +50,7 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
         setContentView(R.layout.activity_stock_exchange);
 
         isPlayersTurn=false;
+        initSharedPreferences();
 
         handler = new Handler(Looper.getMainLooper());
         startRepeatingStockTrendUpdates();
@@ -60,8 +60,6 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        initSharedPreferences();
 
         stockExchangeImageView=findViewById(R.id.StockExchange_ImageView);
 
@@ -80,6 +78,22 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
+
+        registerObserver();
+    }
+
+    private void registerObserver() {
+        SessionStatusService sessionStatusService=SessionStatusService.getInstance();
+
+        sessionStatusService.registerObserver((SessionStatusService.ToBoardObserver)()-> runOnUiThread(() -> {
+            Intent toBoard=new Intent(StockExchange.this, Board.class);
+            startActivity(toBoard);
+        }));
+
+        sessionStatusService.registerObserver((color, newTurn, userid) -> runOnUiThread(() ->
+                isPlayersTurn=newTurn && userid.equals(userId)
+
+        ));
     }
 
     private void startRepeatingStockTrendUpdates() {handler.postDelayed(runnable, DELAY_MILLIS_STOCK_TREND_UPDATE);}
@@ -89,18 +103,19 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
     protected void onDestroy() {
         super.onDestroy();
         stopRepeatingStockTrendUpdates();
+
+        SessionStatusService sessionStatusService=SessionStatusService.getInstance();
+        sessionStatusService.removeObserver((SessionStatusService.ToBoardObserver)()->{});
+        sessionStatusService.removeObserver((color, newTurn, userid) -> {});
     }
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            //TODO API-CALL
+            StockExchangeAPI.getStockTrendByLobbyID(token,lobbyid,StockExchange.this);
             handler.postDelayed(this, DELAY_MILLIS_STOCK_TREND_UPDATE);
         }
     };
-
-    private void unblockBackButton() {
-        this.backButtonblocked =false;
-    }
+    
     private void blockBackButton(){
         this.backButtonblocked =true;
     }
@@ -126,21 +141,14 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
 
     @Override
     public void onGetStockChangesSuccess(String stockChanges) {
-        stockChanges=stockChanges.trim();
-        int imageViewId=getDrawableId(stockChanges);
-        if(imageViewId!=-1) {
-            runOnUiThread(() -> {
-                stockExchangeImageView.setImageResource(imageViewId);
-                navigateBackToBoard();
-            });
-        }else{
-            runOnUiThread(() ->Toast.makeText(StockExchange.this, "Fehler:///", Toast.LENGTH_SHORT).show());
-        }
+        StockExchangeAPI.setStockTrend(token,lobbyid,stockChanges,this);
+        updateView(stockChanges);
+        new Handler(Looper.getMainLooper()).postDelayed(() -> StockExchangeAPI.stopStockExchange(token, lobbyid, this), 5000);
     }
 
     @Override
     public void onGetStockChangesFailure(String errorMessage) {
-        runOnUiThread(() ->Toast.makeText(StockExchange.this, "Fehler:"+errorMessage, Toast.LENGTH_SHORT).show());
+        runOnUiThread(() ->Toast.makeText(StockExchange.this, ERROR_MESSAGE_INTRODUCTORY_STATEMENT+errorMessage, Toast.LENGTH_SHORT).show());
     }
 
     private void initSharedPreferences() {
@@ -160,40 +168,59 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
             token = sharedPreferences.getString("token", null);
             String lobbyidString = sharedPreferences.getString("lobbyid", null);
             lobbyid=UUID.fromString(lobbyidString);
+            String useridString=sharedPreferences.getString("userId",null);
+            userId=UUID.fromString(useridString);
         } catch (GeneralSecurityException | IOException ignored) {
             Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
         }
     }
-    private void navigateBackToBoard(){
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Intent backToBoard = new Intent(StockExchange.this, Board.class);
-            startActivity(backToBoard);
-            //BackButton kann wieder freigegeben werden
-            unblockBackButton();
-        }, DELAY_MILLIS_BACK_TO_BOARD);
-    }
 
     @Override
     public void onSwipeUp() {
-        if(isPlayersTurn()) {
+        if(isPlayersTurn) {
             StockExchangeAPI.getStockChangesByLobbyID(token, lobbyid, this);
         }else{
             runOnUiThread(()-> Toast.makeText(getApplicationContext(),"Du bist nicht an der Reihe!",Toast.LENGTH_SHORT).show());
         }
     }
 
-    private boolean isPlayersTurn() {
-        SessionAPI.getStatusByLobby(token,lobbyid,this);
-        return isPlayersTurn;
+    private void updateView(String stockChanges){
+        stockChanges=stockChanges.trim();
+        int imageViewId=getDrawableId(stockChanges);
+        if(imageViewId!=-1) {
+            runOnUiThread(() -> stockExchangeImageView.setImageResource(imageViewId));
+        }else{
+            runOnUiThread(() ->Toast.makeText(StockExchange.this, ERROR_MESSAGE_INTRODUCTORY_STATEMENT, Toast.LENGTH_SHORT).show());
+        }
     }
 
     @Override
-    public void onGetStatusByLobbySuccess(HashMap<UUID, PlayerSession> sessions) {
-        isPlayersTurn=true;
+    public void onSetStockTrendSuccess(String successMessage) {
+        runOnUiThread(() ->Toast.makeText(StockExchange.this, "Der Aktienkurs hat sich geändert", Toast.LENGTH_SHORT).show());
     }
 
     @Override
-    public void onGetStatusByLobbyFailure(String errorMessage) {
-        isPlayersTurn=false;
+    public void onSetStockTrendFailure(String errorMessage) {
+        runOnUiThread(() ->Toast.makeText(StockExchange.this, ERROR_MESSAGE_INTRODUCTORY_STATEMENT+errorMessage, Toast.LENGTH_SHORT).show());
+    }
+
+    @Override
+    public void onGetStockTrendSuccess(String stocktrend) {
+        updateView(stocktrend);
+    }
+
+    @Override
+    public void onGetStockTrendFailure(String errorMessage) {
+        runOnUiThread(() ->Toast.makeText(StockExchange.this, ERROR_MESSAGE_INTRODUCTORY_STATEMENT+errorMessage, Toast.LENGTH_SHORT).show());
+    }
+
+    @Override
+    public void onStopStockExchangeSuccess(String successMessage) {
+        //toasting this information would be again ruining the user experience
+    }
+
+    @Override
+    public void onStopStockExchangeFailure(String errorMessage) {
+        runOnUiThread(() ->Toast.makeText(StockExchange.this, ERROR_MESSAGE_INTRODUCTORY_STATEMENT+errorMessage, Toast.LENGTH_SHORT).show());
     }
 }

@@ -84,7 +84,7 @@ public class CreateNewLobby extends AppCompatActivity implements LobbyAPI.AddLob
                 );
 
                 String token = sharedPreferences.getString("token", null);
-                LobbyAPI.addLobby(token, lobbyName, lobbyPassword, isLobbyPrivate, maxPlayers, Status.OPEN, CreateNewLobby.this);
+                LobbyAPI.addLobby(token, lobbyName, lobbyPassword, isLobbyPrivate, maxPlayers, Status.OPEN,"sonderzeichen", CreateNewLobby.this);
 
 
             } catch (GeneralSecurityException | IOException ignored) {

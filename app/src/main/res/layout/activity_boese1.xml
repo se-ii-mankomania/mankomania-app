@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screens.Boese1">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/toolbar_layout" />
+
+        <TextView
+            android:id="@+id/RollDice_resultTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="280dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/RollDice_resultTxt"
+            android:textSize="28sp"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/RollDice_Explanation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/RollDice_Explanation"
+            android:layout_marginTop="8dp"
+            android:layout_centerHorizontal="true"
+            android:textSize="18sp"
+            android:layout_below="@id/RollDice_resultTxt" />
+
+        <ImageView
+            android:id="@+id/RollDice_diceOne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/RollDice_Explanation"
+            android:layout_marginTop="20dp"
+            android:contentDescription="@string/dice"
+            app:srcCompat="@drawable/dice"
+            android:layout_toEndOf="@id/StopRollingButton" />
+
+        <ImageView
+            android:id="@+id/RollDice_diceTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/RollDice_Explanation"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@id/RollDice_diceOne"
+            android:contentDescription="@string/dice"
+            app:srcCompat="@drawable/dice" />
+
+        <Button
+            android:id="@+id/RollDice_RollingDiceButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/RollDice_Explanation"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentStart="true"
+            android:text="@string/RollDice" />
+
+        <Button
+            android:id="@+id/StopRollingButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/RollDice_RollingDiceButton"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentStart="true"
+            android:text="Nicht mehr Würfeln" />
+
+        <TextView
+            android:id="@+id/RollDice_Sum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/RollDice_Explanation"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@id/RollDice_diceTwo"
+            android:text="Deine aktuelle Summe lautet: 0"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

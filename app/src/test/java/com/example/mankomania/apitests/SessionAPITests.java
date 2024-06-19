@@ -84,7 +84,7 @@ class SessionAPITests {
         Request request = SessionAPI.createGetRequest(token, path);
 
         // assert
-        assertEquals("http://10.0.2.2:3000/api/session/unavailableColors/1234", request.url().toString());
+        assertEquals("http://se2-demo.aau.at:53214/api/session/unavailableColors/1234", request.url().toString());
     }
 
     @Test
@@ -100,7 +100,7 @@ class SessionAPITests {
         Request request = SessionAPI.createPostRequest(jsonObject, token, path);
 
         // assert
-        assertEquals("http://10.0.2.2:3000/api/session/setColor/1234", request.url().toString());
+        assertEquals("http://se2-demo.aau.at:53214/api/session/setColor/1234", request.url().toString());
     }
 
     @Test
@@ -148,6 +148,7 @@ class SessionAPITests {
         session1.put("currentposition", 5);
         session1.put("balance", 100);
         session1.put("isplayersturn", true);
+        session1.put("minigame",0);
 
         JSONObject session2 = new JSONObject();
         session2.put("userid", "224a27d5-96a3-433c-89a2-d9a2ae2b2041");
@@ -156,6 +157,7 @@ class SessionAPITests {
         session2.put("currentposition", 8);
         session2.put("balance", 150);
         session2.put("isplayersturn", false);
+        session2.put("minigame",0);
 
         // put them into array
         JSONArray responseArray = new JSONArray();
@@ -584,6 +586,7 @@ class SessionAPITests {
         sessionJsonObject.put("currentposition", 5);
         sessionJsonObject.put("balance", 100);
         sessionJsonObject.put("isplayersturn", true);
+        sessionJsonObject.put("minigame",0);
         sessionsJsonArray.put(sessionJsonObject);
 
         // mock Response

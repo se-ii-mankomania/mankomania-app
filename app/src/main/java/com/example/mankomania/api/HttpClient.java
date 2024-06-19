@@ -7,8 +7,8 @@ public class HttpClient {
 
     // must be changed later when server is deployed
     // 10.0.2.2 to reach localhost of development machine
-    private static final String SERVER = "http://10.0.2.2";
-    private static final int PORT = 3000;
+    private static final String SERVER = "http://se2-demo.aau.at";
+    private static final int PORT = 53214;
 
     // private constructor to prevent instantiation from outside
     private HttpClient() {}
