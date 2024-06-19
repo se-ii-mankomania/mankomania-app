@@ -93,12 +93,20 @@ public class Boese1 extends AppCompatActivity implements SensorEventListener {
     @Override
     protected void onResume() {
         super.onResume();
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        registerSensor();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        unregisterSensor();
+    }
+    
+    private void registerSensor() {
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    private void unregisterSensor() {
         sensorManager.unregisterListener(this);
     }
 
