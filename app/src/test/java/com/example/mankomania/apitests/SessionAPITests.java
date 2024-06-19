@@ -84,7 +84,7 @@ class SessionAPITests {
         Request request = SessionAPI.createGetRequest(token, path);
 
         // assert
-        assertEquals("http://10.0.2.2:3000/api/session/unavailableColors/1234", request.url().toString());
+        assertEquals("http://se2-demo.aau.at:53214/api/session/unavailableColors/1234", request.url().toString());
     }
 
     @Test
@@ -100,7 +100,7 @@ class SessionAPITests {
         Request request = SessionAPI.createPostRequest(jsonObject, token, path);
 
         // assert
-        assertEquals("http://10.0.2.2:3000/api/session/setColor/1234", request.url().toString());
+        assertEquals("http://se2-demo.aau.at:53214/api/session/setColor/1234", request.url().toString());
     }
 
     @Test

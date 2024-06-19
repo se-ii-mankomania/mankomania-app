@@ -60,7 +60,7 @@ class AuthAPITests {
         // creating a Request expectedRequest and calling assertEquals(expectedRequest, request);
         // does not work here (AssertionFailedError since the references differ)
 
-        assertEquals("http://10.0.2.2:3000/some/path", request.url().toString());
+        assertEquals("http://se2-demo.aau.at:53214/some/path", request.url().toString());
         assertEquals("POST", request.method());
         assertNotNull(request.body());
     }

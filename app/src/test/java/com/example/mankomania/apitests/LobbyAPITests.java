@@ -158,7 +158,7 @@ class LobbyAPITests {
         Request request = LobbyAPI.createGetRequest(token, path, status);
 
         // verify
-        assertEquals("http://10.0.2.2:3000/api/lobby/getByStatus/OPEN", request.url().toString());
+        assertEquals("http://se2-demo.aau.at:53214/api/lobby/getByStatus/OPEN", request.url().toString());
     }
 
     @Test
@@ -172,7 +172,7 @@ class LobbyAPITests {
         Request request = LobbyAPI.createGetRequest(token, path, status);
 
         // verify
-        assertEquals("http://10.0.2.2:3000/api/lobby/getAll", request.url().toString());
+        assertEquals("http://se2-demo.aau.at:53214/api/lobby/getAll", request.url().toString());
     }
 
     @Test
@@ -192,7 +192,7 @@ class LobbyAPITests {
         Request request = LobbyAPI.createPostRequest(jsonLobby, token, path);
 
         // verify
-        assertEquals("http://10.0.2.2:3000/api/lobby/create", request.url().toString());
+        assertEquals("http://se2-demo.aau.at:53214/api/lobby/create", request.url().toString());
     }
 
     @Test
