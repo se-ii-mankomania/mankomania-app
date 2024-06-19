@@ -20,7 +20,7 @@
             android:name=".screens.Boese1"
             android:exported="false"
             android:screenOrientation="landscape"/>
-        </activity
+        <activity
             android:name=".screens.StockExchange"
             android:exported="false"
             android:screenOrientation="landscape"/>
