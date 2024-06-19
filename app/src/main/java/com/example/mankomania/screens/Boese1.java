@@ -200,6 +200,20 @@ public class Boese1 extends AppCompatActivity implements SensorEventListener {
         }, 2000);
     }
 
+    private void sendApiRequest(String token, UUID lobbyid, int sum, int one){
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    Boese1API.sendBoeseRequest(token, lobbyid, sum, one);
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "Änderungen konnten nicht gespeichert werden.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        thread.start();
+    }
     private void initSharedPreferences() {
         try {
             MasterKey masterKey = new MasterKey.Builder(this)
@@ -215,27 +229,21 @@ public class Boese1 extends AppCompatActivity implements SensorEventListener {
             );
 
             token = sharedPreferences.getString("token", null);
-            String lobbyidString = sharedPreferences.getString("lobbyid", null);
-            lobbyid=UUID.fromString(lobbyidString);
-            String useridString = sharedPreferences.getString("userId", null);
-            userId=UUID.fromString(useridString);
-        } catch (GeneralSecurityException | IOException ignored) {
-            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+            retrieveAndConvertUUIDs(sharedPreferences);
+
+        } catch (GeneralSecurityException | IOException e) {
+            Toast.makeText(getApplicationContext(), "Unable to load SharedPreferences.", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void sendApiRequest(String token, UUID lobbyid, int sum, int one){
-        Thread thread = new Thread(new Runnable() {
+    private void retrieveAndConvertUUIDs(SharedPreferences sharedPreferences) {
+        String lobbyidString = sharedPreferences.getString("lobbyid", null);
+        lobbyid = lobbyidString != null ? UUID.fromString(lobbyidString) : null;
 
-            @Override
-            public void run() {
-                try {
-                    Boese1API.sendBoeseRequest(token, lobbyid, sum, one);
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), "Änderungen konnten nicht gespeichert werden.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        thread.start();
+        String useridString = sharedPreferences.getString("userId", null);
+        userId = useridString != null ? UUID.fromString(useridString) : null;
     }
+
+
+
 }
