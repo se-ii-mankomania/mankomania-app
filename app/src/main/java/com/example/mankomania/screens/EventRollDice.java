@@ -222,6 +222,8 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
         switch (field.getId()){
             case 46:
                 //TODO add Start-Call for Pferderennen
+                Intent startHorseRace = new Intent(EventRollDice.this, HorseRace.class);
+                startActivity(startHorseRace);
                 break;
             case 47:
                 StockExchangeAPI.startStockExchange(token, UUID.fromString(lobbyId),this);
