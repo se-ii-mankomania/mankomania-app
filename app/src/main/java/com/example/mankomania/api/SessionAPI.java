@@ -34,6 +34,8 @@ public class SessionAPI {
    private static final String HEADER_AUTHORIZATION_KEY = "Authorization";
    private static final String COLOR="color";
    private static final String NO_ANSWER="Keine Antwort!";
+   private static final String ERROR_TAG="ERROR";
+   private static final String ERRROR_MESSAGE_FOR_LOG="Create JsonObject failed";
 
     public interface UpdatePositionCallback {
         void onUpdateSuccess(String message);
@@ -214,7 +216,7 @@ public class SessionAPI {
             jsonRequest.put("lobbyid", lobbyid);
 
         } catch (JSONException ignored) {
-            Log.e("ERROR","Create JsonObject");
+            Log.e(ERROR_TAG,ERRROR_MESSAGE_FOR_LOG);
         }
 
         return jsonRequest;
@@ -231,7 +233,7 @@ public class SessionAPI {
             jsonRequest.put(COLOR, color);
 
         } catch (JSONException ignored) {
-            Log.e("ERROR","Create JsonObject");
+            Log.e(ERROR_TAG,ERRROR_MESSAGE_FOR_LOG);
         }
 
         return jsonRequest;
@@ -249,7 +251,7 @@ public class SessionAPI {
             jsonRequest.put("userId", userID);
             jsonRequest.put("currentposition", currentposition);
         } catch (JSONException ignored) {
-            Log.e("ERROR","Create JsonObject");
+            Log.e(ERROR_TAG,ERRROR_MESSAGE_FOR_LOG);
         }
         return jsonRequest;
     }

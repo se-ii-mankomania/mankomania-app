@@ -128,7 +128,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
     private void rollDice() {
         FieldsHandler  fieldshandler = (FieldsHandler) getIntent().getSerializableExtra("fieldsHandler");
         int [] randomNumber = rollAndDisplayDice();
-        SharedPreferences sharedPreferences = setupSharedPreferences();
+        sharedPreferences = setupSharedPreferences();
         updateUserPosition(sharedPreferences, randomNumber, fieldshandler);
         navigateBackToBoard();
         sensorManager.unregisterListener(this);

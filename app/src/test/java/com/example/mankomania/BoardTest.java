@@ -148,6 +148,7 @@ import org.junit.jupiter.api.Test;
        Player player = new Player("Blue", Color.BLUE);
        assertNull(hotel.getOwner());
        hotel.setOwner(player);
+
        assertEquals( 1, hotel.getX());
        assertEquals(2, hotel.getY());
        assertEquals(3, hotel.getId() );
