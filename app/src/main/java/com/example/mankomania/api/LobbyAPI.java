@@ -2,6 +2,8 @@ package com.example.mankomania.api;
 
 import static org.json.JSONObject.NULL;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
@@ -24,6 +26,7 @@ import okhttp3.Response;
 public class LobbyAPI {
     private static final String SERVER = HttpClient.getServer();
     private static final int PORT = HttpClient.getPort();
+    private static final String PASSWORD="password";
 
     public interface GetLobbiesCallback {
         void onSuccess(String[] lobbiesStringArray, List<Lobby> lobbiesList);
@@ -100,9 +103,9 @@ public class LobbyAPI {
             // JSONObjects need special NULL Value from library instead of standard null value
             // this if-else is needed to pass null value into DB for no-password-lobbies
             if(password == null) {
-                jsonLobby.put("password", NULL);
+                jsonLobby.put(PASSWORD, NULL);
             } else {
-                jsonLobby.put("password", password);
+                jsonLobby.put(PASSWORD, password);
             }
 
             jsonLobby.put("isPrivate", isPrivate);
@@ -110,7 +113,7 @@ public class LobbyAPI {
             jsonLobby.put("status", status.toString().toLowerCase());
             jsonLobby.put("stocktrend",stockTrend);
         } catch (JSONException ignored) {
-
+            Log.e("ERROR","Create JsonLobby failed");
         }
         return jsonLobby;
     }
@@ -246,7 +249,7 @@ public class LobbyAPI {
     public static void addLobbyToList(JSONObject jsonLobby, List<Lobby> list) throws JSONException {
         UUID id = UUID.fromString(jsonLobby.getString("id"));
         String name = jsonLobby.getString("name");
-        String password = jsonLobby.getString("password");
+        String password = jsonLobby.getString(PASSWORD);
         boolean isPrivate = jsonLobby.getBoolean("isprivate");
         int maxPlayers = jsonLobby.getInt("maxplayers");
         String stockTrend= jsonLobby.getString("stocktrend");

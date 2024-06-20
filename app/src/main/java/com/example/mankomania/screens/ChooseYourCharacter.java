@@ -94,7 +94,6 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            restoreRadioButtons();
             SessionAPI.getUnavailableColorsByLobby(token,lobbyid,ChooseYourCharacter.this);
             handler.postDelayed(this, INTERVAL_MS);
         }
@@ -123,25 +122,6 @@ public class ChooseYourCharacter extends AppCompatActivity implements SessionAPI
                  currentButton.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.disabled_grey)));
             }
          }
-    }
-
-    /**
-     * restoreRadioButtons() bewirkt, dass die gesamte RadioGroup wieder in ihren
-     * anfänglichen Zustand zurückgesetzt wird. Jeder Button ist auswählbar.
-     */
-    private void restoreRadioButtons(){
-        restoreButton(R.id.ChooseYourCharacter_PurplePlayer,R.color.purplePlayer);
-        restoreButton(R.id.ChooseYourCharacter_GreenPlayer,R.color.greenPlayer);
-        restoreButton(R.id.ChooseYourCharacter_RedPlayer,R.color.redPlayer);
-        restoreButton(R.id.ChooseYourCharacter_BluePlayer,R.color.bluePlayer);
-    }
-
-    private void restoreButton(int viewId, int colorId) {
-        RadioButton radioButton=findViewById(viewId);
-        radioButton.setEnabled(true);
-        radioButton.setTextColor(ContextCompat.getColor(this,colorId));
-        radioButton.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(this,colorId)));
-
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.example.mankomania.api;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.mankomania.logik.spieler.Color;
@@ -30,6 +32,8 @@ public class SessionAPI {
     private static final String RESPONSE_FAILURE_MESSAGE = "Fehler beim Lesen der Response: ";
    private static final String JSON_RESPONSE_MESSAGE_KEY = "message";
    private static final String HEADER_AUTHORIZATION_KEY = "Authorization";
+   private static final String COLOR="color";
+   private static final String NO_ANSWER="Keine Antwort!";
 
     public interface UpdatePositionCallback {
         void onUpdateSuccess(String message);
@@ -159,7 +163,7 @@ public class SessionAPI {
         List<Color> unavailableColors = new ArrayList<>();
         for (int i = 0; i < responseArray.length(); i++) {
             JSONObject jsonSession = responseArray.getJSONObject(i);
-            String color = jsonSession.getString("color");
+            String color = jsonSession.getString(COLOR);
             Color enumValueOfColor = convertToEnums(color);
             unavailableColors.add(enumValueOfColor);
         }
@@ -178,7 +182,7 @@ public class SessionAPI {
             JSONObject jsonSession = responseArray.getJSONObject(i);
             UUID userid = UUID.fromString(jsonSession.getString("userid"));
             String email = jsonSession.getString("email");
-            String colorString = jsonSession.getString("color");
+            String colorString = jsonSession.getString(COLOR);
             Color color = convertToEnums(colorString);
             int currentPosition = jsonSession.getInt("currentposition");
             int balance = jsonSession.getInt("balance");
@@ -210,7 +214,7 @@ public class SessionAPI {
             jsonRequest.put("lobbyid", lobbyid);
 
         } catch (JSONException ignored) {
-
+            Log.e("ERROR","Create JsonObject");
         }
 
         return jsonRequest;
@@ -224,10 +228,10 @@ public class SessionAPI {
     public static JSONObject createJSONObject(String color) {
         JSONObject jsonRequest = new JSONObject();
         try {
-            jsonRequest.put("color", color);
+            jsonRequest.put(COLOR, color);
 
         } catch (JSONException ignored) {
-
+            Log.e("ERROR","Create JsonObject");
         }
 
         return jsonRequest;
@@ -245,7 +249,7 @@ public class SessionAPI {
             jsonRequest.put("userId", userID);
             jsonRequest.put("currentposition", currentposition);
         } catch (JSONException ignored) {
-
+            Log.e("ERROR","Create JsonObject");
         }
         return jsonRequest;
     }
@@ -289,7 +293,7 @@ public class SessionAPI {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onJoinSessionFailure("Keine Antwort!");
+                callback.onJoinSessionFailure(NO_ANSWER);
             }
 
             @Override
@@ -324,7 +328,7 @@ public class SessionAPI {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onGetUnavailableColorsByLobbyFailure("Keine Antwort!");
+                callback.onGetUnavailableColorsByLobbyFailure(NO_ANSWER);
             }
 
             @Override
@@ -357,7 +361,7 @@ public class SessionAPI {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onGetStatusByLobbyFailure("Keine Antwort!");
+                callback.onGetStatusByLobbyFailure(NO_ANSWER);
             }
 
             @Override
@@ -387,7 +391,7 @@ public class SessionAPI {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.onSetColorFailure("Keine Antwort!");
+                callback.onSetColorFailure(NO_ANSWER);
             }
 
             @Override

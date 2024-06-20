@@ -30,20 +30,18 @@ public class SessionStatusService extends Service {
     private final Set<ToBoardObserver> toBoardObservers = new HashSet<>();
     private final Set<ToStockExchangeObserver> toStockExchangeObservers = new HashSet<>();
     private final Set<ToCasinoObserver> toCasinoObservers = new HashSet<>();
-
     private HandlerThread handlerThread;
     private Handler handler;
     private Runnable runnable;
     private String token;
     private UUID lobbyId;
-    private static int formerMiniGameID;
+    private int formerMiniGameID=0;
 
     private static SessionStatusService instance;
 
     public static SessionStatusService getInstance() {
         if (instance == null) {
             instance = new SessionStatusService();
-            formerMiniGameID=0;
         }
         return instance;
     }

@@ -46,10 +46,12 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
 
     private String token;
     private String lobbyId;
+    private String userId;
 
     private static final int SENSIBILITY_BORDER_FOR_SENSOR =10;
     private static final int DELAY_MILLIS_BACK_TO_BOARD=2000;
     private Player player;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +153,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
     }
 
     private SharedPreferences setupSharedPreferences(){
-        SharedPreferences sharedPreferences = null;
+        sharedPreferences = null;
 
         try {
             MasterKey masterKey = new MasterKey.Builder(this)
@@ -174,7 +176,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
     }
 
     private void updateUserPosition(SharedPreferences sharedPreferences, int [] randomNumber, FieldsHandler fieldshandler){
-        String userId = sharedPreferences.getString("userId", null);
+        userId = sharedPreferences.getString("userId", null);
         token = sharedPreferences.getString("token", null);
         lobbyId = sharedPreferences.getString("lobbyid", null);
 
@@ -225,6 +227,9 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
                 break;
             case 47:
                 StockExchangeAPI.startStockExchange(token, UUID.fromString(lobbyId),this);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("previousUserID", userId);
+                editor.apply();
                 break;
             case 48:
                 //TODO add Start-Call for Casino
