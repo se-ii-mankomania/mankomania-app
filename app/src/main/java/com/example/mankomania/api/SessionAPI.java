@@ -184,9 +184,12 @@ public class SessionAPI {
             int balance = jsonSession.getInt("balance");
             boolean isPlayersTurn = jsonSession.getBoolean("isplayersturn");
             int minigame=jsonSession.getInt("minigame");
+            int amountkvshares=jsonSession.getInt("amountkvshares");
+            int amounttshares=jsonSession.getInt("amounttshares");
+            int amountbshares= jsonSession.getInt("amountbshares");
 
             if (color != null) {
-                PlayerSession playerSession = new PlayerSession(userid, email, color, currentPosition, balance, 0, 0, 0, isPlayersTurn);
+                PlayerSession playerSession = new PlayerSession(userid, email, color, currentPosition, balance, amountkvshares, amounttshares, amountbshares, isPlayersTurn);
                 sessions.put(userid, playerSession);
                 SessionStatusService sessionStatusService = SessionStatusService.getInstance();
                 sessionStatusService.notifyUpdatesInSession(playerSession, userid);
