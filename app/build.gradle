@@ -65,7 +65,8 @@ sonar {
                 "**/MainActivityLogin.java, **/PlayerViewModel.java, **/SessionStatusService.java," +
                 "**/Register.java, **/ToolbarFunctionalities.java, **/EventRollDice.java," +
                 "**/StockExchange.java, **/StockExchangeAPI.java, **/SwipeGestureListener.java,"+
-                "**/CreateNewLobby.java, **/Status.java, **/ZoomLayout.java, **/EndWinner.java, **/PlayerScoresFragment.java, **/Boese1.java, **/Boese1API.java"
+                "**/CreateNewLobby.java, **/Status.java, **/ZoomLayout.java, **/EndWinner.java, " +
+                "**/PlayerScoresFragment.java, **/Boese1.java, **/Boese1API.java, **/HorseRace.java, **/HorseRaceAPI.java "
 
     }
 }
