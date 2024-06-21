@@ -131,10 +131,6 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
         }
 
         int[] randomNumber = rollAndDisplayDice();
-        if (randomNumber == null) {
-            Toast.makeText(this, "Failed to roll dice", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         SharedPreferences sharedPreferences = setupSharedPreferences();
         if (sharedPreferences == null) {
