@@ -63,67 +63,63 @@ public class HorseRace extends AppCompatActivity {
 
         returnButton.setVisibility(View.INVISIBLE);
 
-        returnButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent backToBoard = new Intent(HorseRace.this, Board.class);
-                startActivity(backToBoard);
-            }
+        returnButton.setOnClickListener(v -> {
+            Intent backToBoard = new Intent(HorseRace.this, Board.class);
+            startActivity(backToBoard);
         });
 
-        startRaceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resultTextView.setVisibility(View.INVISIBLE);
-                selectedHorseId  = chooseHorse.getCheckedRadioButtonId();
-                if (selectedHorseId == -1) {
-                    Toast.makeText(HorseRace.this, "Bitte wähle ein Pferd aus.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
 
-                selectedHorse = -1;
-                if (selectedHorseId  == R.id.horse1Radio) {
-                    selectedHorse = 1;
-                } else if (selectedHorseId  == R.id.horse2Radio) {
-                    selectedHorse = 2;
-                } else if (selectedHorseId  == R.id.horse3Radio) {
-                    selectedHorse = 3;
-                } else if (selectedHorseId  == R.id.horse4Radio) {
-                    selectedHorse = 4;
-                }
-                selectedBetId  = chooseBetAmount.getCheckedRadioButtonId();
-                if (selectedBetId == -1) {
-                    Toast.makeText(HorseRace.this, "Bitte wähle deinen Geldeinsatz aus.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                selectedBetAmount = -1;
-
-                if (selectedBetId  == R.id.bet5000Radio) {
-                    selectedBetAmount = 5000;
-                } else if (selectedBetId  == R.id.bet10000Radio) {
-                    selectedBetAmount = 10000;
-                } else if (selectedBetId  == R.id.bet20000Radio) {
-                    selectedBetAmount = 20000;
-                }
-
-                chooseHorse.setVisibility(View.INVISIBLE);
-                chooseBetAmount.setVisibility(View.INVISIBLE);
-                chooseBetAmountText.setVisibility(View.INVISIBLE);
-                startRaceButton.setVisibility(View.INVISIBLE);
-
-                HorseRaceAPI.startHorseRace(token, lobbyid, userId, selectedBetAmount, selectedHorse, new HorseRaceAPI.GetHorseRaceResultsCallback() {
-                    @Override
-                    public void onGetHorseRaceResultsSuccess(int[] horsePlaces) {
-                        startRace(horsePlaces);
-                    }
-
-                    @Override
-                    public void onGetHorseRaceResultsFailure(String errorMessage) {
-                        Toast.makeText(HorseRace.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show();
-                    }
-                });
+        startRaceButton.setOnClickListener(v -> {
+            resultTextView.setVisibility(View.INVISIBLE);
+            selectedHorseId = chooseHorse.getCheckedRadioButtonId();
+            if (selectedHorseId == -1) {
+                Toast.makeText(HorseRace.this, "Bitte wähle ein Pferd aus.", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            selectedHorse = -1;
+            if (selectedHorseId == R.id.horse1Radio) {
+                selectedHorse = 1;
+            } else if (selectedHorseId == R.id.horse2Radio) {
+                selectedHorse = 2;
+            } else if (selectedHorseId == R.id.horse3Radio) {
+                selectedHorse = 3;
+            } else if (selectedHorseId == R.id.horse4Radio) {
+                selectedHorse = 4;
+            }
+            selectedBetId = chooseBetAmount.getCheckedRadioButtonId();
+            if (selectedBetId == -1) {
+                Toast.makeText(HorseRace.this, "Bitte wähle deinen Geldeinsatz aus.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            selectedBetAmount = -1;
+
+            if (selectedBetId == R.id.bet5000Radio) {
+                selectedBetAmount = 5000;
+            } else if (selectedBetId == R.id.bet10000Radio) {
+                selectedBetAmount = 10000;
+            } else if (selectedBetId == R.id.bet20000Radio) {
+                selectedBetAmount = 20000;
+            }
+
+            chooseHorse.setVisibility(View.INVISIBLE);
+            chooseBetAmount.setVisibility(View.INVISIBLE);
+            chooseBetAmountText.setVisibility(View.INVISIBLE);
+            startRaceButton.setVisibility(View.INVISIBLE);
+
+            HorseRaceAPI.startHorseRace(token, lobbyid, userId, selectedBetAmount, selectedHorse, new HorseRaceAPI.GetHorseRaceResultsCallback() {
+                @Override
+                public void onGetHorseRaceResultsSuccess(int[] horsePlaces) {
+                    startRace(horsePlaces);
+                }
+
+                @Override
+                public void onGetHorseRaceResultsFailure(String errorMessage) {
+                    Toast.makeText(HorseRace.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show();
+                }
+            });
         });
+
     }
     private void startRace(int[] horsePlaces){
         int [] durations = new int[4];
@@ -159,18 +155,16 @@ public class HorseRace extends AppCompatActivity {
         animateHorse(horse4, durations[3]);
 
         //ergebnis anzeigen
-        horse1.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                resultTextView.setText(resultBuilder.toString());
-                resultTextView.setVisibility(View.VISIBLE);
-                returnButton.setVisibility(View.VISIBLE);
-            }
+        horse1.postDelayed(() -> {
+            resultTextView.setText(resultBuilder.toString());
+            resultTextView.setVisibility(View.VISIBLE);
+            returnButton.setVisibility(View.VISIBLE);
         }, Math.max(durations[0], Math.max(durations[1], Math.max(durations[2], durations[3]))));
+
     }
     private void animateHorse(View horse, int duration){
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
-        TranslateAnimation animation = new TranslateAnimation(0, screenWidth- horse.getWidth(), 0, 0);
+        TranslateAnimation animation = new TranslateAnimation(0, (float)screenWidth- horse.getWidth(), 0, 0);
         animation.setDuration(duration);
         animation.setFillAfter(true);
         horse.startAnimation(animation);

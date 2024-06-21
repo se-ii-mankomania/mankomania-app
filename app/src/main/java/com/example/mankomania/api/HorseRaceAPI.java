@@ -1,5 +1,7 @@
 package com.example.mankomania.api;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
@@ -52,7 +54,7 @@ public class HorseRaceAPI {
             jsonRequest.put("pickedHorse", pickedHorse);
 
         } catch (JSONException ignored) {
-
+            Log.e("Json","JsonRequest failed.");
         }
 
         return jsonRequest;
