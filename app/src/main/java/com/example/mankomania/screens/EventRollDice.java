@@ -124,13 +124,29 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
     }
 
     private void rollDice() {
-        FieldsHandler  fieldshandler = (FieldsHandler) getIntent().getSerializableExtra("fieldsHandler");
-        int [] randomNumber = rollAndDisplayDice();
+        FieldsHandler fieldshandler = (FieldsHandler) getIntent().getSerializableExtra("fieldsHandler");
+        if (fieldshandler == null) {
+            Toast.makeText(this, "FieldsHandler is missing", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int[] randomNumber = rollAndDisplayDice();
+        if (randomNumber == null) {
+            Toast.makeText(this, "Failed to roll dice", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         SharedPreferences sharedPreferences = setupSharedPreferences();
+        if (sharedPreferences == null) {
+            Toast.makeText(this, "Failed to setup SharedPreferences", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         updateUserPosition(sharedPreferences, randomNumber, fieldshandler);
         navigateBackToBoard();
         sensorManager.unregisterListener(this);
     }
+
     private int [] rollAndDisplayDice(){
         Dice dice=new Dice();
         int[] randomNumber=dice.throwDice();
