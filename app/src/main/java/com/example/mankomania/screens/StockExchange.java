@@ -69,7 +69,7 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
             @Override
             public void handleOnBackPressed() {
                 if (backButtonblocked) {
-                    Toast.makeText(StockExchange.this, "Bringe zuerst den Aktienkurs in Schwung!", Toast.LENGTH_SHORT).show();
+                    runOnUiThread(()->Toast.makeText(StockExchange.this, "Bringe zuerst den Aktienkurs in Schwung!", Toast.LENGTH_SHORT).show());
                 } else {
                     this.setEnabled(false);
                     StockExchange.super.finish();
@@ -164,7 +164,7 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
             userid=sharedPreferences.getString("userId",null);
             previousUserID=sharedPreferences.getString("previousUserID",null);
         } catch (GeneralSecurityException | IOException ignored) {
-            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+            runOnUiThread(()->Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show());
         }
     }
 

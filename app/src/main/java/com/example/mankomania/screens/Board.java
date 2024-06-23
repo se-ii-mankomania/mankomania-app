@@ -132,7 +132,7 @@ public class Board extends AppCompatActivity{
 
 
         } catch (GeneralSecurityException | IOException ignored) {
-            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+            runOnUiThread(() ->Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show());
         }
         return userId;
     }

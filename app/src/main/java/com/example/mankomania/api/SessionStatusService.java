@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -36,6 +37,7 @@ public class SessionStatusService extends Service {
     private String token;
     private UUID lobbyId;
     private int formerMiniGameID=0;
+    private final String ERROR_TAG="SessionStatusServiceError";
 
     private static SessionStatusService instance;
 
@@ -84,7 +86,7 @@ public class SessionStatusService extends Service {
             String lobbyid=sharedPreferences.getString("lobbyid",null);
             lobbyId= UUID.fromString(lobbyid);
         } catch (GeneralSecurityException | IOException ignored) {
-            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+            Log.e(ERROR_TAG,"SharedPreferences konnten nicht geladen werden.");
         }
     }
 
@@ -128,11 +130,11 @@ public class SessionStatusService extends Service {
 
                 @Override
                 public void onGetStatusByLobbyFailure(String errorMessage) {
-                    Toast.makeText(getApplicationContext(), "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    Log.e(ERROR_TAG,"Fehler: " + errorMessage);
                 }
             });
         } else {
-            Toast.makeText(getApplicationContext(), "Lobby-ID ist null", Toast.LENGTH_SHORT).show();
+            Log.e(ERROR_TAG,"Lobby-ID ist null");
         }
     }
 

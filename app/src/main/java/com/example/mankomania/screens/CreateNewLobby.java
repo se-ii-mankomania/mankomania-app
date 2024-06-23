@@ -88,7 +88,7 @@ public class CreateNewLobby extends AppCompatActivity implements LobbyAPI.AddLob
 
 
             } catch (GeneralSecurityException | IOException ignored) {
-                Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+                runOnUiThread(() ->Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show());
             }
         });
     }
