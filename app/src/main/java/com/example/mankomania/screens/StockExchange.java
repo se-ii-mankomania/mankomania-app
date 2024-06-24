@@ -31,13 +31,13 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
 
     private String token;
     private UUID lobbyid;
-    private UUID userId;
+    private String userid;
+    private String previousUserID;
 
     private Handler handler;
     private ImageView stockExchangeImageView;
 
     private boolean backButtonblocked;
-    private boolean isPlayersTurn;
     private GestureDetector gestureDetector;
     private static final int DELAY_MILLIS_STOCK_TREND_UPDATE=1000;
     private static final String ERROR_MESSAGE_INTRODUCTORY_STATEMENT="Fehler:";
@@ -49,7 +49,6 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_stock_exchange);
 
-        isPlayersTurn=false;
         initSharedPreferences();
 
         handler = new Handler(Looper.getMainLooper());
@@ -70,7 +69,7 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
             @Override
             public void handleOnBackPressed() {
                 if (backButtonblocked) {
-                    Toast.makeText(StockExchange.this, "Bringe zuerst den Aktienkurs in Schwung!", Toast.LENGTH_SHORT).show();
+                    runOnUiThread(()->Toast.makeText(StockExchange.this, "Bringe zuerst den Aktienkurs in Schwung!", Toast.LENGTH_SHORT).show());
                 } else {
                     this.setEnabled(false);
                     StockExchange.super.finish();
@@ -89,11 +88,6 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
             Intent toBoard=new Intent(StockExchange.this, Board.class);
             startActivity(toBoard);
         }));
-
-        sessionStatusService.registerObserver((color, newTurn, userid) -> runOnUiThread(() ->
-                isPlayersTurn=newTurn && userid.equals(userId)
-
-        ));
     }
 
     private void startRepeatingStockTrendUpdates() {handler.postDelayed(runnable, DELAY_MILLIS_STOCK_TREND_UPDATE);}
@@ -106,7 +100,6 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
 
         SessionStatusService sessionStatusService=SessionStatusService.getInstance();
         sessionStatusService.removeObserver((SessionStatusService.ToBoardObserver)()->{});
-        sessionStatusService.removeObserver((color, newTurn, userid) -> {});
     }
     Runnable runnable = new Runnable() {
         @Override
@@ -168,20 +161,24 @@ public class StockExchange extends AppCompatActivity implements StockExchangeAPI
             token = sharedPreferences.getString("token", null);
             String lobbyidString = sharedPreferences.getString("lobbyid", null);
             lobbyid=UUID.fromString(lobbyidString);
-            String useridString=sharedPreferences.getString("userId",null);
-            userId=UUID.fromString(useridString);
+            userid=sharedPreferences.getString("userId",null);
+            previousUserID=sharedPreferences.getString("previousUserID",null);
         } catch (GeneralSecurityException | IOException ignored) {
-            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+            runOnUiThread(()->Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show());
         }
     }
 
     @Override
     public void onSwipeUp() {
-        if(isPlayersTurn) {
+        if(isPlayersTurn()) {
             StockExchangeAPI.getStockChangesByLobbyID(token, lobbyid, this);
         }else{
             runOnUiThread(()-> Toast.makeText(getApplicationContext(),"Du bist nicht an der Reihe!",Toast.LENGTH_SHORT).show());
         }
+    }
+
+    private boolean isPlayersTurn(){
+        return userid.equals(previousUserID);
     }
 
     private void updateView(String stockChanges){
