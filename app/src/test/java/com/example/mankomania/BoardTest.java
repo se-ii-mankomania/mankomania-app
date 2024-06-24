@@ -59,7 +59,7 @@ import org.junit.jupiter.api.Test;
         fieldsHandler.movePlayer(playerred, 7);
         fieldsHandler.movePlayer(playerpurple, 7);
 
-        assertEquals(fieldsHandler.getField(6).getId(), playerblue.getCurrentField().getId());
+        assertEquals(fieldsHandler.getField(45).getId(), playerblue.getCurrentField().getId());
         assertEquals(fieldsHandler.getField(17).getId(), playergreen.getCurrentField().getId());
         assertEquals(fieldsHandler.getField(28).getId(), playerred.getCurrentField().getId());
         assertEquals(fieldsHandler.getField(39).getId(), playerpurple.getCurrentField().getId());
@@ -75,12 +75,16 @@ import org.junit.jupiter.api.Test;
 
     @Test
      void gameFieldMoveTestStartAtActionfield(){
+       //Böse 1
         Player playerblue = new Player("BLUE", Color.BLUE);
         playerblue.setCurrentField(fieldsHandler.getField(44));
+        //Pferderennen
         Player playergreen = new Player("GREEN", Color.GREEN);
         playergreen.setCurrentField(fieldsHandler.getField(45));
+        //Börse
         Player playerred = new Player("RED", Color.RED);
         playerred.setCurrentField(fieldsHandler.getField(46));
+        //Casino
         Player playerpurple = new Player("PURPLE",Color.LILA);
         playerpurple.setCurrentField(fieldsHandler.getField(47));
 
@@ -90,7 +94,7 @@ import org.junit.jupiter.api.Test;
         fieldsHandler.movePlayer(playerpurple, 5);
 
         assertEquals(fieldsHandler.getField(45).getId(), playerblue.getCurrentField().getId());
-        assertEquals(fieldsHandler.getField(47).getId(), playergreen.getCurrentField().getId());
+        assertEquals(fieldsHandler.getField(44).getId(), playergreen.getCurrentField().getId());
         assertEquals(fieldsHandler.getField(23).getId(), playerred.getCurrentField().getId());
         assertEquals(fieldsHandler.getField(40).getId(), playerpurple.getCurrentField().getId());
     }
