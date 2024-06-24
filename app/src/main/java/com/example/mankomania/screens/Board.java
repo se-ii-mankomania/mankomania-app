@@ -243,8 +243,10 @@ public class Board extends AppCompatActivity{
             ImageView playerView = findViewById(viewId);
             GameboardField gameboardField = fieldsHandler.getField(playerSession.getCurrentPosition() - 1);
             if(playerView.getVisibility() == View.VISIBLE) {
-                animateMove(playerView, playerView.getX(), playerView.getY(),
-                        gameboardField.getX(), gameboardField.getY());
+                if (gameboardField != null) {
+                    animateMove(playerView, playerView.getX(), playerView.getY(),
+                            gameboardField.getX(), gameboardField.getY());
+                }
             } else {
                 playerView.setX(gameboardField.getX());
                 playerView.setY(gameboardField.getY());

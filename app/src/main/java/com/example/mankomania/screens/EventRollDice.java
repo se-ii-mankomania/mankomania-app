@@ -222,6 +222,13 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
 
     private void checkIfRedirectingIsNecessary(GameboardField field) {
         switch (field.getId()){
+            case 7:
+                goToBoese1();
+                break;
+            case 23:
+                goToBoese1();
+                break;
+
             case 46:
                 //TODO add Start-Call for Pferderennen
                 break;
@@ -236,6 +243,11 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
                 break;
             default:
         }
+    }
+
+    private void goToBoese1(){
+        Intent boese1 = new Intent(EventRollDice.this, Boese1.class);
+        startActivity(boese1);
     }
 
     private void toastFieldDescription(Player player, int delayMillis){
