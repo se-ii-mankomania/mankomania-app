@@ -26,7 +26,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="5dp"
         android:layout_marginStart="16dp"
-        app:srcCompat="@drawable/braunespferdneu"/>
+        app:srcCompat="@drawable/braunespferd"/>
 
     <ImageView
         android:id="@+id/horse2"
@@ -46,7 +46,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="5dp"
         android:layout_marginStart="16dp"
-        app:srcCompat="@drawable/eselneu" />
+        app:srcCompat="@drawable/esel" />
 
     <ImageView
         android:id="@+id/horse4"
