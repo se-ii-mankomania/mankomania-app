@@ -73,7 +73,7 @@ public class HorseRace extends AppCompatActivity {
             resultTextView.setVisibility(View.INVISIBLE);
             selectedHorseId = chooseHorse.getCheckedRadioButtonId();
             if (selectedHorseId == -1) {
-                Toast.makeText(HorseRace.this, "Bitte wähle ein Pferd aus.", Toast.LENGTH_SHORT).show();
+                runOnUiThread(()-> Toast.makeText(HorseRace.this, "Bitte wähle ein Pferd aus.", Toast.LENGTH_SHORT).show());
                 return;
             }
 
@@ -89,7 +89,7 @@ public class HorseRace extends AppCompatActivity {
             }
             selectedBetId = chooseBetAmount.getCheckedRadioButtonId();
             if (selectedBetId == -1) {
-                Toast.makeText(HorseRace.this, "Bitte wähle deinen Geldeinsatz aus.", Toast.LENGTH_SHORT).show();
+                runOnUiThread(()->Toast.makeText(HorseRace.this, "Bitte wähle deinen Geldeinsatz aus.", Toast.LENGTH_SHORT).show());
                 return;
             }
             selectedBetAmount = -1;
@@ -115,7 +115,7 @@ public class HorseRace extends AppCompatActivity {
 
                 @Override
                 public void onGetHorseRaceResultsFailure(String errorMessage) {
-                    Toast.makeText(HorseRace.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    runOnUiThread(()->Toast.makeText(HorseRace.this, "Fehler: " + errorMessage, Toast.LENGTH_SHORT).show());
                 }
             });
         });
