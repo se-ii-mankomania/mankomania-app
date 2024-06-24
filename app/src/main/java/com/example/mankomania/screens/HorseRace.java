@@ -189,7 +189,7 @@ public class HorseRace extends AppCompatActivity {
             lobbyid= UUID.fromString(lobbyidString);
             userId = sharedPreferences.getString("userId", null);
         } catch (GeneralSecurityException | IOException ignored) {
-            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+            runOnUiThread(()->Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show());
         }
     }
 }

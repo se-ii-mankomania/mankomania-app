@@ -126,7 +126,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
     private void rollDice() {
         FieldsHandler fieldshandler = (FieldsHandler) getIntent().getSerializableExtra("fieldsHandler");
         if (fieldshandler == null) {
-            Toast.makeText(this, "FieldsHandler is missing", Toast.LENGTH_SHORT).show();
+            runOnUiThread(() -> Toast.makeText(EventRollDice.this, "FieldsHandler is missing", Toast.LENGTH_SHORT).show());
             return;
         }
 
@@ -134,7 +134,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
 
         SharedPreferences sharedPreferences = setupSharedPreferences();
         if (sharedPreferences == null) {
-            Toast.makeText(this, "Failed to setup SharedPreferences", Toast.LENGTH_SHORT).show();
+            runOnUiThread(()->Toast.makeText(EventRollDice.this, "Failed to setup SharedPreferences", Toast.LENGTH_SHORT).show());
             return;
         }
 
@@ -158,7 +158,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
         diceTwo.setImageResource(sourceDiceTwo);
 
         String resultOfRollingDice = String.valueOf(randomNumber[0] + randomNumber[1]);
-        Toast.makeText(getApplicationContext(), "Deine Spielfigur zieht " + resultOfRollingDice + " Felder weiter.", Toast.LENGTH_SHORT).show();
+        runOnUiThread(()-> Toast.makeText(getApplicationContext(), "Deine Spielfigur zieht " + resultOfRollingDice + " Felder weiter.", Toast.LENGTH_SHORT).show());
         return randomNumber;
     }
 
@@ -233,7 +233,6 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
     private void checkIfRedirectingIsNecessary(GameboardField field) {
         switch (field.getId()){
             case 46:
-                //TODO add Start-Call for Pferderennen
                 Intent startHorseRace = new Intent(EventRollDice.this, HorseRace.class);
                 startActivity(startHorseRace);
                 break;
