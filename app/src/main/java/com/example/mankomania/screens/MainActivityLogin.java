@@ -94,7 +94,7 @@ public class MainActivityLogin extends AppCompatActivity implements AuthAPI.Logi
             editor.putString("userId",userId);
             editor.apply();
         } catch (GeneralSecurityException | IOException ignored) {
-            Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+            runOnUiThread(() ->Toast.makeText(getApplicationContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show());
         }
 
         // go to next page

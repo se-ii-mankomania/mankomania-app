@@ -1,5 +1,7 @@
 package com.example.mankomania.api;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import org.json.JSONException;
@@ -76,7 +78,7 @@ public class AuthAPI {
             jsonRequest.put("email", email);
             jsonRequest.put("password", password);
         } catch (JSONException ignored) {
-
+            Log.e("ERROR", "Create JsonObject failed");
         }
         return jsonRequest;
     }

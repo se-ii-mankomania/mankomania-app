@@ -87,10 +87,11 @@ class WalletTest {
 
     @Test
     void testRemoveMoneyWithChange(){
-        wallet.addMoney(50000);
+        wallet.addMoney(70000);
         assertEquals(1, wallet.getNoteCount(NoteTypes.FIFTYTHOUSAND));
-        wallet.removeMoney(30000);
-        assertEquals(2, wallet.getNoteCount(NoteTypes.TENTHOUSAND));
+        assertEquals(2,wallet.getNoteCount(NoteTypes.TENTHOUSAND));
+        wallet.removeMoney(40000);
+        assertEquals(3, wallet.getNoteCount(NoteTypes.TENTHOUSAND));
     }
 
     @Test

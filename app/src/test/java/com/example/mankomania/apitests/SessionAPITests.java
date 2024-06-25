@@ -149,6 +149,9 @@ class SessionAPITests {
         session1.put("balance", 100);
         session1.put("isplayersturn", true);
         session1.put("minigame",0);
+        session1.put("amountkvshares",10);
+        session1.put("amounttshares",10);
+        session1.put("amountbshares",10);
 
         JSONObject session2 = new JSONObject();
         session2.put("userid", "224a27d5-96a3-433c-89a2-d9a2ae2b2041");
@@ -158,6 +161,9 @@ class SessionAPITests {
         session2.put("balance", 150);
         session2.put("isplayersturn", false);
         session2.put("minigame",0);
+        session2.put("amountkvshares",10);
+        session2.put("amounttshares",10);
+        session2.put("amountbshares",10);
 
         // put them into array
         JSONArray responseArray = new JSONArray();
@@ -587,6 +593,9 @@ class SessionAPITests {
         sessionJsonObject.put("balance", 100);
         sessionJsonObject.put("isplayersturn", true);
         sessionJsonObject.put("minigame",0);
+        sessionJsonObject.put("amountkvshares",10);
+        sessionJsonObject.put("amounttshares",10);
+        sessionJsonObject.put("amountbshares",10);
         sessionsJsonArray.put(sessionJsonObject);
 
         // mock Response

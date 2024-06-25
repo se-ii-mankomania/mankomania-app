@@ -2,6 +2,7 @@ package com.example.mankomania.screens;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +65,7 @@ public class PlayerScoresFragment extends Fragment implements SessionAPI.GetStat
             SessionAPI.getStatusByLobby(token, lobbyId, this);
 
         } catch (GeneralSecurityException | IOException ignored) {
-            Toast.makeText(requireContext(), "SharedPreferences konnten nicht geladen werden.", Toast.LENGTH_SHORT).show();
+            Log.e("PLAYER_SCORE_ERROR","SharedPreferences konnten nicht geladen werden.");
         }
 
         return view;

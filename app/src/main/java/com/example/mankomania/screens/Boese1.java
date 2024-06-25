@@ -72,7 +72,7 @@ public class Boese1 extends AppCompatActivity implements SensorEventListener {
             @Override
             public void handleOnBackPressed() {
                 if (backPressedBlocked) {
-                    Toast.makeText(Boese1.this, "Bitte würfeln!", Toast.LENGTH_SHORT).show();
+                    runOnUiThread(() ->Toast.makeText(Boese1.this, "Bitte würfeln!", Toast.LENGTH_SHORT).show());
                 } else {
                     this.setEnabled(false);
                     Boese1.super.finish();
@@ -147,7 +147,7 @@ public class Boese1 extends AppCompatActivity implements SensorEventListener {
                 oneCounter++;
             }
             rolling = false;
-            Toast.makeText(getApplicationContext(), "Du hast eine 1 gewürfelt!", Toast.LENGTH_SHORT).show();
+            runOnUiThread(() ->Toast.makeText(getApplicationContext(), "Du hast eine 1 gewürfelt!", Toast.LENGTH_SHORT).show());
             sendApiRequest(token, lobbyid, sum, oneCounter);
             unblockBackButton();
         }
@@ -174,7 +174,7 @@ public class Boese1 extends AppCompatActivity implements SensorEventListener {
 
     private void stopRolling() {
         rolling = false;
-        Toast.makeText(getApplicationContext(), "Du hast ein Summe von " + sum +" gewürfelt.", Toast.LENGTH_SHORT).show();
+        runOnUiThread(() ->Toast.makeText(getApplicationContext(), "Du hast ein Summe von " + sum +" gewürfelt.", Toast.LENGTH_SHORT).show());
         sendApiRequest(token, lobbyid, sum, oneCounter);
         Button rollDiceButton = findViewById(R.id.RollDice_RollingDiceButton);
         rollDiceButton.setEnabled(false);
@@ -216,7 +216,7 @@ public class Boese1 extends AppCompatActivity implements SensorEventListener {
                 try {
                     Boese1API.sendBoeseRequest(token, lobbyid, sum, one);
                 } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), "Änderungen konnten nicht gespeichert werden.", Toast.LENGTH_SHORT).show();
+                    runOnUiThread(() ->Toast.makeText(getApplicationContext(), "Änderungen konnten nicht gespeichert werden.", Toast.LENGTH_SHORT).show());
                 }
             }
         });
@@ -240,7 +240,7 @@ public class Boese1 extends AppCompatActivity implements SensorEventListener {
             retrieveAndConvertUUIDs(sharedPreferences);
 
         } catch (GeneralSecurityException | IOException e) {
-            Toast.makeText(getApplicationContext(), "Unable to load SharedPreferences.", Toast.LENGTH_SHORT).show();
+            runOnUiThread(() ->Toast.makeText(getApplicationContext(), "Unable to load SharedPreferences.", Toast.LENGTH_SHORT).show());
         }
     }
 

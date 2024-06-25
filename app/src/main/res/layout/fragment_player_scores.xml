@@ -74,7 +74,6 @@
             android:id="@+id/Fragment_PlayersTurn_Txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
             android:text="@string/CurrentPlayer"
             android:textColor="@color/purple_700"
             android:textSize="18sp" />
@@ -83,7 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/noch_niemand"
-            android:paddingBottom="16dp"
+            android:textColor="@color/purple_700"
             android:textSize="18sp" />
 
     </LinearLayout>
