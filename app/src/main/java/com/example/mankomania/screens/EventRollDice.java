@@ -126,13 +126,24 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
     }
 
     private void rollDice() {
-        FieldsHandler  fieldshandler = (FieldsHandler) getIntent().getSerializableExtra("fieldsHandler");
-        int [] randomNumber = rollAndDisplayDice();
-        sharedPreferences = setupSharedPreferences();
+        FieldsHandler fieldshandler = (FieldsHandler) getIntent().getSerializableExtra("fieldsHandler");
+        if (fieldshandler == null) {
+            runOnUiThread(() -> Toast.makeText(EventRollDice.this, "FieldsHandler is missing", Toast.LENGTH_SHORT).show());
+            return;
+        }
+
+        int[] randomNumber = rollAndDisplayDice();
+
+        SharedPreferences sharedPreferences = setupSharedPreferences();
+        if (sharedPreferences == null) {
+            runOnUiThread(()->Toast.makeText(EventRollDice.this, "Failed to setup SharedPreferences", Toast.LENGTH_SHORT).show());
+            return;
+        }
         updateUserPosition(sharedPreferences, randomNumber, fieldshandler);
         navigateBackToBoard();
         sensorManager.unregisterListener(this);
     }
+
     private int [] rollAndDisplayDice(){
         Dice dice=new Dice();
         int[] randomNumber=dice.throwDice();
@@ -148,7 +159,7 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
         diceTwo.setImageResource(sourceDiceTwo);
 
         String resultOfRollingDice = String.valueOf(randomNumber[0] + randomNumber[1]);
-        Toast.makeText(getApplicationContext(), "Deine Spielfigur zieht " + resultOfRollingDice + " Felder weiter.", Toast.LENGTH_SHORT).show();
+        runOnUiThread(()-> Toast.makeText(getApplicationContext(), "Deine Spielfigur zieht " + resultOfRollingDice + " Felder weiter.", Toast.LENGTH_SHORT).show());
         return randomNumber;
     }
 
@@ -230,7 +241,8 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
                 break;
 
             case 46:
-                //TODO add Start-Call for Pferderennen
+                Intent startHorseRace = new Intent(EventRollDice.this, HorseRace.class);
+                startActivity(startHorseRace);
                 break;
             case 47:
                 StockExchangeAPI.startStockExchange(token, UUID.fromString(lobbyId),this);
