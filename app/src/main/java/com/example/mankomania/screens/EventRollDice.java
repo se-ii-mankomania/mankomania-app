@@ -233,13 +233,9 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
 
     private void checkIfRedirectingIsNecessary(GameboardField field) {
         switch (field.getId()){
-            case 7:
+            case 45:
                 goToBoese1();
                 break;
-            case 23:
-                goToBoese1();
-                break;
-
             case 46:
                 Intent startHorseRace = new Intent(EventRollDice.this, HorseRace.class);
                 startActivity(startHorseRace);
