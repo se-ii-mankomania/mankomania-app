@@ -10,8 +10,11 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -258,16 +261,27 @@ public class EventRollDice extends AppCompatActivity implements SensorEventListe
         startActivity(boese1);
     }
 
-    private void toastFieldDescription(Player player, int delayMillis){
+    private void toastFieldDescription(Player player, int delayMillis) {
         new Handler(Looper.getMainLooper()).postDelayed(() -> runOnUiThread(() -> {
             int resource = getResId("field_" + player.getCurrentField().getId() + "_description", R.string.class);
-            if (resource == -1) {
-                Toast.makeText(getApplicationContext(), "Field description could not be found", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getApplicationContext(), getString(resource), Toast.LENGTH_LONG).show();
-            }
+            String message = resource == -1 ? "Field description could not be found" : getString(resource);
+            showCustomToast(message);
         }), delayMillis);
     }
+
+    private void showCustomToast(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast, null);
+
+        TextView text = layout.findViewById(R.id.custom_toast_text);
+        text.setText(message);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
+    }
+
 
     private void navigateBackToBoard(){
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
